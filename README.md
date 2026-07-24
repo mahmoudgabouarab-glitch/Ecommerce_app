@@ -11,6 +11,23 @@ categories, coupons, and orders.
 
 ---
 
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center"><img src="screenshots/home.png" width="230"><br><sub>Home</sub></td>
+    <td align="center"><img src="screenshots/details.png" width="230"><br><sub>Product details</sub></td>
+    <td align="center"><img src="screenshots/suggestions.png" width="230"><br><sub>You may also like</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/cart.png" width="230"><br><sub>Cart</sub></td>
+    <td align="center"><img src="screenshots/profile.png" width="230"><br><sub>Profile</sub></td>
+    <td align="center"><img src="screenshots/admin.png" width="230"><br><sub>Admin dashboard</sub></td>
+  </tr>
+</table>
+
+---
+
 ## Features
 
 ### Customer
