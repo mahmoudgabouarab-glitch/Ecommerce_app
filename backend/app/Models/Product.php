@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Product extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'category_id',
+        'title',
+        'description',
+        'brand',
+        'price',
+        'sale_price',
+        'stock',
+        'images',
+        'rating',
+        'rating_count',
+        'is_featured',
+    ];
+
+    protected $casts = [
+        'images' => 'array',
+        'price' => 'decimal:2',
+        'sale_price' => 'decimal:2',
+        'rating' => 'decimal:1',
+        'is_featured' => 'boolean',
+    ];
+
+    // Effective price = sale price when present, otherwise the base price.
+    public function getEffectivePriceAttribute(): float
+    {
+        return (float) ($this->sale_price ?? $this->price);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Recalculate and persist the cached rating average and count.
+     */
+    public function refreshRating(): void
+    {
+        $this->rating = round((float) $this->reviews()->avg('rating'), 1);
+        $this->rating_count = $this->reviews()->count();
+        $this->save();
+    }
+}
