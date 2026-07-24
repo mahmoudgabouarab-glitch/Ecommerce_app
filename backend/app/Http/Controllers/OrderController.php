@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
-use App\Models\CartItem;
 use App\Models\Coupon;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -61,15 +62,35 @@ class OrderController extends Controller
         $order = DB::transaction(function () use ($request, $items, $data) {
             $subtotal = 0.0;
 
-            // Verify stock and lock product rows.
+            // Aggregate quantities so multiple cart lines of the same product
+            // (e.g. different variants) are checked against stock cumulatively.
+            $productQty = [];
+            $variantQty = [];
             foreach ($items as $item) {
-                $product = $item->product()->lockForUpdate()->first();
-                if (! $product || $product->stock < $item->quantity) {
-                    abort(422, "Not enough stock for {$item->product->title}.");
+                $productQty[$item->product_id] =
+                    ($productQty[$item->product_id] ?? 0) + $item->quantity;
+                if ($item->variant_id) {
+                    $variantQty[$item->variant_id] =
+                        ($variantQty[$item->variant_id] ?? 0) + $item->quantity;
                 }
                 $subtotal += $item->lineTotal();
             }
             $subtotal = round($subtotal, 2);
+
+            // Verify and lock product stock (cumulative).
+            foreach ($productQty as $productId => $qty) {
+                $product = Product::whereKey($productId)->lockForUpdate()->first();
+                if (! $product || $product->stock < $qty) {
+                    abort(422, "Not enough stock for {$product?->title}.");
+                }
+            }
+            // Verify and lock variant stock (cumulative).
+            foreach ($variantQty as $variantId => $qty) {
+                $variant = ProductVariant::whereKey($variantId)->lockForUpdate()->first();
+                if (! $variant || $variant->stock < $qty) {
+                    abort(422, 'Not enough stock for the selected option.');
+                }
+            }
 
             // Apply coupon if provided and valid.
             $discount = 0.0;
@@ -96,16 +117,24 @@ class OrderController extends Controller
                 'coupon_code' => $couponCode,
             ]);
 
-            // Snapshot each line into order_items and decrement stock.
+            // Snapshot each line into order_items.
             foreach ($items as $item) {
                 $order->items()->create([
                     'product_id' => $item->product_id,
+                    'variant_id' => $item->variant_id,
                     'product_title' => $item->product->title,
                     'product_image' => $item->product->images[0] ?? null,
                     'unit_price' => $item->unitPrice(),
                     'quantity' => $item->quantity,
                 ]);
-                $item->product()->decrement('stock', $item->quantity);
+            }
+
+            // Decrement stock once per product / variant (aggregated above).
+            foreach ($productQty as $productId => $qty) {
+                Product::whereKey($productId)->decrement('stock', $qty);
+            }
+            foreach ($variantQty as $variantId => $qty) {
+                ProductVariant::whereKey($variantId)->decrement('stock', $qty);
             }
 
             // Empty the cart.
@@ -130,12 +159,7 @@ class OrderController extends Controller
         }
 
         DB::transaction(function () use ($order) {
-            // Return stock for each line.
-            foreach ($order->items as $item) {
-                if ($item->product_id) {
-                    $item->product()->increment('stock', $item->quantity);
-                }
-            }
+            $this->adjustStock($order->load('items'), +1); // return stock
             $order->update(['status' => 'cancelled']);
         });
 
@@ -149,9 +173,36 @@ class OrderController extends Controller
             'status' => ['required', 'in:pending,processing,shipped,delivered,cancelled'],
         ]);
 
-        $order->update(['status' => $data['status']]);
+        $from = $order->status;
+        $to = $data['status'];
+
+        DB::transaction(function () use ($order, $from, $to) {
+            // Keep inventory in sync with cancellation transitions.
+            if ($to === 'cancelled' && $from !== 'cancelled') {
+                $this->adjustStock($order->load('items'), +1); // give stock back
+            } elseif ($from === 'cancelled' && $to !== 'cancelled') {
+                $this->adjustStock($order->load('items'), -1); // take it again
+            }
+            $order->update(['status' => $to]);
+        });
 
         return new OrderResource($order->load('items'));
+    }
+
+    /**
+     * Return ($sign = +1) or re-deduct ($sign = -1) an order's line quantities
+     * against product and variant stock.
+     */
+    private function adjustStock(Order $order, int $sign): void
+    {
+        foreach ($order->items as $item) {
+            if ($item->product_id) {
+                Product::whereKey($item->product_id)->increment('stock', $sign * $item->quantity);
+            }
+            if ($item->variant_id) {
+                ProductVariant::whereKey($item->variant_id)->increment('stock', $sign * $item->quantity);
+            }
+        }
     }
 
     // GET /api/admin/orders  — all orders (admin)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CartItemResource;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -31,8 +32,14 @@ class CartController extends Controller
         ]);
 
         $product = Product::findOrFail($data['product_id']);
-        if ($product->stock < $data['quantity']) {
-            return response()->json(['message' => 'Not enough stock.'], 422);
+
+        // Resolve the variant and make sure it belongs to this product.
+        $variant = null;
+        if (! empty($data['variant_id'])) {
+            $variant = ProductVariant::find($data['variant_id']);
+            if (! $variant || $variant->product_id !== $product->id) {
+                return response()->json(['message' => 'Invalid option for this product.'], 422);
+            }
         }
 
         // Increment quantity if the same product/variant is already in the cart.
@@ -41,7 +48,15 @@ class CartController extends Controller
             'product_id' => $data['product_id'],
             'variant_id' => $data['variant_id'] ?? null,
         ]);
-        $item->quantity = ($item->exists ? $item->quantity : 0) + $data['quantity'];
+        $newQuantity = ($item->exists ? $item->quantity : 0) + $data['quantity'];
+
+        // Check against variant stock when a variant is chosen, else product stock.
+        $available = $variant ? $variant->stock : $product->stock;
+        if ($available < $newQuantity) {
+            return response()->json(['message' => 'Not enough stock.'], 422);
+        }
+
+        $item->quantity = $newQuantity;
         $item->save();
 
         return new CartItemResource($item->load(['product', 'variant']));
@@ -55,6 +70,14 @@ class CartController extends Controller
         $data = $request->validate([
             'quantity' => ['required', 'integer', 'min:1'],
         ]);
+
+        $cartItem->loadMissing(['product', 'variant']);
+        $available = $cartItem->variant
+            ? $cartItem->variant->stock
+            : ($cartItem->product->stock ?? 0);
+        if ($available < $data['quantity']) {
+            return response()->json(['message' => 'Not enough stock.'], 422);
+        }
 
         $cartItem->update(['quantity' => $data['quantity']]);
 
