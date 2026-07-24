@@ -93,6 +93,7 @@
   "cart_empty": "Your cart is empty",
   "browse_add": "Browse products and add your favorites",
   "subtotal_items": "Subtotal ({} items)",
+  "subtotal_item": "Subtotal (1 item)",
   "proceed_checkout": "Proceed to checkout",
 
   "checkout": "Checkout",

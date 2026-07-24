@@ -35,6 +35,17 @@ class _SearchScaffold extends StatefulWidget {
 class _SearchScaffoldState extends State<_SearchScaffold> {
   final _controller = TextEditingController();
   Timer? _debounce;
+  bool _hasText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Rebuild the app bar (clear button) only when text presence flips.
+    _controller.addListener(() {
+      final has = _controller.text.isNotEmpty;
+      if (has != _hasText) setState(() => _hasText = has);
+    });
+  }
 
   void _onChanged(String q) {
     _debounce?.cancel();
@@ -76,13 +87,12 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
           ),
         ),
         actions: [
-          if (_controller.text.isNotEmpty)
+          if (_hasText)
             IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
                 _controller.clear();
                 context.read<SearchCubit>().search('');
-                setState(() {});
               },
             ),
         ],
@@ -99,9 +109,10 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
             }
             if (state is SearchResults) {
               if (state.products.isEmpty) {
-                return const EmptyState(
+                return EmptyState(
                   icon: Icons.search_off_rounded,
-                  title: 'no_products',
+                  title: 'no_products'.tr(),
+                  subtitle: 'try_different'.tr(),
                 );
               }
               return GridView.builder(
@@ -150,7 +161,6 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
                             onTap: () {
                               _controller.text = q;
                               _submit(q);
-                              setState(() {});
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(

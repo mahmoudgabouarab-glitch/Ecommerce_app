@@ -194,7 +194,10 @@ class _CheckoutBar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('subtotal_items'.tr(args: ['$count']),
+              Text(
+                  count == 1
+                      ? 'subtotal_item'.tr()
+                      : 'subtotal_items'.tr(args: ['$count']),
                   style: AppStyles.regular14.copyWith(color: cs.onSurfaceVariant)),
               Text(formatPrice(subtotal), style: AppStyles.bold20),
             ],

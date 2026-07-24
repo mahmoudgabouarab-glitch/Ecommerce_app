@@ -384,45 +384,66 @@ class _VariantEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      margin: EdgeInsets.only(top: 12.h),
+      padding: EdgeInsets.fromLTRB(12.w, 6.h, 12.w, 12.h),
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(14.r),
+        border: Border.all(color: cs.outlineVariant),
+      ),
+      child: Column(
         children: [
-          Expanded(
-            child: CustomTextField(
-                controller: row.size,
-                hint: 'size'.tr(),
-                validator: (_) => null),
+          // Remove control, aligned to the trailing edge.
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: GestureDetector(
+              onTap: onRemove,
+              behavior: HitTestBehavior.opaque,
+              child: Padding(
+                padding: EdgeInsets.all(4.r),
+                child: Icon(Icons.close, color: AppColors.danger, size: 20.r),
+              ),
+            ),
           ),
-          SizedBox(width: 8.w),
-          Expanded(
-            child: CustomTextField(
-                controller: row.color,
-                hint: 'color'.tr(),
-                validator: (_) => null),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                    controller: row.size,
+                    hint: 'size'.tr(),
+                    validator: (_) => null),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: CustomTextField(
+                    controller: row.color,
+                    hint: 'color'.tr(),
+                    validator: (_) => null),
+              ),
+            ],
           ),
-          SizedBox(width: 8.w),
-          Expanded(
-            child: CustomTextField(
-                controller: row.stock,
-                hint: 'stock'.tr(),
-                keyboardType: TextInputType.number,
-                validator: (_) => null),
-          ),
-          SizedBox(width: 8.w),
-          Expanded(
-            child: CustomTextField(
-                controller: row.price,
-                hint: 'price_diff'.tr(),
-                keyboardType: const TextInputType.numberWithOptions(
-                    signed: true, decimal: true),
-                validator: (_) => null),
-          ),
-          IconButton(
-            onPressed: onRemove,
-            icon: Icon(Icons.remove_circle_outline,
-                color: AppColors.danger, size: 22.r),
+          SizedBox(height: 10.h),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                    controller: row.stock,
+                    hint: 'stock'.tr(),
+                    keyboardType: TextInputType.number,
+                    validator: (_) => null),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: CustomTextField(
+                    controller: row.price,
+                    hint: 'price_diff'.tr(),
+                    keyboardType: const TextInputType.numberWithOptions(
+                        signed: true, decimal: true),
+                    validator: (_) => null),
+              ),
+            ],
           ),
         ],
       ),
