@@ -24,6 +24,11 @@ categories, coupons, and orders.
     <td align="center"><img src="screenshots/profile.png" width="230"><br><sub>Profile</sub></td>
     <td align="center"><img src="screenshots/admin.png" width="230"><br><sub>Admin dashboard</sub></td>
   </tr>
+  <tr>
+    <td align="center"><img src="screenshots/home_light.png" width="230"><br><sub>Home (light theme)</sub></td>
+    <td align="center"><img src="screenshots/admin_product_form.png" width="230"><br><sub>Admin — photos &amp; variants</sub></td>
+    <td></td>
+  </tr>
 </table>
 
 ---
