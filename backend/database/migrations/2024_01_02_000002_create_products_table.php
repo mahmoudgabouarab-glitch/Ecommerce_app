@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->string('title');
-            $table->text('description')->default('');
+            $table->text('description')->nullable();
             $table->string('brand')->nullable();
             $table->decimal('price', 10, 2);
             $table->decimal('sale_price', 10, 2)->nullable();
