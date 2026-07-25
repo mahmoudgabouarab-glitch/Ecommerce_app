@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
+use App\Models\AppNotification;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
@@ -143,6 +144,14 @@ class OrderController extends Controller
             return $order;
         });
 
+        AppNotification::create([
+            'user_id' => $order->user_id,
+            'title' => "Order #{$order->id} placed",
+            'body' => 'Your order has been placed and is pending confirmation.',
+            'type' => 'order',
+            'order_id' => $order->id,
+        ]);
+
         return new OrderResource($order->load(['items', 'address']));
     }
 
@@ -186,7 +195,31 @@ class OrderController extends Controller
             $order->update(['status' => $to]);
         });
 
+        if ($from !== $to) {
+            AppNotification::create([
+                'user_id' => $order->user_id,
+                'title' => "Order #{$order->id} {$to}",
+                'body' => $this->statusMessage($to, $order->id),
+                'type' => 'order',
+                'order_id' => $order->id,
+            ]);
+        }
+
         return new OrderResource($order->load('items'));
+    }
+
+    /**
+     * A friendly message for each order status transition.
+     */
+    private function statusMessage(string $status, int $orderId): string
+    {
+        return match ($status) {
+            'processing' => "Your order #{$orderId} is being prepared.",
+            'shipped' => "Good news! Order #{$orderId} is on its way.",
+            'delivered' => "Order #{$orderId} has been delivered. Enjoy!",
+            'cancelled' => "Order #{$orderId} has been cancelled.",
+            default => "Order #{$orderId} is now pending.",
+        };
     }
 
     /**

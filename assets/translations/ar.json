@@ -238,5 +238,13 @@
   "active": "مفعّل",
   "inactive": "متوقف",
   "off": "خصم",
-  "expires": "ينتهي"
+  "expires": "ينتهي",
+
+  "mark_all_read": "تعليم الكل كمقروء",
+  "no_notifications": "لا توجد إشعارات",
+  "no_notifications_hint": "تحديثات طلباتك هتظهر هنا",
+  "just_now": "الآن",
+  "minutes_ago": "منذ {} دقيقة",
+  "hours_ago": "منذ {} ساعة",
+  "days_ago": "منذ {} يوم"
 }

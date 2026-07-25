@@ -16,6 +16,8 @@ import '../../../admin/presentation/view/admin_dashboard_view.dart';
 import '../../../auth/data/repo/auth_repo_impl.dart';
 import '../../../auth/presentation/view/login_view.dart';
 import '../../../auth/presentation/view/password_views.dart';
+import '../../../notifications/presentation/view/notifications_view.dart';
+import '../../../notifications/presentation/view_model/notifications_cubit/notifications_cubit.dart';
 import '../../../wishlist/presentation/view/wishlist_view.dart';
 import 'about_view.dart';
 import 'edit_profile_view.dart';
@@ -35,6 +37,7 @@ class _SettingsViewState extends State<SettingsView> {
     await CacheHelper.removeData(key: CacheKeys.userEmail);
     await CacheHelper.removeData(key: CacheKeys.userAvatar);
     if (context.mounted) {
+      context.read<NotificationsCubit>().reset();
       pushAndRemoveUntil(context, const LoginView());
     }
   }
@@ -113,6 +116,15 @@ class _SettingsViewState extends State<SettingsView> {
                   onTap: () => push(context, const AddressesView())),
               _tile(context, Icons.favorite_outline, 'wishlist'.tr(),
                   onTap: () => push(context, const WishlistView())),
+              BlocBuilder<NotificationsCubit, NotificationsState>(
+                builder: (context, _) => _tile(
+                  context,
+                  Icons.notifications_outlined,
+                  'notifications'.tr(),
+                  badgeCount: context.read<NotificationsCubit>().unreadCount,
+                  onTap: () => push(context, const NotificationsView()),
+                ),
+              ),
             ],
             _tile(context, Icons.info_outline, 'about'.tr(),
                 onTap: () => push(context, const AboutView())),
@@ -142,7 +154,7 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget _tile(BuildContext context, IconData icon, String title,
-      {VoidCallback? onTap}) {
+      {VoidCallback? onTap, int badgeCount = 0}) {
     final cs = Theme.of(context).colorScheme;
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
@@ -163,7 +175,27 @@ class _SettingsViewState extends State<SettingsView> {
           child: Icon(icon, color: AppColors.primary, size: 20.r),
         ),
         title: Text(title, style: AppStyles.medium14),
-        trailing: Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (badgeCount > 0)
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                decoration: const BoxDecoration(
+                  color: AppColors.danger,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Text(badgeCount > 99 ? '99+' : '$badgeCount',
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700)),
+              ),
+            SizedBox(width: 6.w),
+            Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
+          ],
+        ),
       ),
     );
   }

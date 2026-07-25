@@ -238,5 +238,13 @@
   "active": "Active",
   "inactive": "Inactive",
   "off": "off",
-  "expires": "Expires"
+  "expires": "Expires",
+
+  "mark_all_read": "Mark all read",
+  "no_notifications": "No notifications",
+  "no_notifications_hint": "Order updates will show up here",
+  "just_now": "Just now",
+  "minutes_ago": "{}m ago",
+  "hours_ago": "{}h ago",
+  "days_ago": "{}d ago"
 }

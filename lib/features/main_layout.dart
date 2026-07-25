@@ -7,6 +7,7 @@ import 'cart/data/repo/cart_repo_impl.dart';
 import 'cart/presentation/view/cart_view.dart';
 import 'cart/presentation/view_model/cart_cubit/cart_cubit.dart';
 import 'home/presentation/view/home_view.dart';
+import 'notifications/presentation/view_model/notifications_cubit/notifications_cubit.dart';
 import 'order/data/repo/order_repo_impl.dart';
 import 'order/presentation/view/orders_view.dart';
 import 'order/presentation/view_model/orders_cubit/orders_cubit.dart';
@@ -32,7 +33,10 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   void initState() {
     super.initState();
-    if (isLoggedInUser()) context.read<WishlistCubit>().getWishlist();
+    if (isLoggedInUser()) {
+      context.read<WishlistCubit>().getWishlist();
+      context.read<NotificationsCubit>().load();
+    }
   }
 
   void _onSelect(int i) {
@@ -40,6 +44,7 @@ class _MainLayoutState extends State<MainLayout> {
     if (!isLoggedInUser()) return;
     if (i == 1) _cartCubit.getCart();
     if (i == 2) _ordersCubit.getOrders();
+    if (i == 3) context.read<NotificationsCubit>().refreshBadge();
   }
 
   @override

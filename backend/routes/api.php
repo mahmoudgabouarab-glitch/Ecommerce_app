@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProductController;
@@ -61,6 +62,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Coupons
     Route::post('/coupons/apply', [CouponController::class, 'apply']);
+
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll']);
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'read']);
 
     // Addresses
     Route::apiResource('addresses', AddressController::class)->except(['show']);

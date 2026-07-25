@@ -6,6 +6,7 @@ import '../../features/admin/data/repo/admin_repo_impl.dart';
 import '../../features/auth/data/repo/auth_repo_impl.dart';
 import '../../features/cart/data/repo/cart_repo_impl.dart';
 import '../../features/home/data/repo/home_repo_impl.dart';
+import '../../features/notifications/data/repo/notifications_repo_impl.dart';
 import '../../features/order/data/repo/order_repo_impl.dart';
 import '../../features/settings/data/repo/profile_repo_impl.dart';
 import '../../features/wishlist/data/repo/wishlist_repo_impl.dart';
@@ -23,6 +24,9 @@ void setupServiceLocator() {
   getIt.registerSingleton<HomeRepoImpl>(HomeRepoImpl(getIt<ApiServise>()));
   getIt.registerSingleton<CartRepoImpl>(CartRepoImpl(getIt<ApiServise>()));
   getIt.registerSingleton<OrderRepoImpl>(OrderRepoImpl(getIt<ApiServise>()));
+  getIt.registerSingleton<NotificationsRepoImpl>(
+    NotificationsRepoImpl(getIt<ApiServise>()),
+  );
   getIt.registerSingleton<WishlistRepoImpl>(
     WishlistRepoImpl(getIt<ApiServise>()),
   );

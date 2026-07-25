@@ -64,4 +64,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(WishlistItem::class);
     }
+
+    // Named appNotifications to avoid clashing with the Notifiable trait's
+    // notifications() relation.
+    public function appNotifications(): HasMany
+    {
+        return $this->hasMany(AppNotification::class)->latest();
+    }
 }
