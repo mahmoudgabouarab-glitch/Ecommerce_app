@@ -129,19 +129,25 @@ php artisan serve                 # http://127.0.0.1:8000
 flutter pub get
 ```
 
-Set the API base URL in [`lib/core/network/api_service.dart`](lib/core/network/api_service.dart)
-to match how you run the server:
+Point the app at your API with `--dart-define` (no code edits needed):
+
+```bash
+flutter run --dart-define=API_BASE_URL=https://your-app.up.railway.app/api/
+```
+
+If you omit it, the app falls back to a local address (edit `_defaultBaseUrl`
+in [`lib/core/network/api_service.dart`](lib/core/network/api_service.dart)):
 
 | Target | Base URL |
 |--------|----------|
 | Android emulator | `http://10.0.2.2:8000/api/` |
 | iOS simulator / desktop | `http://127.0.0.1:8000/api/` |
-| Physical device | `http://<your-computer-LAN-IP>:8000/api/` |
+| Physical device (same Wi-Fi) | `http://YOUR_COMPUTER_LAN_IP:8000/api/` |
 
-Then run:
+For a release build, pass the same flag:
 
 ```bash
-flutter run
+flutter build apk --dart-define=API_BASE_URL=https://your-app.up.railway.app/api/
 ```
 
 ---
@@ -181,6 +187,42 @@ GET  /admin/stats
 - Strings live in [`assets/translations/en.json`](assets/translations/en.json) and `ar.json`.
 - Arabic switches the app to RTL automatically.
 - Theme (System / Light / Dark) and language are toggled from the Profile screen.
+
+---
+
+## Deploying the API (Railway)
+
+The `backend/` folder ships a `Dockerfile`, `railway.json`, and a startup
+script, so Railway can build and run it as-is.
+
+1. **Push to GitHub** (already done), then on [railway.app](https://railway.app)
+   choose **New Project → Deploy from GitHub repo**.
+2. In the service **Settings**, set **Root Directory** to `backend`.
+3. Add a **MySQL** database to the project (**New → Database → MySQL**).
+4. Add a **Volume** to the service, mounted at `/app/storage/app/public`
+   (keeps uploaded product/profile images across redeploys).
+5. Set the service **Variables**:
+
+   | Variable | Value |
+   |----------|-------|
+   | `APP_KEY` | `base64:...` (run `php artisan key:generate --show` locally) |
+   | `APP_ENV` | `production` |
+   | `APP_DEBUG` | `false` |
+   | `APP_URL` | `https://your-app.up.railway.app` |
+   | `DB_URL` | `${{MySQL.MYSQL_URL}}` (Railway reference variable) |
+   | `FILESYSTEM_DISK` | `public` |
+   | `LOG_CHANNEL` | `stderr` |
+
+6. Deploy. On boot the container runs `storage:link` and `migrate --force`
+   automatically.
+7. One-off, to load demo data, open the service **Shell** and run:
+   `php artisan db:seed --force`.
+8. Point the app at it:
+   `flutter run --dart-define=API_BASE_URL=https://your-app.up.railway.app/api/`
+
+> `TrustProxies` is set to `*` so image URLs are generated as `https://`
+> behind Railway's load balancer. The dev server (`php artisan serve`) is fine
+> for a demo; swap in nginx + php-fpm for heavier production traffic.
 
 ---
 

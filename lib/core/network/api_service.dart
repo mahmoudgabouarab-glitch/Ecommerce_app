@@ -5,10 +5,18 @@ import 'cache_helper.dart';
 import 'cache_keys.dart';
 
 class ApiServise {
+  /// API base URL. Configured at build/run time via:
+  ///   flutter run --dart-define=API_BASE_URL=https://your-host/api/
+  ///
+  /// Falls back to a local address for development when no value is passed:
   /// - iOS simulator / desktop / web:  http://127.0.0.1:8000/api/
   /// - Android emulator:               http://10.0.2.2:8000/api/
-  /// - Real device: replace with your computer's LAN IP.
-  final String _baseUrl = "http://192.168.1.3:8000/api/";
+  /// - Real device on the same Wi-Fi:  http://YOUR_COMPUTER_LAN_IP:8000/api/
+  static const String _defaultBaseUrl = "http://192.168.1.3:8000/api/";
+  final String _baseUrl = const String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: _defaultBaseUrl,
+  );
   final Dio _dio;
 
   ApiServise(this._dio) {
