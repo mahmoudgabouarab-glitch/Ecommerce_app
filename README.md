@@ -44,6 +44,8 @@ categories, coupons, and orders.
 - **Cart** — add variants, update quantity, stock-aware
 - **Checkout** — saved addresses, cash on delivery / card, coupon codes, order summary
 - **Orders** — history, order details, status timeline, cancel, reorder
+- **Notifications** — in-app centre with an unread badge (home + profile) **and
+  FCM push** to the system tray when an order's status changes
 - **Profile** — avatar upload, edit profile, change password, theme & language switch
 
 ### Admin
@@ -65,6 +67,8 @@ categories, coupons, and orders.
 | Error handling | `dartz` (`Either<Failure, T>`) |
 | UI | `flutter_screenutil`, `cached_network_image`, `shimmer`, `fl_chart` |
 | Media | `image_picker`, `share_plus` |
+| Push | `firebase_core`, `firebase_messaging` (FCM) |
+| Tooling | `flutter_launcher_icons` |
 | Localization | `easy_localization` (ar / en) |
 | Storage | `shared_preferences` |
 | Backend | Laravel 10, Sanctum, Eloquent, MySQL |
@@ -171,6 +175,9 @@ GET  /me                  POST /logout        POST /profile
 GET/POST/PUT/DELETE /cart      POST /coupons/apply
 GET/POST/PATCH /orders         apiResource /addresses
 POST /products/{id}/reviews    POST /wishlist/{id}
+GET  /notifications       POST /notifications/read-all
+PATCH /notifications/{id}/read
+POST /device-tokens       DELETE /device-tokens   (FCM registration)
 ```
 
 **Admin** (`/admin`, requires admin role)
@@ -212,6 +219,7 @@ script, so Railway can build and run it as-is.
    | `DB_URL` | `${{MySQL.MYSQL_URL}}` (Railway reference variable) |
    | `FILESYSTEM_DISK` | `public` |
    | `LOG_CHANNEL` | `stderr` |
+   | `FCM_CREDENTIALS` | *(optional)* Firebase service-account JSON — see below |
 
 6. Deploy. On boot the container runs `storage:link` and `migrate --force`
    automatically.
@@ -223,6 +231,42 @@ script, so Railway can build and run it as-is.
 > `TrustProxies` is set to `*` so image URLs are generated as `https://`
 > behind Railway's load balancer. The dev server (`php artisan serve`) is fine
 > for a demo; swap in nginx + php-fpm for heavier production traffic.
+
+---
+
+## Push notifications (FCM)
+
+Order-status pushes are optional — the app works with in-app notifications on
+its own, and push simply stays disabled until Firebase is configured.
+
+**Client (Flutter):**
+
+```bash
+dart pub global activate flutterfire_cli
+flutterfire configure          # registers the app, writes google-services.json
+```
+
+**Server (Laravel):** in the Firebase console, open **Project settings →
+Service accounts → Generate new private key**, then set the whole JSON as the
+`FCM_CREDENTIALS` env var on the API service. The backend signs an FCM HTTP v1
+request with it and pushes to the customer's registered devices on every order
+update. The device token is registered from the app after login via
+`POST /device-tokens`.
+
+> The service-account key is a secret — keep it in the env var only, never in
+> the repo. `google-services.json` is client config and is safe to commit.
+
+---
+
+## App icon
+
+The launcher icon is generated from `assets/icon/` with
+[`flutter_launcher_icons`](https://pub.dev/packages/flutter_launcher_icons).
+To use your own logo, replace `assets/icon/icon_full.png` (1024×1024) and run:
+
+```bash
+dart run flutter_launcher_icons
+```
 
 ---
 
