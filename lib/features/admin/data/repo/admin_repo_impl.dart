@@ -5,6 +5,7 @@ import '../../../../core/errors/failure.dart';
 import '../../../../core/network/api_service.dart';
 import '../../../home/data/models/product_model.dart';
 import '../../../order/data/models/order_model.dart';
+import '../models/coupon_model.dart';
 import '../models/stats_model.dart';
 import 'admin_repo.dart';
 
@@ -118,6 +119,89 @@ class AdminRepoImpl implements AdminRepo {
   Future<Either<Failure, Unit>> deleteProduct(int id) async {
     try {
       await _api.delete(endpoint: "admin/products/$id");
+      return const Right(unit);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  // --- Categories ---
+
+  @override
+  Future<Either<Failure, Unit>> saveCategory({
+    int? id,
+    required String name,
+    required String slug,
+    String? imageUrl,
+  }) async {
+    try {
+      final body = {
+        "name": name,
+        "slug": slug,
+        "image_url": ?imageUrl,
+      };
+      id == null
+          ? await _api.post(endpoint: "admin/categories", data: body)
+          : await _api.put(endpoint: "admin/categories/$id", data: body);
+      return const Right(unit);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteCategory(int id) async {
+    try {
+      await _api.delete(endpoint: "admin/categories/$id");
+      return const Right(unit);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  // --- Coupons ---
+
+  @override
+  Future<Either<Failure, List<CouponModel>>> getCoupons() async {
+    try {
+      final data = await _api.get(endpoint: "admin/coupons");
+      final list = (data['data'] as List<dynamic>? ?? [])
+          .map((e) => CouponModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return Right(list);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> createCoupon({
+    required String code,
+    required String discountType,
+    required double amount,
+    double? minTotal,
+    DateTime? expiresAt,
+    bool isActive = true,
+  }) async {
+    try {
+      await _api.post(endpoint: "admin/coupons", data: {
+        "code": code,
+        "discount_type": discountType,
+        "amount": amount,
+        "min_total": ?minTotal,
+        "expires_at": ?expiresAt?.toIso8601String().split('T').first,
+        "is_active": isActive,
+      });
+      return const Right(unit);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteCoupon(int id) async {
+    try {
+      await _api.delete(endpoint: "admin/coupons/$id");
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));

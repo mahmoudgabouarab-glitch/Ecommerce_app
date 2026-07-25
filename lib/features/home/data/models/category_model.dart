@@ -22,12 +22,14 @@ class CategoryModel extends Equatable {
   final String name;
   final String slug;
   final String? imageUrl;
+  final int? productsCount;
 
   const CategoryModel({
     required this.id,
     required this.name,
     required this.slug,
     this.imageUrl,
+    this.productsCount,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) => CategoryModel(
@@ -35,8 +37,9 @@ class CategoryModel extends Equatable {
         name: json['name'] as String? ?? '',
         slug: json['slug'] as String? ?? '',
         imageUrl: json['image_url'] as String?,
+        productsCount: json['products_count'] as int?,
       );
 
   @override
-  List<Object?> get props => [id, name, slug, imageUrl];
+  List<Object?> get props => [id, name, slug, imageUrl, productsCount];
 }

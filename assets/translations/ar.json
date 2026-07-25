@@ -216,5 +216,27 @@
   "status_cancelled": "ملغي",
 
   "retry": "إعادة المحاولة",
-  "something_wrong": "حدث خطأ ما"
+  "something_wrong": "حدث خطأ ما",
+
+  "categories": "الأقسام",
+  "coupons": "الكوبونات",
+  "add_category": "إضافة قسم",
+  "edit_category": "تعديل القسم",
+  "no_categories": "لا توجد أقسام",
+  "category_name": "اسم القسم",
+  "delete_category_q": "حذف القسم؟",
+  "add_coupon": "إضافة كوبون",
+  "no_coupons": "لا توجد كوبونات",
+  "delete_coupon_q": "حذف الكوبون؟",
+  "discount_type": "نوع الخصم",
+  "percent": "نسبة مئوية",
+  "fixed": "مبلغ ثابت",
+  "amount": "المبلغ",
+  "percent_amount": "النسبة (%)",
+  "min_order": "أقل طلب",
+  "expiry_optional": "تاريخ الانتهاء (اختياري)",
+  "active": "مفعّل",
+  "inactive": "متوقف",
+  "off": "خصم",
+  "expires": "ينتهي"
 }

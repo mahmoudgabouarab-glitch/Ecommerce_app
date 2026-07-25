@@ -216,5 +216,27 @@
   "status_cancelled": "cancelled",
 
   "retry": "Retry",
-  "something_wrong": "Something went wrong"
+  "something_wrong": "Something went wrong",
+
+  "categories": "Categories",
+  "coupons": "Coupons",
+  "add_category": "Add category",
+  "edit_category": "Edit category",
+  "no_categories": "No categories yet",
+  "category_name": "Category name",
+  "delete_category_q": "Delete category?",
+  "add_coupon": "Add coupon",
+  "no_coupons": "No coupons yet",
+  "delete_coupon_q": "Delete coupon?",
+  "discount_type": "Discount type",
+  "percent": "Percentage",
+  "fixed": "Fixed",
+  "amount": "Amount",
+  "percent_amount": "Percent (%)",
+  "min_order": "Min order",
+  "expiry_optional": "Expiry date (optional)",
+  "active": "Active",
+  "inactive": "Inactive",
+  "off": "off",
+  "expires": "Expires"
 }

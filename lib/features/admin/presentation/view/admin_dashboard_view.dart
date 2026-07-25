@@ -6,7 +6,11 @@ import '../../../../core/network/service_locator.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../home/data/repo/home_repo_impl.dart';
 import '../../data/repo/admin_repo_impl.dart';
+import '../view_model/admin_categories_cubit/admin_categories_cubit.dart';
+import '../view_model/admin_coupons_cubit/admin_coupons_cubit.dart';
 import '../view_model/admin_products_cubit/admin_products_cubit.dart';
+import 'widgets/admin_categories_tab.dart';
+import 'widgets/admin_coupons_tab.dart';
 import 'widgets/admin_orders_tab.dart';
 import 'widgets/admin_products_tab.dart';
 import 'widgets/overview_tab.dart';
@@ -17,17 +21,21 @@ class AdminDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text('admin_dashboard'.tr()),
           bottom: TabBar(
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
             labelColor: AppColors.primary,
             indicatorColor: AppColors.primary,
             tabs: [
               Tab(text: 'overview'.tr()),
               Tab(text: 'orders'.tr()),
               Tab(text: 'products'.tr()),
+              Tab(text: 'categories'.tr()),
+              Tab(text: 'coupons'.tr()),
             ],
           ),
         ),
@@ -42,6 +50,18 @@ class AdminDashboardView extends StatelessWidget {
                   getIt<HomeRepoImpl>(),
                 )..getProducts(),
                 child: const AdminProductsTab(),
+              ),
+              BlocProvider(
+                create: (_) => AdminCategoriesCubit(
+                  getIt<AdminRepoImpl>(),
+                  getIt<HomeRepoImpl>(),
+                )..getCategories(),
+                child: const AdminCategoriesTab(),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    AdminCouponsCubit(getIt<AdminRepoImpl>())..getCoupons(),
+                child: const AdminCouponsTab(),
               ),
             ],
           ),
