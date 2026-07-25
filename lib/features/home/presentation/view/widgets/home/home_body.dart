@@ -11,6 +11,8 @@ import '../../../../../../core/utils/styles.dart';
 import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/product_grid_shimmer.dart';
 import '../../../../../../core/widgets/state_views.dart';
+import '../../../../../notifications/presentation/view/notifications_view.dart';
+import '../../../../../notifications/presentation/view_model/notifications_cubit/notifications_cubit.dart';
 import '../../../view_model/products_cubit/products_cubit.dart';
 import '../../search_view.dart';
 import '../suggested_products_section.dart';
@@ -285,14 +287,61 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text('hello'.tr(args: [name]),
-            style: AppStyles.regular14.copyWith(color: cs.onSurfaceVariant)),
-        SizedBox(height: 2.h),
-        Text('find_favorite'.tr(), style: AppStyles.bold24),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('hello'.tr(args: [name]),
+                  style: AppStyles.regular14
+                      .copyWith(color: cs.onSurfaceVariant)),
+              SizedBox(height: 2.h),
+              Text('find_favorite'.tr(), style: AppStyles.bold24),
+            ],
+          ),
+        ),
+        SizedBox(width: 12.w),
+        const _NotificationBell(),
       ],
+    );
+  }
+}
+
+/// Bell button in the home header that opens notifications and shows the
+/// unread count as a badge.
+class _NotificationBell extends StatelessWidget {
+  const _NotificationBell();
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return GestureDetector(
+      onTap: () => push(context, const NotificationsView()),
+      child: Container(
+        width: 48.w,
+        height: 48.w,
+        decoration: BoxDecoration(
+          color: cs.surface,
+          borderRadius: BorderRadius.circular(14.r),
+          border: Border.all(color: cs.outline),
+        ),
+        alignment: Alignment.center,
+        child: BlocBuilder<NotificationsCubit, NotificationsState>(
+          builder: (context, _) {
+            final count = context.read<NotificationsCubit>().unreadCount;
+            return Badge(
+              isLabelVisible: count > 0,
+              backgroundColor: AppColors.danger,
+              label: Text(count > 99 ? '99+' : '$count'),
+              offset: Offset(6.w, -6.h),
+              child: Icon(Icons.notifications_outlined,
+                  color: cs.onSurface, size: 24.r),
+            );
+          },
+        ),
+      ),
     );
   }
 }
