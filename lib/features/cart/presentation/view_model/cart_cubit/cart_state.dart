@@ -26,3 +26,14 @@ final class CartFailure extends CartState {
   @override
   List<Object> get props => [error];
 }
+
+/// A cart action (update/remove) failed, but the cart is still shown — the
+/// error is surfaced as a snackbar instead of replacing the whole screen.
+final class CartActionError extends CartState {
+  final CartResponse cart;
+  final String error;
+  const CartActionError(this.cart, this.error);
+
+  @override
+  List<Object> get props => [cart, error];
+}

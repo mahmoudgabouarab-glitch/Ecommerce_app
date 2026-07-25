@@ -32,6 +32,7 @@ class CartItemModel extends Equatable {
   final double unitPrice;
   final double lineTotal;
   final ProductModel product;
+  final ProductVariantModel? variant;
 
   const CartItemModel({
     required this.id,
@@ -39,6 +40,7 @@ class CartItemModel extends Equatable {
     required this.unitPrice,
     required this.lineTotal,
     required this.product,
+    this.variant,
   });
 
   factory CartItemModel.fromJson(Map<String, dynamic> json) => CartItemModel(
@@ -49,10 +51,15 @@ class CartItemModel extends Equatable {
         product: ProductModel.fromJson(
           json['product'] as Map<String, dynamic>? ?? {},
         ),
+        variant: json['variant'] == null
+            ? null
+            : ProductVariantModel.fromJson(
+                json['variant'] as Map<String, dynamic>),
       );
 
   @override
-  List<Object?> get props => [id, quantity, unitPrice, lineTotal, product];
+  List<Object?> get props =>
+      [id, quantity, unitPrice, lineTotal, product, variant];
 }
 
 double _toDouble(dynamic v) {

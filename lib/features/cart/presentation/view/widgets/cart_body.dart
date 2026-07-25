@@ -8,6 +8,7 @@ import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_functions.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../../../../core/widgets/custom_button.dart';
+import '../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../core/widgets/state_views.dart';
 import '../../../../auth/presentation/view/widgets/login_required.dart';
 import '../../../../checkout/presentation/view/checkout_view.dart';
@@ -23,7 +24,12 @@ class CartBody extends StatelessWidget {
       return GuestState(
           icon: Icons.shopping_cart_outlined, title: 'my_cart'.tr());
     }
-    return BlocBuilder<CartCubit, CartState>(
+    return BlocConsumer<CartCubit, CartState>(
+      listener: (context, state) {
+        // A failed quantity/remove action keeps the cart on screen and just
+        // reports the problem (e.g. "Not enough stock").
+        if (state is CartActionError) showSnackBar(context, state.error);
+      },
       builder: (context, state) {
         if (state is CartLoading || state is CartInitial) {
           return const Center(
@@ -35,7 +41,8 @@ class CartBody extends StatelessWidget {
             onRetry: () => context.read<CartCubit>().getCart(),
           );
         }
-        final cart = (state as CartSuccess).cart;
+        final cart =
+            state is CartActionError ? state.cart : (state as CartSuccess).cart;
         if (cart.items.isEmpty) {
           return EmptyState(
             icon: Icons.shopping_cart_outlined,
@@ -102,6 +109,24 @@ class _CartTile extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: AppStyles.semiBold14),
+                if (item.variant != null &&
+                    item.variant!.label.isNotEmpty) ...[
+                  SizedBox(height: 4.h),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+                      decoration: BoxDecoration(
+                        color: cs.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      child: Text(item.variant!.label,
+                          style: AppStyles.regular12
+                              .copyWith(color: cs.onSurfaceVariant)),
+                    ),
+                  ),
+                ],
                 SizedBox(height: 6.h),
                 Text(formatPrice(item.unitPrice), style: AppStyles.price),
                 SizedBox(height: 8.h),
@@ -109,6 +134,7 @@ class _CartTile extends StatelessWidget {
                   children: [
                     _QtyStepper(
                       quantity: item.quantity,
+                      canDecrement: item.quantity > 1,
                       onMinus: () =>
                           cubit.updateQuantity(item.id, item.quantity - 1),
                       onPlus: () =>
@@ -135,10 +161,12 @@ class _CartTile extends StatelessWidget {
 class _QtyStepper extends StatelessWidget {
   const _QtyStepper({
     required this.quantity,
+    required this.canDecrement,
     required this.onMinus,
     required this.onPlus,
   });
   final int quantity;
+  final bool canDecrement;
   final VoidCallback onMinus;
   final VoidCallback onPlus;
 
@@ -152,7 +180,7 @@ class _QtyStepper extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _btn(context, Icons.remove, onMinus),
+          _btn(context, Icons.remove, canDecrement ? onMinus : null),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             child: Text('$quantity', style: AppStyles.semiBold14),
@@ -163,13 +191,18 @@ class _QtyStepper extends StatelessWidget {
     );
   }
 
-  Widget _btn(BuildContext context, IconData icon, VoidCallback onTap) {
+  Widget _btn(BuildContext context, IconData icon, VoidCallback? onTap) {
+    final cs = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10.r),
       child: Padding(
         padding: EdgeInsets.all(6.r),
-        child: Icon(icon, size: 18.r, color: AppColors.primary),
+        child: Icon(icon,
+            size: 18.r,
+            color: onTap == null
+                ? cs.onSurfaceVariant.withValues(alpha: 0.35)
+                : AppColors.primary),
       ),
     );
   }

@@ -11,12 +11,18 @@ class CartCubit extends Cubit<CartState> {
 
   final CartRepo _repo;
 
+  // Last successfully loaded cart, kept so a failed action can keep it on screen.
+  CartResponse? _cart;
+
   Future<void> getCart() async {
     emit(CartLoading());
     final result = await _repo.getCart();
     result.fold(
       (failure) => emit(CartFailure(failure.errorMessage)),
-      (cart) => emit(CartSuccess(cart)),
+      (cart) {
+        _cart = cart;
+        emit(CartSuccess(cart));
+      },
     );
   }
 
@@ -25,7 +31,7 @@ class CartCubit extends Cubit<CartState> {
     final result =
         await _repo.updateQuantity(cartItemId: cartItemId, quantity: quantity);
     result.fold(
-      (failure) => emit(CartFailure(failure.errorMessage)),
+      (failure) => _emitActionError(failure.errorMessage),
       (_) => getCart(),
     );
   }
@@ -33,8 +39,18 @@ class CartCubit extends Cubit<CartState> {
   Future<void> removeItem(int cartItemId) async {
     final result = await _repo.removeItem(cartItemId);
     result.fold(
-      (failure) => emit(CartFailure(failure.errorMessage)),
+      (failure) => _emitActionError(failure.errorMessage),
       (_) => getCart(),
     );
+  }
+
+  /// Surface an action failure as a transient error while keeping the cart
+  /// visible (falls back to a full failure only if we have no cart yet).
+  void _emitActionError(String message) {
+    if (_cart != null) {
+      emit(CartActionError(_cart!, message));
+    } else {
+      emit(CartFailure(message));
+    }
   }
 }
