@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/network/cache_helper.dart';
 import '../../../../core/network/cache_keys.dart';
 import '../../../../core/network/service_locator.dart';
+import '../../../../core/services/push_service.dart';
 import '../../../../core/theme/theme_cubit.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_functions.dart';
@@ -31,6 +32,7 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   Future<void> _logout(BuildContext context) async {
+    await PushService.unregister();
     await getIt<AuthRepoImpl>().logout();
     await CacheHelper.removeData(key: CacheKeys.token);
     await CacheHelper.removeData(key: CacheKeys.userName);

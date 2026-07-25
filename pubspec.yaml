@@ -51,6 +51,8 @@ dependencies:
 
   # Localization (Arabic + English)
   easy_localization: ^3.0.7
+  firebase_core: ^4.12.1
+  firebase_messaging: ^16.4.3
 
 dev_dependencies:
   flutter_test:

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
-use App\Models\AppNotification;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Services\Notifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -144,13 +144,12 @@ class OrderController extends Controller
             return $order;
         });
 
-        AppNotification::create([
-            'user_id' => $order->user_id,
-            'title' => "Order #{$order->id} placed",
-            'body' => 'Your order has been placed and is pending confirmation.',
-            'type' => 'order',
-            'order_id' => $order->id,
-        ]);
+        Notifier::order(
+            $order->user_id,
+            "Order #{$order->id} placed",
+            'Your order has been placed and is pending confirmation.',
+            $order->id,
+        );
 
         return new OrderResource($order->load(['items', 'address']));
     }
@@ -196,13 +195,12 @@ class OrderController extends Controller
         });
 
         if ($from !== $to) {
-            AppNotification::create([
-                'user_id' => $order->user_id,
-                'title' => "Order #{$order->id} {$to}",
-                'body' => $this->statusMessage($to, $order->id),
-                'type' => 'order',
-                'order_id' => $order->id,
-            ]);
+            Notifier::order(
+                $order->user_id,
+                "Order #{$order->id} {$to}",
+                $this->statusMessage($to, $order->id),
+                $order->id,
+            );
         }
 
         return new OrderResource($order->load('items'));

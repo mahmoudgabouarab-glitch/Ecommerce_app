@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/network/service_locator.dart';
+import '../core/services/push_service.dart';
 import '../core/utils/app_functions.dart';
 import 'cart/data/repo/cart_repo_impl.dart';
 import 'cart/presentation/view/cart_view.dart';
@@ -36,6 +37,7 @@ class _MainLayoutState extends State<MainLayout> {
     if (isLoggedInUser()) {
       context.read<WishlistCubit>().getWishlist();
       context.read<NotificationsCubit>().load();
+      PushService.registerDevice();
     }
   }
 

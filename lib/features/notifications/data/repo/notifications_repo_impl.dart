@@ -41,6 +41,32 @@ class NotificationsRepoImpl implements NotificationsRepo {
     }
   }
 
+  @override
+  Future<Either<Failure, Unit>> registerDevice({
+    required String token,
+    String? platform,
+  }) async {
+    try {
+      await _api.post(
+        endpoint: "device-tokens",
+        data: {"token": token, "platform": ?platform},
+      );
+      return const Right(unit);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> unregisterDevice(String token) async {
+    try {
+      await _api.delete(endpoint: "device-tokens", data: {"token": token});
+      return const Right(unit);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
   Failure _handle(Object e) {
     if (e is DioException) return ServiseFailure.fromDioException(e);
     return ServiseFailure(e.toString());

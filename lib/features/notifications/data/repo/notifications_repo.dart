@@ -9,4 +9,11 @@ abstract class NotificationsRepo {
   Future<Either<Failure, Unit>> markAllRead();
 
   Future<Either<Failure, Unit>> markRead(int id);
+
+  Future<Either<Failure, Unit>> registerDevice({
+    required String token,
+    String? platform,
+  });
+
+  Future<Either<Failure, Unit>> unregisterDevice(String token);
 }

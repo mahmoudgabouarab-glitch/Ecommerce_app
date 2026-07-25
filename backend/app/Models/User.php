@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(AppNotification::class)->latest();
     }
+
+    public function deviceTokens(): HasMany
+    {
+        return $this->hasMany(DeviceToken::class);
+    }
 }
