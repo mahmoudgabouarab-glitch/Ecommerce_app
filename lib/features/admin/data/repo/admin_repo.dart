@@ -36,7 +36,7 @@ abstract class AdminRepo {
     int? id,
     required String name,
     required String slug,
-    String? imageUrl,
+    String? imagePath, // local file path of a newly picked image
   });
 
   Future<Either<Failure, Unit>> deleteCategory(int id);

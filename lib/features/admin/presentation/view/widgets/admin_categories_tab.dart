@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/styles.dart';
@@ -176,14 +179,22 @@ class _CategoryForm extends StatefulWidget {
 
 class _CategoryFormState extends State<_CategoryForm> {
   late final _name = TextEditingController(text: widget.existing?.name);
-  late final _image = TextEditingController(text: widget.existing?.imageUrl);
   final _formKey = GlobalKey<FormState>();
+  final _picker = ImagePicker();
+
+  String? _pickedPath; // newly picked local image
+  late final String? _existingUrl = widget.existing?.imageUrl;
 
   @override
   void dispose() {
     _name.dispose();
-    _image.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final file = await _picker.pickImage(
+        source: ImageSource.gallery, imageQuality: 80, maxWidth: 1000);
+    if (file != null) setState(() => _pickedPath = file.path);
   }
 
   void _submit() {
@@ -191,7 +202,7 @@ class _CategoryFormState extends State<_CategoryForm> {
     context.read<AdminCategoriesCubit>().saveCategory(
           id: widget.existing?.id,
           name: _name.text.trim(),
-          imageUrl: _image.text.trim().isEmpty ? null : _image.text.trim(),
+          imagePath: _pickedPath,
         );
   }
 
@@ -217,11 +228,12 @@ class _CategoryFormState extends State<_CategoryForm> {
                 style: AppStyles.bold20),
             SizedBox(height: 16.h),
             CustomTextField(controller: _name, hint: 'category_name'.tr()),
-            SizedBox(height: 12.h),
-            CustomTextField(
-                controller: _image,
-                hint: 'image_url'.tr(),
-                validator: (_) => null),
+            SizedBox(height: 14.h),
+            _ImagePickerField(
+              pickedPath: _pickedPath,
+              existingUrl: _existingUrl,
+              onPick: _pickImage,
+            ),
             SizedBox(height: 20.h),
             BlocConsumer<AdminCategoriesCubit, AdminCategoriesState>(
               listener: (context, state) {
@@ -236,6 +248,70 @@ class _CategoryFormState extends State<_CategoryForm> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ImagePickerField extends StatelessWidget {
+  const _ImagePickerField({
+    required this.pickedPath,
+    required this.existingUrl,
+    required this.onPick,
+  });
+
+  final String? pickedPath;
+  final String? existingUrl;
+  final VoidCallback onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final hasImage =
+        pickedPath != null || (existingUrl != null && existingUrl!.isNotEmpty);
+    return GestureDetector(
+      onTap: onPick,
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12.r),
+            child: SizedBox(
+              width: 64.w,
+              height: 64.w,
+              child: _thumb(cs),
+            ),
+          ),
+          SizedBox(width: 14.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('category_image'.tr(), style: AppStyles.semiBold14),
+                SizedBox(height: 3.h),
+                Text(
+                  hasImage ? 'change_image'.tr() : 'pick_image'.tr(),
+                  style: AppStyles.regular12.copyWith(color: AppColors.primary),
+                ),
+              ],
+            ),
+          ),
+          Icon(Icons.image_outlined, color: cs.onSurfaceVariant, size: 22.r),
+        ],
+      ),
+    );
+  }
+
+  Widget _thumb(ColorScheme cs) {
+    if (pickedPath != null) {
+      return Image.file(File(pickedPath!), fit: BoxFit.cover);
+    }
+    if (existingUrl != null && existingUrl!.isNotEmpty) {
+      return CachedNetworkImage(imageUrl: existingUrl!, fit: BoxFit.cover);
+    }
+    return Container(
+      color: cs.surfaceContainerHigh,
+      alignment: Alignment.center,
+      child: Icon(Icons.add_a_photo_outlined,
+          color: cs.onSurfaceVariant, size: 24.r),
     );
   }
 }

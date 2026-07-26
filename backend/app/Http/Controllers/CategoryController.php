@@ -28,8 +28,13 @@ class CategoryController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'unique:categories,slug'],
-            'image_url' => ['nullable', 'url'],
+            'image' => ['nullable', 'image', 'max:4096'],
         ]);
+
+        unset($data['image']);
+        if ($request->hasFile('image')) {
+            $data['image_url'] = url('storage/'.$request->file('image')->store('categories', 'public'));
+        }
 
         return new CategoryResource(Category::create($data));
     }
@@ -40,8 +45,13 @@ class CategoryController extends Controller
         $data = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
             'slug' => ['sometimes', 'string', 'max:255', 'unique:categories,slug,'.$category->id],
-            'image_url' => ['nullable', 'url'],
+            'image' => ['nullable', 'image', 'max:4096'],
         ]);
+
+        unset($data['image']);
+        if ($request->hasFile('image')) {
+            $data['image_url'] = url('storage/'.$request->file('image')->store('categories', 'public'));
+        }
 
         $category->update($data);
 

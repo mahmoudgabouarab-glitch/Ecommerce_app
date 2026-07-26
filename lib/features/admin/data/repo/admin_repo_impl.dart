@@ -133,17 +133,25 @@ class AdminRepoImpl implements AdminRepo {
     int? id,
     required String name,
     required String slug,
-    String? imageUrl,
+    String? imagePath,
   }) async {
     try {
-      final body = {
-        "name": name,
-        "slug": slug,
-        "image_url": ?imageUrl,
-      };
-      id == null
-          ? await _api.post(endpoint: "admin/categories", data: body)
-          : await _api.put(endpoint: "admin/categories/$id", data: body);
+      // Multipart so a newly picked photo file rides along. On edit with no new
+      // photo, the file field is simply omitted and the server keeps the old one
+      // (POST + _method spoofing, since PHP won't parse multipart PUT bodies).
+      final form = FormData();
+      form.fields.add(MapEntry('name', name));
+      form.fields.add(MapEntry('slug', slug));
+      if (imagePath != null) {
+        form.files
+            .add(MapEntry('image', await MultipartFile.fromFile(imagePath)));
+      }
+      if (id != null) form.fields.add(const MapEntry('_method', 'PUT'));
+
+      await _api.post(
+        endpoint: id == null ? "admin/categories" : "admin/categories/$id",
+        data: form,
+      );
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));

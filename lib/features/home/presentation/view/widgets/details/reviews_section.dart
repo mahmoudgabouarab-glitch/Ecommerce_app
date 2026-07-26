@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/utils/app_colors.dart';
+import '../../../../../../core/utils/app_functions.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../../../../core/widgets/custom_snackbar.dart';
+import '../../../../../auth/presentation/view/widgets/login_required.dart';
 import '../../../../data/models/review_model.dart';
 import '../../../view_model/reviews_cubit/reviews_cubit.dart';
 
@@ -59,6 +61,11 @@ class ReviewsSection extends StatelessWidget {
   }
 
   void _openDialog(BuildContext context) {
+    // Guests can browse reviews but must sign in to write one.
+    if (isGuestUser()) {
+      showLoginRequired(context);
+      return;
+    }
     final cubit = context.read<ReviewsCubit>();
     showDialog(
       context: context,

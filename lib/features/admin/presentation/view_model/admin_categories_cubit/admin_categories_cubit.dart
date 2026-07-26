@@ -26,14 +26,14 @@ class AdminCategoriesCubit extends Cubit<AdminCategoriesState> {
   Future<void> saveCategory({
     int? id,
     required String name,
-    String? imageUrl,
+    String? imagePath,
   }) async {
     emit(AdminCategorySaving());
     final result = await _adminRepo.saveCategory(
       id: id,
       name: name,
       slug: _slugify(name),
-      imageUrl: imageUrl,
+      imagePath: imagePath,
     );
     result.fold(
       (failure) => emit(AdminCategoriesFailure(failure.errorMessage)),
