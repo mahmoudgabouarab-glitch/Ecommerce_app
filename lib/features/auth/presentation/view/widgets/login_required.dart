@@ -7,7 +7,6 @@ import '../../../../../core/utils/app_functions.dart';
 import '../../../../../core/utils/styles.dart';
 import '../login_view.dart';
 
-/// Dialog shown when a guest tries a protected action.
 Future<void> showLoginRequired(BuildContext context) {
   final cs = Theme.of(context).colorScheme;
   return showDialog(
@@ -37,7 +36,6 @@ Future<void> showLoginRequired(BuildContext context) {
   );
 }
 
-/// A full-screen placeholder for guest users on protected tabs (cart/orders).
 class GuestState extends StatelessWidget {
   const GuestState({super.key, required this.icon, required this.title});
 

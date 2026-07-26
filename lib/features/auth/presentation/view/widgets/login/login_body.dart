@@ -12,9 +12,9 @@ import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../main_layout.dart';
-import '../../password_views.dart';
-import '../../signup_view.dart';
 import '../../../view_model/login/login_cubit.dart';
+import '../../forgot_password_view.dart';
+import '../../signup_view.dart';
 
 class LoginBody extends StatelessWidget {
   const LoginBody({super.key});
@@ -99,7 +99,6 @@ class LoginBody extends StatelessWidget {
                 text: 'continue_guest'.tr(),
                 outlined: true,
                 onPressed: () async {
-                  // Enter a clean guest session (no lingering login).
                   await CacheHelper.removeData(key: CacheKeys.token);
                   await CacheHelper.removeData(key: CacheKeys.userName);
                   await CacheHelper.removeData(key: CacheKeys.userEmail);

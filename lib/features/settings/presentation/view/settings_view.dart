@@ -16,7 +16,7 @@ import '../../../address/presentation/view/addresses_view.dart';
 import '../../../admin/presentation/view/admin_dashboard_view.dart';
 import '../../../auth/data/repo/auth_repo_impl.dart';
 import '../../../auth/presentation/view/login_view.dart';
-import '../../../auth/presentation/view/password_views.dart';
+import '../../../auth/presentation/view/change_password_view.dart';
 import '../../../notifications/presentation/view/notifications_view.dart';
 import '../../../notifications/presentation/view_model/notifications_cubit/notifications_cubit.dart';
 import '../../../wishlist/presentation/view/wishlist_view.dart';
