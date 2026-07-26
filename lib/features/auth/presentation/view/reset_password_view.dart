@@ -8,10 +8,9 @@ import '../view_model/password_cubit/password_cubit.dart';
 import 'widgets/password/reset_password_body.dart';
 
 class ResetPasswordView extends StatelessWidget {
-  const ResetPasswordView({super.key, required this.email, required this.otp});
+  const ResetPasswordView({super.key, required this.email});
 
   final String email;
-  final String otp;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class ResetPasswordView extends StatelessWidget {
       create: (_) => PasswordCubit(getIt<AuthRepoImpl>()),
       child: Scaffold(
         appBar: AppBar(title: Text('reset_password'.tr())),
-        body: SafeArea(child: ResetPasswordBody(email: email, otp: otp)),
+        body: SafeArea(child: ResetPasswordBody(email: email)),
       ),
     );
   }

@@ -7,6 +7,12 @@ abstract class Failure {
   Failure(this.errorMessage, {this.statusCode});
 }
 
+class EmailNotVerifiedFailure extends Failure {
+  final String email;
+
+  EmailNotVerifiedFailure(super.errorMessage, this.email);
+}
+
 class ServiseFailure extends Failure {
   ServiseFailure(super.errorMessage, {super.statusCode});
 

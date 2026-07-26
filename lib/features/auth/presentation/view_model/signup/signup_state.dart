@@ -19,12 +19,12 @@ final class SignupImagePicked extends SignupState {
   List<Object> get props => [path];
 }
 
-final class SignupSuccess extends SignupState {
-  final AuthModel auth;
-  const SignupSuccess(this.auth);
+final class SignupCodeSent extends SignupState {
+  final String email;
+  const SignupCodeSent(this.email);
 
   @override
-  List<Object> get props => [auth];
+  List<Object> get props => [email];
 }
 
 final class SignupFailure extends SignupState {

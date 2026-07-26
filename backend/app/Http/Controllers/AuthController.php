@@ -14,7 +14,8 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     /**
-     * Register a new customer and return an API token.
+     * Register a new customer, then email a verification code. No token is
+     * issued until the email is verified.
      */
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -31,16 +32,17 @@ class AuthController extends Controller
             $user->save();
         }
 
-        $token = $user->createToken('mobile')->plainTextToken;
+        EmailVerificationController::sendCode($user->email);
 
         return response()->json([
-            'user' => new UserResource($user),
-            'token' => $token,
+            'message' => 'A verification code has been sent to your email.',
+            'email' => $user->email,
         ], 201);
     }
 
     /**
-     * Authenticate a user and return an API token.
+     * Authenticate a user and return an API token. Unverified accounts are
+     * blocked and re-sent a fresh verification code.
      */
     public function login(LoginRequest $request): JsonResponse
     {
@@ -52,11 +54,19 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = $user->createToken('mobile')->plainTextToken;
+        if (! $user->email_verified_at) {
+            EmailVerificationController::sendCode($user->email);
+
+            return response()->json([
+                'message' => 'Please verify your email. A new code has been sent.',
+                'email' => $user->email,
+                'needs_verification' => true,
+            ], 403);
+        }
 
         return response()->json([
             'user' => new UserResource($user),
-            'token' => $token,
+            'token' => $user->createToken('mobile')->plainTextToken,
         ]);
     }
 

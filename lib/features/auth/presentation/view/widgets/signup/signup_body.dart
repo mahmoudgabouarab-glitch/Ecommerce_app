@@ -8,8 +8,8 @@ import '../../../../../../core/utils/styles.dart';
 import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../../core/widgets/custom_text_field.dart';
-import '../../../../../main_layout.dart';
 import '../../../view_model/signup/signup_cubit.dart';
+import '../../verify_email_view.dart';
 import 'signup_avatar_picker.dart';
 
 class SignupBody extends StatelessWidget {
@@ -22,8 +22,8 @@ class SignupBody extends StatelessWidget {
 
     return BlocListener<SignupCubit, SignupState>(
       listener: (context, state) {
-        if (state is SignupSuccess) {
-          pushAndRemoveUntil(context, const MainLayout());
+        if (state is SignupCodeSent) {
+          push(context, VerifyEmailView(email: state.email));
         } else if (state is SignupFailure) {
           showSnackBar(context, state.error);
         }

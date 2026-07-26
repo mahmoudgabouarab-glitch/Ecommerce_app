@@ -3,14 +3,15 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failure.dart';
 import '../models/auth_model.dart';
 
-/// Contract for authentication operations.
 abstract class AuthRepo {
   Future<Either<Failure, AuthModel>> login({
     required String email,
     required String password,
   });
 
-  Future<Either<Failure, AuthModel>> register({
+  /// Registers the user and triggers a verification email. Returns the email
+  /// so the app can move to the verification screen (no token yet).
+  Future<Either<Failure, String>> register({
     required String name,
     required String email,
     required String password,
@@ -19,10 +20,17 @@ abstract class AuthRepo {
     String? avatarPath,
   });
 
+  /// Confirms the emailed code and returns the authenticated session.
+  Future<Either<Failure, AuthModel>> verifyEmail({
+    required String email,
+    required String code,
+  });
+
+  Future<Either<Failure, Unit>> resendCode(String email);
+
   Future<Either<Failure, Unit>> logout();
 
-  /// Request a reset code. Returns the OTP (demo returns it directly).
-  Future<Either<Failure, String>> forgotPassword(String email);
+  Future<Either<Failure, Unit>> forgotPassword(String email);
 
   Future<Either<Failure, Unit>> resetPassword({
     required String email,

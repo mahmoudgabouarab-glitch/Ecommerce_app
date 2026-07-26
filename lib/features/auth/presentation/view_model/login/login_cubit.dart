@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/errors/failure.dart';
 import '../../../../../core/utils/user_cache.dart';
 import '../../../data/models/auth_model.dart';
 import '../../../data/repo/auth_repo.dart';
@@ -27,7 +28,13 @@ class LoginCubit extends Cubit<LoginState> {
     );
 
     await result.fold(
-      (failure) async => emit(LoginFailure(failure.errorMessage)),
+      (failure) async {
+        if (failure is EmailNotVerifiedFailure) {
+          emit(LoginNeedsVerification(failure.email));
+        } else {
+          emit(LoginFailure(failure.errorMessage));
+        }
+      },
       (auth) async {
         await UserCache.save(auth.user, token: auth.token);
         emit(LoginSuccess(auth));

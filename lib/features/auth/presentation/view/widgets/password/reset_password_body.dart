@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/custom_snackbar.dart';
@@ -11,17 +10,16 @@ import '../../../../../../core/widgets/custom_text_field.dart';
 import '../../../view_model/password_cubit/password_cubit.dart';
 
 class ResetPasswordBody extends StatefulWidget {
-  const ResetPasswordBody({super.key, required this.email, required this.otp});
+  const ResetPasswordBody({super.key, required this.email});
 
   final String email;
-  final String otp;
 
   @override
   State<ResetPasswordBody> createState() => _ResetPasswordBodyState();
 }
 
 class _ResetPasswordBodyState extends State<ResetPasswordBody> {
-  late final _otpController = TextEditingController(text: widget.otp);
+  final _otpController = TextEditingController();
   final _passController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -54,18 +52,6 @@ class _ResetPasswordBodyState extends State<ResetPasswordBody> {
               Text('reset_subtitle'.tr(),
                   style: AppStyles.regular14
                       .copyWith(color: AppStyles.muted(context))),
-              SizedBox(height: 12.h),
-              if (widget.otp.isNotEmpty)
-                Container(
-                  padding: EdgeInsets.all(12.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Text('demo_code'.tr(args: [widget.otp]),
-                      style: AppStyles.regular12
-                          .copyWith(color: AppColors.primary)),
-                ),
               SizedBox(height: 20.h),
               CustomTextField(
                 controller: _otpController,

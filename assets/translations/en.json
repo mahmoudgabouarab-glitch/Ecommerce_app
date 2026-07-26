@@ -246,5 +246,12 @@
   "just_now": "Just now",
   "minutes_ago": "{}m ago",
   "hours_ago": "{}h ago",
-  "days_ago": "{}d ago"
+  "days_ago": "{}d ago",
+
+  "verify_email": "Verify your email",
+  "verify_email_subtitle": "We sent a 6-digit code to {}. Enter it below to continue.",
+  "verification_code": "Verification code",
+  "verify": "Verify",
+  "resend_code": "Resend code",
+  "code_sent": "A new code has been sent"
 }

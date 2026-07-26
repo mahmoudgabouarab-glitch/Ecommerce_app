@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OtpMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class PasswordController extends Controller
 {
     /**
-     * POST /api/password/forgot — issue a 6-digit reset code.
-     *
-     * In production this code would be emailed. For this project (no SMTP set up)
-     * it is returned in the response so the flow can be demoed end-to-end.
+     * POST /api/password/forgot — email a 6-digit reset code.
      */
     public function forgot(Request $request)
     {
@@ -31,10 +31,17 @@ class PasswordController extends Controller
             ['token' => Hash::make($otp), 'created_at' => now()]
         );
 
-        return response()->json([
-            'message' => 'A reset code has been generated.',
-            'otp' => $otp, // demo only — normally sent by email
-        ]);
+        try {
+            Mail::to($request->email)->send(new OtpMail(
+                'Reset your password',
+                'Use the code below to reset your password:',
+                $otp,
+            ));
+        } catch (\Throwable $e) {
+            Log::warning('Reset email failed: '.$e->getMessage());
+        }
+
+        return response()->json(['message' => 'A reset code has been sent to your email.']);
     }
 
     /**

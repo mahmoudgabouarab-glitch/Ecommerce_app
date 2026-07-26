@@ -15,7 +15,7 @@ class PasswordCubit extends Cubit<PasswordState> {
     final result = await _repo.forgotPassword(email);
     result.fold(
       (f) => emit(PasswordFailure(f.errorMessage)),
-      (otp) => emit(ForgotSuccess(otp)),
+      (_) => emit(ForgotSuccess()),
     );
   }
 

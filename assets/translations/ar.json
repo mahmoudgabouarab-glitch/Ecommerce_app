@@ -246,5 +246,12 @@
   "just_now": "الآن",
   "minutes_ago": "منذ {} دقيقة",
   "hours_ago": "منذ {} ساعة",
-  "days_ago": "منذ {} يوم"
+  "days_ago": "منذ {} يوم",
+
+  "verify_email": "تأكيد الإيميل",
+  "verify_email_subtitle": "بعتنا كود من 6 أرقام على {}. اكتبه تحت عشان تكمّل.",
+  "verification_code": "كود التأكيد",
+  "verify": "تأكيد",
+  "resend_code": "إعادة إرسال الكود",
+  "code_sent": "تم إرسال كود جديد"
 }

@@ -15,6 +15,7 @@ import '../../../../../main_layout.dart';
 import '../../../view_model/login/login_cubit.dart';
 import '../../forgot_password_view.dart';
 import '../../signup_view.dart';
+import '../../verify_email_view.dart';
 
 class LoginBody extends StatelessWidget {
   const LoginBody({super.key});
@@ -28,6 +29,8 @@ class LoginBody extends StatelessWidget {
       listener: (context, state) {
         if (state is LoginSuccess) {
           pushAndRemoveUntil(context, const MainLayout());
+        } else if (state is LoginNeedsVerification) {
+          push(context, VerifyEmailView(email: state.email));
         } else if (state is LoginFailure) {
           showSnackBar(context, state.error);
         }

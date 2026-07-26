@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
         // --- Admin + demo customer ---
         User::updateOrCreate(
             ['email' => 'admin@shopsphere.com'],
-            ['name' => 'Admin', 'password' => 'admin123', 'role' => 'admin']
+            ['name' => 'Admin', 'password' => 'admin123', 'role' => 'admin', 'email_verified_at' => now()]
         );
         User::updateOrCreate(
             ['email' => 'customer@shopsphere.com'],
-            ['name' => 'Ahmed Ali', 'password' => 'password', 'role' => 'customer', 'phone' => '01000000000']
+            ['name' => 'Ahmed Ali', 'password' => 'password', 'role' => 'customer', 'phone' => '01000000000', 'email_verified_at' => now()]
         );
 
         // --- Categories ---

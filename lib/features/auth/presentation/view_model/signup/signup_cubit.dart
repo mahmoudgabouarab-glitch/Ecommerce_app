@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../core/utils/user_cache.dart';
-import '../../../data/models/auth_model.dart';
 import '../../../data/repo/auth_repo.dart';
 
 part 'signup_state.dart';
@@ -49,12 +47,9 @@ class SignupCubit extends Cubit<SignupState> {
       avatarPath: avatarPath,
     );
 
-    await result.fold(
-      (failure) async => emit(SignupFailure(failure.errorMessage)),
-      (auth) async {
-        await UserCache.save(auth.user, token: auth.token);
-        emit(SignupSuccess(auth));
-      },
+    result.fold(
+      (failure) => emit(SignupFailure(failure.errorMessage)),
+      (email) => emit(SignupCodeSent(email)),
     );
   }
 

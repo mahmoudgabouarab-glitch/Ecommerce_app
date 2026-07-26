@@ -35,10 +35,7 @@ class _ForgotPasswordBodyState extends State<ForgotPasswordBody> {
         if (state is ForgotSuccess) {
           push(
             context,
-            ResetPasswordView(
-              email: _emailController.text.trim(),
-              otp: state.otp,
-            ),
+            ResetPasswordView(email: _emailController.text.trim()),
           );
         } else if (state is PasswordFailure) {
           showSnackBar(context, state.error);

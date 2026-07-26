@@ -22,13 +22,25 @@ class AuthRepoImpl implements AuthRepo {
         data: {"email": email, "password": password},
       );
       return Right(AuthModel.fromJson(data));
+    } on DioException catch (e) {
+      final r = e.response;
+      if (r?.statusCode == 403 &&
+          r?.data is Map &&
+          (r!.data as Map)['needs_verification'] == true) {
+        final map = r.data as Map;
+        return Left(EmailNotVerifiedFailure(
+          (map['message'] as String?) ?? 'Please verify your email.',
+          (map['email'] as String?) ?? email,
+        ));
+      }
+      return Left(_handle(e));
     } catch (e) {
       return Left(_handle(e));
     }
   }
 
   @override
-  Future<Either<Failure, AuthModel>> register({
+  Future<Either<Failure, String>> register({
     required String name,
     required String email,
     required String password,
@@ -48,7 +60,33 @@ class AuthRepoImpl implements AuthRepo {
           if (avatarPath != null) "avatar": await MultipartFile.fromFile(avatarPath),
         },
       );
+      return Right((data['email'] as String?) ?? email);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthModel>> verifyEmail({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      final data = await _api.post(
+        endpoint: "email/verify",
+        data: {"email": email, "code": code},
+      );
       return Right(AuthModel.fromJson(data));
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> resendCode(String email) async {
+    try {
+      await _api.post(endpoint: "email/resend", data: {"email": email});
+      return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
     }
@@ -65,13 +103,10 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, String>> forgotPassword(String email) async {
+  Future<Either<Failure, Unit>> forgotPassword(String email) async {
     try {
-      final data = await _api.post(
-        endpoint: "password/forgot",
-        data: {"email": email},
-      );
-      return Right(data['otp'] as String? ?? '');
+      await _api.post(endpoint: "password/forgot", data: {"email": email});
+      return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
     }
