@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../core/network/service_locator.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
@@ -40,7 +38,6 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
   @override
   void initState() {
     super.initState();
-    // Rebuild the app bar (clear button) only when text presence flips.
     _controller.addListener(() {
       final has = _controller.text.isNotEmpty;
       if (has != _hasText) setState(() => _hasText = has);
@@ -72,6 +69,7 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
 
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 90.h,
         titleSpacing: 0,
         title: TextField(
           controller: _controller,
@@ -102,7 +100,8 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
           builder: (context, state) {
             if (state is SearchLoading) {
               return const Center(
-                  child: CircularProgressIndicator(color: AppColors.primary));
+                child: CircularProgressIndicator(color: AppColors.primary),
+              );
             }
             if (state is SearchFailure) {
               return ErrorState(message: state.error);
@@ -128,13 +127,15 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
                     ProductItem(product: state.products[i]),
               );
             }
-            // Idle → recent searches
             final recent = state is SearchIdle ? state.recent : <String>[];
             if (recent.isEmpty) {
               return Center(
-                child: Text('start_typing'.tr(),
-                    style: AppStyles.regular14
-                        .copyWith(color: cs.onSurfaceVariant)),
+                child: Text(
+                  'start_typing'.tr(),
+                  style: AppStyles.regular14.copyWith(
+                    color: cs.onSurfaceVariant,
+                  ),
+                ),
               );
             }
             return ListView(
@@ -145,10 +146,14 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
                   children: [
                     Text('recent_searches'.tr(), style: AppStyles.semiBold16),
                     TextButton(
-                      onPressed: () => context.read<SearchCubit>().clearRecent(),
-                      child: Text('clear'.tr(),
-                          style: AppStyles.semiBold14
-                              .copyWith(color: AppColors.primary)),
+                      onPressed: () =>
+                          context.read<SearchCubit>().clearRecent(),
+                      child: Text(
+                        'clear'.tr(),
+                        style: AppStyles.semiBold14.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -157,30 +162,37 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
                   spacing: 10.w,
                   runSpacing: 10.h,
                   children: recent
-                      .map((q) => GestureDetector(
-                            onTap: () {
-                              _controller.text = q;
-                              _submit(q);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 14.w, vertical: 9.h),
-                              decoration: BoxDecoration(
-                                color: cs.surface,
-                                borderRadius: BorderRadius.circular(30.r),
-                                border: Border.all(color: cs.outline),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.history,
-                                      size: 16.r, color: cs.onSurfaceVariant),
-                                  SizedBox(width: 6.w),
-                                  Text(q, style: AppStyles.regular14),
-                                ],
-                              ),
+                      .map(
+                        (q) => GestureDetector(
+                          onTap: () {
+                            _controller.text = q;
+                            _submit(q);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 14.w,
+                              vertical: 9.h,
                             ),
-                          ))
+                            decoration: BoxDecoration(
+                              color: cs.surface,
+                              borderRadius: BorderRadius.circular(30.r),
+                              border: Border.all(color: cs.outline),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.history,
+                                  size: 16.r,
+                                  color: cs.onSurfaceVariant,
+                                ),
+                                SizedBox(width: 6.w),
+                                Text(q, style: AppStyles.regular14),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
                       .toList(),
                 ),
               ],

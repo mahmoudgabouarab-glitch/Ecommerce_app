@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// Wrapper for the paginated `/products` response: `{ data: [...], meta: {...} }`.
 class ProductsResponse extends Equatable {
   final List<ProductModel> data;
   final int currentPage;
@@ -117,7 +116,6 @@ class ProductVariantModel extends Equatable {
     required this.priceDiff,
   });
 
-  /// A short display label, e.g. "M", "42", or "M / Red".
   String get label => [size, color].where((e) => e != null && e.isNotEmpty).join(' / ');
 
   factory ProductVariantModel.fromJson(Map<String, dynamic> json) {

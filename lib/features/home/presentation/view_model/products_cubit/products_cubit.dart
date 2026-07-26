@@ -17,8 +17,7 @@ class ProductsCubit extends Cubit<ProductsState> {
   double? _minPrice;
   double? _maxPrice;
 
-  // Pagination state
-  static const int _perPage = 6; // small page size to showcase infinite scroll
+  static const int _perPage = 6;
   final List<ProductModel> _products = [];
   int _page = 1;
   int _lastPage = 1;
@@ -62,7 +61,6 @@ class ProductsCubit extends Cubit<ProductsState> {
   Future<void> filterByCategory(int? categoryId) =>
       getProducts(categoryId: categoryId, resetFilters: true);
 
-  /// Load the first page (initial load / refresh / filter change).
   Future<void> _fetchFirstPage() async {
     emit(ProductsLoading());
     _page = 1;
@@ -75,28 +73,30 @@ class ProductsCubit extends Cubit<ProductsState> {
       page: 1,
       perPage: _perPage,
     );
-    result.fold(
-      (failure) => emit(ProductsFailure(failure.errorMessage)),
-      (response) {
-        _products
-          ..clear()
-          ..addAll(response.data);
-        _lastPage = response.lastPage;
-        emit(ProductsSuccess(
-          List.of(_products),
-          hasReachedMax: _page >= _lastPage,
-        ));
-      },
-    );
+    result.fold((failure) => emit(ProductsFailure(failure.errorMessage)), (
+      response,
+    ) {
+      _products
+        ..clear()
+        ..addAll(response.data);
+      _lastPage = response.lastPage;
+      emit(
+        ProductsSuccess(List.of(_products), hasReachedMax: _page >= _lastPage),
+      );
+    });
   }
 
-  /// Append the next page when the user scrolls near the bottom.
   Future<void> loadMore() async {
     if (_isLoadingMore || _page >= _lastPage) return;
 
     _isLoadingMore = true;
-    emit(ProductsSuccess(List.of(_products),
-        hasReachedMax: false, loadingMore: true));
+    emit(
+      ProductsSuccess(
+        List.of(_products),
+        hasReachedMax: false,
+        loadingMore: true,
+      ),
+    );
 
     final result = await _repo.getProducts(
       categoryId: _categoryId,
@@ -109,16 +109,23 @@ class ProductsCubit extends Cubit<ProductsState> {
     );
     result.fold(
       (_) {
-        // Keep what we have; allow retry on next scroll.
-        emit(ProductsSuccess(List.of(_products),
-            hasReachedMax: _page >= _lastPage));
+        emit(
+          ProductsSuccess(
+            List.of(_products),
+            hasReachedMax: _page >= _lastPage,
+          ),
+        );
       },
       (response) {
         _page += 1;
         _lastPage = response.lastPage;
         _products.addAll(response.data);
-        emit(ProductsSuccess(List.of(_products),
-            hasReachedMax: _page >= _lastPage));
+        emit(
+          ProductsSuccess(
+            List.of(_products),
+            hasReachedMax: _page >= _lastPage,
+          ),
+        );
       },
     );
     _isLoadingMore = false;

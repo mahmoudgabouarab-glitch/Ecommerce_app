@@ -7,7 +7,6 @@ sealed class SearchState extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Empty query — show recent searches.
 final class SearchIdle extends SearchState {
   final List<String> recent;
   const SearchIdle(this.recent);

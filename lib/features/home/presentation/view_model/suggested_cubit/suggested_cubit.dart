@@ -6,21 +6,17 @@ import '../../../data/repo/home_repo.dart';
 
 part 'suggested_state.dart';
 
-/// Loads a small list of products for a horizontal "suggestions" carousel.
-/// Used both for per-product related items and the home "recommended" row.
 class SuggestedCubit extends Cubit<SuggestedState> {
   SuggestedCubit(this._repo) : super(SuggestedInitial());
 
   final HomeRepo _repo;
 
-  /// "You may also like" — products related to [productId].
   Future<void> loadRelated(int productId) async {
     emit(SuggestedLoading());
     final result = await _repo.getRelated(productId);
     _emitResult(result);
   }
 
-  /// "Recommended for you" — featured products for the home screen.
   Future<void> loadFeatured() async {
     emit(SuggestedLoading());
     final result = await _repo.getProducts(featured: true, perPage: 10);

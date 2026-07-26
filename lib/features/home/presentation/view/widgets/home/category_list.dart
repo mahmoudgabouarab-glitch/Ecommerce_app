@@ -2,13 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../view_model/categories_cubit/categories_cubit.dart';
 import '../../../view_model/products_cubit/products_cubit.dart';
 
-/// Horizontal list of category pills. Tapping one filters the product grid.
 class CategoryList extends StatefulWidget {
   const CategoryList({super.key});
 
@@ -17,7 +15,7 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> {
-  int? _selectedId; // null = All
+  int? _selectedId;
 
   @override
   Widget build(BuildContext context) {

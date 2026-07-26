@@ -21,7 +21,6 @@ abstract class HomeRepo {
 
   Future<Either<Failure, ProductModel>> getProductDetails(int id);
 
-  /// Products related to [productId] — "You may also like".
   Future<Either<Failure, List<ProductModel>>> getRelated(int productId);
 
   Future<Either<Failure, List<ReviewModel>>> getReviews(int productId);

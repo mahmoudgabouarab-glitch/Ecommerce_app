@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// Wrapper for the `/categories` response: `{ data: [...] }`.
 class CategoriesResponse extends Equatable {
   final List<CategoryModel> data;
 

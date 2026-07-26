@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/app_functions.dart';
 import '../../../../../../core/utils/styles.dart';
@@ -11,7 +10,6 @@ import '../../../../../wishlist/presentation/view_model/wishlist_cubit/wishlist_
 import '../../../../data/models/product_model.dart';
 import '../../details_view.dart';
 
-/// A polished product card used in the home grid.
 class ProductItem extends StatelessWidget {
   const ProductItem({super.key, required this.product});
 
@@ -155,7 +153,6 @@ class ProductItem extends StatelessWidget {
   }
 }
 
-/// Favorite toggle that reflects and updates the shared [WishlistCubit].
 class _WishlistHeart extends StatelessWidget {
   const _WishlistHeart({required this.productId});
   final int productId;
@@ -163,7 +160,6 @@ class _WishlistHeart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    // Rebuild whenever the wishlist changes.
     context.watch<WishlistCubit>();
     final isFav = context.read<WishlistCubit>().isFavorite(productId);
 

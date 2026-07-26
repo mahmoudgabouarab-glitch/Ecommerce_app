@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../../../core/utils/styles.dart';
 
 class _Banner {
@@ -13,7 +11,6 @@ class _Banner {
   final List<Color> colors;
 }
 
-/// Auto-scrolling promo banner carousel with page dots.
 class HomeBanner extends StatefulWidget {
   const HomeBanner({super.key});
 

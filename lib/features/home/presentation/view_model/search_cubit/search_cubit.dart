@@ -32,7 +32,6 @@ class SearchCubit extends Cubit<SearchState> {
     );
   }
 
-  /// Persist a submitted query to the recent-searches list (most recent first).
   Future<void> saveRecent(String query) async {
     final q = query.trim();
     if (q.isEmpty) return;

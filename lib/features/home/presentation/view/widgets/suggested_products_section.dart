@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_functions.dart';
 import '../../../../../core/utils/styles.dart';
@@ -10,8 +9,6 @@ import '../../../data/models/product_model.dart';
 import '../../view_model/suggested_cubit/suggested_cubit.dart';
 import '../details_view.dart';
 
-/// A titled horizontal carousel of product suggestions. Renders nothing while
-/// loading or on failure/empty, so it never leaves an empty labelled gap.
 class SuggestedProductsSection extends StatelessWidget {
   const SuggestedProductsSection({super.key, required this.title});
 

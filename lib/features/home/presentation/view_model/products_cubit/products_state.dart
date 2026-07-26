@@ -13,11 +13,7 @@ final class ProductsLoading extends ProductsState {}
 
 final class ProductsSuccess extends ProductsState {
   final List<ProductModel> products;
-
-  /// True when there are no more pages to load.
   final bool hasReachedMax;
-
-  /// True while the next page is being fetched (shows a bottom spinner).
   final bool loadingMore;
 
   const ProductsSuccess(
