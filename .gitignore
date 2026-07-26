@@ -1,5 +1,6 @@
-# Generated build artifacts (real Flutter build lives in frontend/build)
+# Generated build/tooling artifacts (the real ones live in frontend/)
 build/
+.dart_tool/
 
 # OS / editor cruft
 .DS_Store
