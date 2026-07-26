@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/errors/failure.dart';
+import '../../../../../core/network/cache_helper.dart';
+import '../../../../../core/network/cache_keys.dart';
 import '../../../../../core/utils/user_cache.dart';
 import '../../../data/models/auth_model.dart';
 import '../../../data/repo/auth_repo.dart';
@@ -14,8 +16,13 @@ class LoginCubit extends Cubit<LoginState> {
 
   final AuthRepo _repo;
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  // Pre-fill with the last successful sign-in so it survives logout.
+  final emailController = TextEditingController(
+    text: CacheHelper.getData(key: CacheKeys.lastEmail) as String? ?? '',
+  );
+  final passwordController = TextEditingController(
+    text: CacheHelper.getData(key: CacheKeys.lastPassword) as String? ?? '',
+  );
   final formKey = GlobalKey<FormState>();
 
   Future<void> login() async {
@@ -37,6 +44,10 @@ class LoginCubit extends Cubit<LoginState> {
       },
       (auth) async {
         await UserCache.save(auth.user, token: auth.token);
+        await CacheHelper.saveData(
+            key: CacheKeys.lastEmail, value: emailController.text.trim());
+        await CacheHelper.saveData(
+            key: CacheKeys.lastPassword, value: passwordController.text);
         emit(LoginSuccess(auth));
       },
     );
