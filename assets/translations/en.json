@@ -2,7 +2,7 @@
   "app_name": "ShopSphere",
   "shop_smarter": "Shop smarter",
 
-  "welcome_back": "Welcome back 👋",
+  "welcome_back": "Welcome back",
   "sign_in_subtitle": "Sign in to continue shopping",
   "email": "Email",
   "password": "Password",
@@ -53,7 +53,7 @@
   "passwords_no_match": "Passwords do not match",
   "required_field": "Required field",
 
-  "hello": "Hello, {} 👋",
+  "hello": "Hello, {}",
   "find_favorite": "Find your favorite",
   "search_products": "Search products...",
   "search": "Search",

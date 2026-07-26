@@ -2,7 +2,7 @@
   "app_name": "شوب سفير",
   "shop_smarter": "تسوّق أذكى",
 
-  "welcome_back": "أهلاً بعودتك 👋",
+  "welcome_back": "أهلاً بعودتك",
   "sign_in_subtitle": "سجّل دخولك لتكمل التسوّق",
   "email": "البريد الإلكتروني",
   "password": "كلمة المرور",
@@ -53,7 +53,7 @@
   "passwords_no_match": "كلمتا المرور غير متطابقتين",
   "required_field": "حقل مطلوب",
 
-  "hello": "مرحبًا، {} 👋",
+  "hello": "مرحبًا، {}",
   "find_favorite": "اعثر على ما تحب",
   "search_products": "ابحث عن منتجات...",
   "search": "بحث",

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
-
 import '../../../../core/network/service_locator.dart';
 import '../../../../core/utils/app_functions.dart';
 import '../../../cart/data/repo/cart_repo_impl.dart';
@@ -33,31 +32,29 @@ class DetailsView extends StatelessWidget {
           create: (_) =>
               SuggestedCubit(getIt<HomeRepoImpl>())..loadRelated(productId),
         ),
-        BlocProvider(
-          create: (_) => AddToCartCubit(getIt<CartRepoImpl>()),
-        ),
+        BlocProvider(create: (_) => AddToCartCubit(getIt<CartRepoImpl>())),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            BlocBuilder<DetailsCubit, DetailsState>(
-              builder: (context, state) {
-                if (state is! DetailsSuccess) return const SizedBox.shrink();
-                final p = state.product;
-                return IconButton(
-                  icon: const Icon(Icons.share_outlined),
-                  onPressed: () => Share.share(
-                    'Check out "${p.title}" on E-Commerce App — '
-                    '${formatPrice(p.effectivePrice)}',
-                    subject: p.title,
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+        appBar: AppBar(actions: shareButton),
         body: const SafeArea(child: DetailsBody()),
       ),
     );
   }
 }
+
+List<Widget> shareButton = [
+  BlocBuilder<DetailsCubit, DetailsState>(
+    builder: (context, state) {
+      if (state is! DetailsSuccess) return const SizedBox.shrink();
+      final p = state.product;
+      return IconButton(
+        icon: const Icon(Icons.share_outlined),
+        onPressed: () => Share.share(
+          'Check out "${p.title}" on E-Commerce App — '
+          '${formatPrice(p.effectivePrice)}',
+          subject: p.title,
+        ),
+      );
+    },
+  ),
+];

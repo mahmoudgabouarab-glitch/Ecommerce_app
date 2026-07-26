@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/utils/app_colors.dart';
 
-/// Swipeable product image gallery with page dots.
 class ProductGallery extends StatefulWidget {
   const ProductGallery({super.key, required this.images});
 
