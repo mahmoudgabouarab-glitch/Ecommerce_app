@@ -22,6 +22,25 @@ use Illuminate\Support\Facades\Route;
 | Public routes
 |--------------------------------------------------------------------------
 */
+Route::get('/_mailtest', function (\Illuminate\Http\Request $request) {
+    $config = [
+        'mailer' => config('mail.default'),
+        'host' => config('mail.mailers.smtp.host'),
+        'port' => config('mail.mailers.smtp.port'),
+        'username_set' => (bool) config('mail.mailers.smtp.username'),
+        'from' => config('mail.from.address'),
+    ];
+    try {
+        \Illuminate\Support\Facades\Mail::raw('ShopSphere SMTP test.', function ($m) use ($request) {
+            $m->to($request->query('email', 'test@example.com'))->subject('ShopSphere SMTP test');
+        });
+
+        return response()->json(['ok' => true, 'config' => $config]);
+    } catch (\Throwable $e) {
+        return response()->json(['ok' => false, 'error' => $e->getMessage(), 'config' => $config], 500);
+    }
+});
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/email/verify', [EmailVerificationController::class, 'verify']);
