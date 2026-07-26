@@ -5,6 +5,7 @@ import '../../../../core/errors/failure.dart';
 import '../../../../core/network/api_service.dart';
 import '../../../home/data/models/product_model.dart';
 import '../../../order/data/models/order_model.dart';
+import '../models/admin_user_model.dart';
 import '../models/coupon_model.dart';
 import '../models/stats_model.dart';
 import 'admin_repo.dart';
@@ -203,6 +204,39 @@ class AdminRepoImpl implements AdminRepo {
     try {
       await _api.delete(endpoint: "admin/coupons/$id");
       return const Right(unit);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  // --- Users ---
+
+  @override
+  Future<Either<Failure, List<AdminUserModel>>> getUsers({String? search}) async {
+    try {
+      final data = await _api.get(
+        endpoint: "admin/users",
+        queryParameters: {"search": ?search},
+      );
+      final list = (data['data'] as List<dynamic>? ?? [])
+          .map((e) => AdminUserModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return Right(list);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AdminUserModel>> updateUserRole(
+      int id, String role) async {
+    try {
+      final data = await _api.patch(
+        endpoint: "admin/users/$id/role",
+        data: {"role": role},
+      );
+      final map = (data['data'] ?? data) as Map<String, dynamic>;
+      return Right(AdminUserModel.fromJson(map));
     } catch (e) {
       return Left(_handle(e));
     }

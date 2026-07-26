@@ -14,6 +14,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
@@ -109,6 +110,10 @@ Route::middleware('auth:sanctum')->group(function () {
         // Orders
         Route::get('/orders', [OrderController::class, 'adminIndex']);
         Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus']);
+
+        // Users (search + promote/demote admins)
+        Route::get('/users', [UserController::class, 'index']);
+        Route::patch('/users/{user}/role', [UserController::class, 'updateRole']);
 
         // Dashboard stats
         Route::get('/stats', [StatsController::class, 'index']);

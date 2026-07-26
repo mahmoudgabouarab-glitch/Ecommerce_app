@@ -9,10 +9,12 @@ import '../../data/repo/admin_repo_impl.dart';
 import '../view_model/admin_categories_cubit/admin_categories_cubit.dart';
 import '../view_model/admin_coupons_cubit/admin_coupons_cubit.dart';
 import '../view_model/admin_products_cubit/admin_products_cubit.dart';
+import '../view_model/admin_users_cubit/admin_users_cubit.dart';
 import 'widgets/admin_categories_tab.dart';
 import 'widgets/admin_coupons_tab.dart';
 import 'widgets/admin_orders_tab.dart';
 import 'widgets/admin_products_tab.dart';
+import 'widgets/admin_users_tab.dart';
 import 'widgets/overview_tab.dart';
 
 class AdminDashboardView extends StatelessWidget {
@@ -21,7 +23,7 @@ class AdminDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           title: Text('admin_dashboard'.tr()),
@@ -36,6 +38,7 @@ class AdminDashboardView extends StatelessWidget {
               Tab(text: 'products'.tr()),
               Tab(text: 'categories'.tr()),
               Tab(text: 'coupons'.tr()),
+              Tab(text: 'users'.tr()),
             ],
           ),
         ),
@@ -62,6 +65,11 @@ class AdminDashboardView extends StatelessWidget {
                 create: (_) =>
                     AdminCouponsCubit(getIt<AdminRepoImpl>())..getCoupons(),
                 child: const AdminCouponsTab(),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    AdminUsersCubit(getIt<AdminRepoImpl>())..getUsers(),
+                child: const AdminUsersTab(),
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../home/data/models/product_model.dart';
 import '../../../order/data/models/order_model.dart';
+import '../models/admin_user_model.dart';
 import '../models/coupon_model.dart';
 import '../models/stats_model.dart';
 
@@ -53,4 +54,9 @@ abstract class AdminRepo {
   });
 
   Future<Either<Failure, Unit>> deleteCoupon(int id);
+
+  // --- Users ---
+  Future<Either<Failure, List<AdminUserModel>>> getUsers({String? search});
+
+  Future<Either<Failure, AdminUserModel>> updateUserRole(int id, String role);
 }
