@@ -53,6 +53,7 @@ dependencies:
   easy_localization: ^3.0.7
   firebase_core: ^4.12.1
   firebase_messaging: ^16.4.3
+  flutter_secure_storage: ^10.3.1
 
 dev_dependencies:
   flutter_test:

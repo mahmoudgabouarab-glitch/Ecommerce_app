@@ -12,7 +12,7 @@ class CacheKeys {
   static const String themeMode = "themeMode";
   static const String onboardingSeen = "onboardingSeen";
   static const String recentSearches = "recentSearches";
-  // Last successful sign-in, pre-filled on the login screen after logout.
+  // Last successful sign-in email, pre-filled on the login screen after logout.
+  // (The password is kept in encrypted SecureStore, not here.)
   static const String lastEmail = "lastEmail";
-  static const String lastPassword = "lastPassword";
 }
