@@ -4,26 +4,32 @@ class ProductsResponse extends Equatable {
   final List<ProductModel> data;
   final int currentPage;
   final int lastPage;
+  final double? maxPrice; // most expensive product in the catalogue
 
   const ProductsResponse({
     required this.data,
     this.currentPage = 1,
     this.lastPage = 1,
+    this.maxPrice,
   });
 
   factory ProductsResponse.fromJson(Map<String, dynamic> json) {
     final meta = json['meta'] as Map<String, dynamic>?;
+    final rawMax = json['max_price'];
     return ProductsResponse(
       data: (json['data'] as List<dynamic>? ?? [])
           .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       currentPage: meta?['current_page'] as int? ?? 1,
       lastPage: meta?['last_page'] as int? ?? 1,
+      maxPrice: rawMax == null
+          ? null
+          : (rawMax is num ? rawMax.toDouble() : double.tryParse('$rawMax')),
     );
   }
 
   @override
-  List<Object?> get props => [data, currentPage, lastPage];
+  List<Object?> get props => [data, currentPage, lastPage, maxPrice];
 }
 
 class ProductModel extends Equatable {

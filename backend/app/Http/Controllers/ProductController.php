@@ -59,7 +59,11 @@ class ProductController extends Controller
 
         $products = $query->paginate($request->integer('per_page', 12));
 
-        return ProductResource::collection($products);
+        // Expose the most expensive product so the client can size its price
+        // filter to the real catalogue range instead of a hard-coded max.
+        return ProductResource::collection($products)->additional([
+            'max_price' => (float) (Product::max('price') ?? 0),
+        ]);
     }
 
     // GET /api/products/{product}

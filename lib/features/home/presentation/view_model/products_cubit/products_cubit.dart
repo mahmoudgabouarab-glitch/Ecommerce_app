@@ -23,9 +23,14 @@ class ProductsCubit extends Cubit<ProductsState> {
   int _lastPage = 1;
   bool _isLoadingMore = false;
 
+  double? _catalogMaxPrice;
+
   String? get sort => _sort;
   double? get minPrice => _minPrice;
   double? get maxPrice => _maxPrice;
+
+  /// Highest product price in the catalogue, used to size the price filter.
+  double? get catalogMaxPrice => _catalogMaxPrice;
 
   Future<void> getProducts({
     int? categoryId,
@@ -80,6 +85,11 @@ class ProductsCubit extends Cubit<ProductsState> {
         ..clear()
         ..addAll(response.data);
       _lastPage = response.lastPage;
+      // Keep the largest value we've seen so the slider never shrinks below
+      // an already-picked range.
+      if (response.maxPrice != null && response.maxPrice! > 0) {
+        _catalogMaxPrice = response.maxPrice;
+      }
       emit(
         ProductsSuccess(List.of(_products), hasReachedMax: _page >= _lastPage),
       );

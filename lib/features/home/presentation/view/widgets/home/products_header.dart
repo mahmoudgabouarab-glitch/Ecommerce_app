@@ -55,13 +55,22 @@ class _FilterSheet extends StatefulWidget {
 
 class _FilterSheetState extends State<_FilterSheet> {
   static const double _min = 0;
-  static const double _max = 3000;
+
+  // Top of the slider = the priciest product in the catalogue (rounded up to a
+  // clean step), falling back to a sane default when it isn't known yet.
+  late final double _max = _resolveMax();
 
   late RangeValues _range = RangeValues(
-    widget.cubit.minPrice ?? _min,
-    widget.cubit.maxPrice ?? _max,
+    (widget.cubit.minPrice ?? _min).clamp(_min, _max).toDouble(),
+    (widget.cubit.maxPrice ?? _max).clamp(_min, _max).toDouble(),
   );
   late String? _sort = widget.cubit.sort;
+
+  double _resolveMax() {
+    final m = widget.cubit.catalogMaxPrice;
+    if (m == null || m <= 0) return 3000;
+    return ((m / 100).ceil() * 100).toDouble();
+  }
 
   static const _sorts = {
     'newest': 'newest',
