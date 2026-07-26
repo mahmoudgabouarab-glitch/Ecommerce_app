@@ -9,7 +9,7 @@ import '../../../../../core/utils/styles.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../core/widgets/custom_text_field.dart';
-import '../../../../order/presentation/view/order_details_view.dart';
+import '../../../../main_layout.dart';
 import '../../view_model/checkout_cubit/checkout_cubit.dart';
 
 class CheckoutBody extends StatelessWidget {
@@ -27,8 +27,9 @@ class CheckoutBody extends StatelessWidget {
         if (state is CheckoutSuccess) {
           showSnackBar(context, 'order_placed'.tr(args: ['${state.order.id}']),
               success: true);
-          // Go straight to the new order's details (back returns to home).
-          pushAndKeepFirst(context, OrderDetailsView(order: state.order));
+          // Reset to a fresh shell on the Orders tab: this reloads the (now
+          // empty) cart and the orders list, showing the just-placed order.
+          pushAndRemoveUntil(context, const MainLayout(initialIndex: 2));
         } else if (state is CheckoutFailure) {
           showSnackBar(context, state.error);
         }

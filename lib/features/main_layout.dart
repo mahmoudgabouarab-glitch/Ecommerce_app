@@ -16,14 +16,17 @@ import 'settings/presentation/view/settings_view.dart';
 import 'wishlist/presentation/view_model/wishlist_cubit/wishlist_cubit.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
+  const MainLayout({super.key, this.initialIndex = 0});
+
+  /// Tab to open on first build (0 home, 1 cart, 2 orders, 3 profile).
+  final int initialIndex;
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  int _index = 0;
+  late int _index = widget.initialIndex;
 
   late final CartCubit _cartCubit = CartCubit(getIt<CartRepoImpl>())..getCart();
   late final OrdersCubit _ordersCubit = OrdersCubit(getIt<OrderRepoImpl>())
