@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
-use App\Mail\OtpMail;
 use App\Models\User;
+use App\Services\Mailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class EmailVerificationController extends Controller
 {
@@ -26,15 +24,12 @@ class EmailVerificationController extends Controller
             ['code' => Hash::make($code), 'created_at' => now()],
         );
 
-        try {
-            Mail::to($email)->send(new OtpMail(
-                'Verify your email',
-                'Use the code below to verify your email address:',
-                $code,
-            ));
-        } catch (\Throwable $e) {
-            Log::warning('Verification email failed: '.$e->getMessage());
-        }
+        Mailer::sendOtp(
+            $email,
+            'Verify your email',
+            'Use the code below to verify your email address:',
+            $code,
+        );
     }
 
     // POST /api/email/verify  { email, code }

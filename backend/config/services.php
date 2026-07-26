@@ -18,4 +18,9 @@ return [
     'fcm' => [
         'credentials' => env('FCM_CREDENTIALS'),
     ],
+
+    // Brevo transactional email (HTTP API — SMTP ports are blocked on Railway).
+    'brevo' => [
+        'key' => env('BREVO_API_KEY'),
+    ],
 ];

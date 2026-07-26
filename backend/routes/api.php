@@ -23,22 +23,31 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::get('/_mailtest', function (\Illuminate\Http\Request $request) {
+    $key = config('services.brevo.key');
     $config = [
-        'mailer' => config('mail.default'),
-        'host' => config('mail.mailers.smtp.host'),
-        'port' => config('mail.mailers.smtp.port'),
-        'username_set' => (bool) config('mail.mailers.smtp.username'),
+        'brevo_key_set' => (bool) $key,
         'from' => config('mail.from.address'),
+        'from_name' => config('mail.from.name'),
     ];
-    try {
-        \Illuminate\Support\Facades\Mail::raw('ShopSphere SMTP test.', function ($m) use ($request) {
-            $m->to($request->query('email', 'test@example.com'))->subject('ShopSphere SMTP test');
-        });
-
-        return response()->json(['ok' => true, 'config' => $config]);
-    } catch (\Throwable $e) {
-        return response()->json(['ok' => false, 'error' => $e->getMessage(), 'config' => $config], 500);
+    if (! $key) {
+        return response()->json(['ok' => false, 'reason' => 'BREVO_API_KEY not set', 'config' => $config], 500);
     }
+
+    $res = \Illuminate\Support\Facades\Http::withHeaders(['api-key' => $key, 'accept' => 'application/json'])
+        ->timeout(20)
+        ->post('https://api.brevo.com/v3/smtp/email', [
+            'sender' => ['email' => config('mail.from.address'), 'name' => config('mail.from.name') ?? 'ShopSphere'],
+            'to' => [['email' => $request->query('email', 'test@example.com')]],
+            'subject' => 'ShopSphere test',
+            'htmlContent' => '<p>ShopSphere Brevo test — it works.</p>',
+        ]);
+
+    return response()->json([
+        'ok' => $res->successful(),
+        'status' => $res->status(),
+        'body' => $res->json() ?? $res->body(),
+        'config' => $config,
+    ], $res->successful() ? 200 : 500);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

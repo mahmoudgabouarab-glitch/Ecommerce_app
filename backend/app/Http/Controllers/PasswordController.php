@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\OtpMail;
 use App\Models\User;
+use App\Services\Mailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class PasswordController extends Controller
 {
@@ -31,15 +29,12 @@ class PasswordController extends Controller
             ['token' => Hash::make($otp), 'created_at' => now()]
         );
 
-        try {
-            Mail::to($request->email)->send(new OtpMail(
-                'Reset your password',
-                'Use the code below to reset your password:',
-                $otp,
-            ));
-        } catch (\Throwable $e) {
-            Log::warning('Reset email failed: '.$e->getMessage());
-        }
+        Mailer::sendOtp(
+            $request->email,
+            'Reset your password',
+            'Use the code below to reset your password:',
+            $otp,
+        );
 
         return response()->json(['message' => 'A reset code has been sent to your email.']);
     }
