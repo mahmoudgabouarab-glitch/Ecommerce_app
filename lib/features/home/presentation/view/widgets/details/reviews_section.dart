@@ -100,16 +100,22 @@ class _ReviewTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              // Tap the reviewer (avatar + name) to open their public profile.
+              // Tap the reviewer to open their profile — guests must sign in.
               InkWell(
                 borderRadius: BorderRadius.circular(20.r),
-                onTap: () => push(
-                  context,
-                  PublicProfileView(
-                    userId: review.userId,
-                    userName: review.userName,
-                  ),
-                ),
+                onTap: () {
+                  if (isGuestUser()) {
+                    showLoginRequired(context);
+                    return;
+                  }
+                  push(
+                    context,
+                    PublicProfileView(
+                      userId: review.userId,
+                      userName: review.userName,
+                    ),
+                  );
+                },
                 child: Row(
                   children: [
                     CircleAvatar(

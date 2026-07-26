@@ -20,7 +20,7 @@ class UserController extends Controller
             'avatar' => $user->avatar ? url('storage/'.$user->avatar) : null,
             'gender' => $user->gender,
             'birth_date' => $user->birth_date?->format('Y-m-d'),
-            'phone' => $user->phone,
+            'phone' => $user->show_phone ? $user->phone : null,
             'bio' => $user->bio,
             'member_since' => $user->created_at?->format('Y-m'),
             'reviews_count' => $user->reviews()->count(),

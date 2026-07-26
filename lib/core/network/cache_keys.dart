@@ -5,6 +5,7 @@ class CacheKeys {
   static const String userEmail = "userEmail";
   static const String userRole = "userRole";
   static const String userPhone = "userPhone";
+  static const String userShowPhone = "userShowPhone";
   static const String userAvatar = "userAvatar";
   static const String userGender = "userGender";
   static const String userBirthDate = "userBirthDate";

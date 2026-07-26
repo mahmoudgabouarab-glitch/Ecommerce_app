@@ -103,6 +103,8 @@
   "address_line": "Address line",
   "city": "City",
   "phone": "Phone",
+  "show_phone": "Show phone on my profile",
+  "show_phone_desc": "When on, other users can see your phone number.",
   "payment_method": "Payment method",
   "cash_on_delivery": "Cash on delivery",
   "credit_card": "Credit card",

@@ -27,6 +27,7 @@ class EditProfileView extends StatelessWidget {
         getIt<ProfileRepoImpl>(),
         name: CacheHelper.getDataString(key: CacheKeys.userName),
         phone: CacheHelper.getDataString(key: CacheKeys.userPhone),
+        showPhone: CacheHelper.getData(key: CacheKeys.userShowPhone) == true,
         gender: _nullIfEmpty(CacheHelper.getDataString(key: CacheKeys.userGender)),
         birthDate:
             _nullIfEmpty(CacheHelper.getDataString(key: CacheKeys.userBirthDate)),
@@ -95,7 +96,9 @@ class _EditProfileBody extends StatelessWidget {
                   keyboardType: TextInputType.phone,
                   validator: (_) => null,
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 8.h),
+                _ShowPhoneSwitch(cubit: cubit),
+                SizedBox(height: 8.h),
                 _label(context, 'gender'.tr()),
                 _GenderSelector(cubit: cubit),
                 SizedBox(height: 16.h),
@@ -129,6 +132,33 @@ class _EditProfileBody extends StatelessWidget {
             style: AppStyles.semiBold14.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant)),
       );
+}
+
+class _ShowPhoneSwitch extends StatelessWidget {
+  const _ShowPhoneSwitch({required this.cubit});
+  final EditProfileCubit cubit;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: cs.surface,
+        borderRadius: BorderRadius.circular(14.r),
+        border: Border.all(color: cs.outlineVariant),
+      ),
+      child: SwitchListTile(
+        value: cubit.showPhone,
+        activeThumbColor: AppColors.primary,
+        contentPadding: EdgeInsets.zero,
+        title: Text('show_phone'.tr(), style: AppStyles.semiBold14),
+        subtitle: Text('show_phone_desc'.tr(),
+            style: AppStyles.regular12.copyWith(color: cs.onSurfaceVariant)),
+        onChanged: cubit.setShowPhone,
+      ),
+    );
+  }
 }
 
 class _GenderSelector extends StatelessWidget {

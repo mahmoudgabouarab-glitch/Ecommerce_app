@@ -20,6 +20,7 @@ class ProfileController extends Controller
         $data = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:30'],
+            'show_phone' => ['sometimes', 'boolean'],
             'gender' => ['nullable', 'in:male,female,other'],
             'birth_date' => ['nullable', 'date'],
             'bio' => ['nullable', 'string', 'max:500'],
@@ -38,6 +39,9 @@ class ProfileController extends Controller
             if (array_key_exists($field, $data)) {
                 $user->{$field} = $data[$field];
             }
+        }
+        if ($request->has('show_phone')) {
+            $user->show_phone = $request->boolean('show_phone');
         }
         $user->save();
 

@@ -22,6 +22,7 @@ class UserModel extends Equatable {
   final String email;
   final String role;
   final String? phone;
+  final bool showPhone;
   final String? avatar;
   final String? gender;
   final String? birthDate;
@@ -33,6 +34,7 @@ class UserModel extends Equatable {
     required this.email,
     required this.role,
     this.phone,
+    this.showPhone = false,
     this.avatar,
     this.gender,
     this.birthDate,
@@ -47,6 +49,7 @@ class UserModel extends Equatable {
         email: json['email'] as String? ?? '',
         role: json['role'] as String? ?? 'customer',
         phone: json['phone'] as String?,
+        showPhone: json['show_phone'] as bool? ?? false,
         avatar: json['avatar'] as String?,
         gender: json['gender'] as String?,
         birthDate: json['birth_date'] as String?,
@@ -59,6 +62,7 @@ class UserModel extends Equatable {
         'email': email,
         'role': role,
         'phone': phone,
+        'show_phone': showPhone,
         'avatar': avatar,
         'gender': gender,
         'birth_date': birthDate,
@@ -67,5 +71,5 @@ class UserModel extends Equatable {
 
   @override
   List<Object?> get props =>
-      [id, name, email, role, phone, avatar, gender, birthDate, bio];
+      [id, name, email, role, phone, showPhone, avatar, gender, birthDate, bio];
 }

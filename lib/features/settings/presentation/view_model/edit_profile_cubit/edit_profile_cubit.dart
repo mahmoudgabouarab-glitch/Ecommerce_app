@@ -13,6 +13,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     this._repo, {
     String? name,
     String? phone,
+    this.showPhone = false,
     String? bio,
     this.gender,
     this.birthDate,
@@ -33,6 +34,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
 
   String? gender; // male | female | other
   String? birthDate; // yyyy-MM-dd
+  bool showPhone;
 
   String? _pickedPath;
   String? _avatarUrl;
@@ -42,6 +44,11 @@ class EditProfileCubit extends Cubit<EditProfileState> {
 
   void setGender(String value) {
     gender = value;
+    emit(EditProfileChanged());
+  }
+
+  void setShowPhone(bool value) {
+    showPhone = value;
     emit(EditProfileChanged());
   }
 
@@ -70,6 +77,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     final result = await _repo.updateProfile(
       name: nameController.text.trim(),
       phone: phoneController.text.trim(),
+      showPhone: showPhone,
       gender: gender,
       birthDate: birthDate,
       bio: bioController.text.trim(),

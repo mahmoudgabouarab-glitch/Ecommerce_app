@@ -7,6 +7,7 @@ abstract class ProfileRepo {
   Future<Either<Failure, UserModel>> updateProfile({
     required String name,
     String? phone,
+    bool? showPhone,
     String? gender,
     String? birthDate,
     String? bio,

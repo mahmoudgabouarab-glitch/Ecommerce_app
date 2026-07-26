@@ -17,6 +17,10 @@ class UserCache {
       value: user.phone ?? '',
     );
     await CacheHelper.saveData(
+      key: CacheKeys.userShowPhone,
+      value: user.showPhone,
+    );
+    await CacheHelper.saveData(
       key: CacheKeys.userAvatar,
       value: user.avatar ?? '',
     );

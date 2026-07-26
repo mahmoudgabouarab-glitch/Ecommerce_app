@@ -18,6 +18,7 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
+        'show_phone',
         'avatar',
         'gender',
         'birth_date',
@@ -34,6 +35,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'birth_date' => 'date',
+        'show_phone' => 'boolean',
     ];
 
     public function isAdmin(): bool
