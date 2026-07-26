@@ -5,11 +5,6 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Minimal Firebase Cloud Messaging (HTTP v1) sender. Signs a JWT with the
- * service-account key, exchanges it for an OAuth token, and posts to FCM.
- * Everything is wrapped so a push failure never breaks the calling flow.
- */
 class FcmSender
 {
     public static function send(array $tokens, string $title, string $body, array $data = []): void
@@ -21,7 +16,7 @@ class FcmSender
 
         $sa = self::credentials();
         if ($sa === null) {
-            return; // FCM not configured — silently skip.
+            return;
         }
 
         try {

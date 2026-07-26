@@ -8,9 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserIsAdmin
 {
-    /**
-     * Allow the request through only for authenticated admin users.
-     */
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->user() || $request->user()->role !== 'admin') {

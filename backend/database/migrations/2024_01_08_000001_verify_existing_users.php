@@ -12,8 +12,5 @@ return new class extends Migration
             ->update(['email_verified_at' => now()]);
     }
 
-    public function down(): void
-    {
-        //
-    }
+    public function down(): void {}
 };

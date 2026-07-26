@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Hash;
 
 class PasswordController extends Controller
 {
-    /**
-     * POST /api/password/forgot — email a 6-digit reset code.
-     */
     public function forgot(Request $request)
     {
         $request->validate(['email' => ['required', 'email']]);
@@ -39,9 +36,6 @@ class PasswordController extends Controller
         return response()->json(['message' => 'A reset code has been sent to your email.']);
     }
 
-    /**
-     * POST /api/password/reset — verify the code and set a new password.
-     */
     public function reset(Request $request)
     {
         $request->validate([
@@ -69,9 +63,6 @@ class PasswordController extends Controller
         return response()->json(['message' => 'Password reset successfully.']);
     }
 
-    /**
-     * POST /api/password/change — change password for the logged-in user.
-     */
     public function change(Request $request)
     {
         $request->validate([

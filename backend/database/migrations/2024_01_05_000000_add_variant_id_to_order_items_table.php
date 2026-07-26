@@ -9,7 +9,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('order_items', function (Blueprint $table) {
-            // Which variant was purchased, so stock can be returned on cancel.
             $table->foreignId('variant_id')
                 ->nullable()
                 ->after('product_id')

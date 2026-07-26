@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->string('body');
-            $table->string('type')->default('order'); // order | general
+            $table->string('type')->default('order');
             $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamp('read_at')->nullable();
             $table->timestamps();

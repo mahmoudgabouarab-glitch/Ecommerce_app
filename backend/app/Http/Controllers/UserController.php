@@ -8,10 +8,8 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /** The seeded primary admin — always kept as admin. */
     private const PRIMARY_ADMIN = 'admin@shopsphere.com';
 
-    // GET /api/users/{user}/profile — public info about a reviewer.
     public function publicProfile(User $user)
     {
         return response()->json([
@@ -27,7 +25,6 @@ class UserController extends Controller
         ]);
     }
 
-    // GET /api/admin/users?search=
     public function index(Request $request)
     {
         $search = trim((string) $request->query('search', ''));
@@ -44,7 +41,6 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
-    // PATCH /api/admin/users/{user}/role  { role: admin|customer }
     public function updateRole(Request $request, User $user)
     {
         $data = $request->validate(['role' => ['required', 'in:admin,customer']]);

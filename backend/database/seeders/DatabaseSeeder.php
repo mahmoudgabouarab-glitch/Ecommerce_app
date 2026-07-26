@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // --- Admin + demo customer ---
         User::updateOrCreate(
             ['email' => 'admin@shopsphere.com'],
             ['name' => 'Admin', 'password' => 'admin123', 'role' => 'admin', 'email_verified_at' => now()]
@@ -23,7 +22,6 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Ahmed Ali', 'password' => 'password', 'role' => 'customer', 'phone' => '01000000000', 'email_verified_at' => now()]
         );
 
-        // --- Categories ---
         $categories = collect([
             ['name' => 'Electronics', 'slug' => 'electronics', 'kw' => 'electronics'],
             ['name' => 'Fashion', 'slug' => 'fashion', 'kw' => 'fashion'],
@@ -36,10 +34,7 @@ class DatabaseSeeder extends Seeder
 
         $id = fn (string $slug) => $categories->firstWhere('slug', $slug)->id;
 
-        // --- Products ---
-        // [title, category, price, sale, brand, featured, image-keyword]
         $products = [
-            // Electronics
             ['Wireless Headphones', 'electronics', 1200, 999, 'SoundMax', true, 'headphones'],
             ['Smart Watch Pro', 'electronics', 2500, null, 'TechWear', true, 'smartwatch'],
             ['Bluetooth Speaker', 'electronics', 800, 650, 'SoundMax', false, 'speaker'],
@@ -49,7 +44,6 @@ class DatabaseSeeder extends Seeder
             ['Power Bank 20000mAh', 'electronics', 700, null, 'VoltEdge', false, 'powerbank,battery'],
             ['4K Monitor 27"', 'electronics', 6500, 5900, 'ViewPro', true, 'monitor,computer'],
 
-            // Fashion
             ['Cotton T-Shirt', 'fashion', 300, 220, 'UrbanFit', false, 'tshirt'],
             ['Denim Jacket', 'fashion', 900, null, 'UrbanFit', true, 'denim,jacket'],
             ['Leather Backpack', 'fashion', 1450, 1200, 'CarryOn', true, 'leather,backpack'],
@@ -59,7 +53,6 @@ class DatabaseSeeder extends Seeder
             ['Wool Hoodie', 'fashion', 750, 620, 'UrbanFit', true, 'hoodie'],
             ['Baseball Cap', 'fashion', 250, null, 'StepUp', false, 'cap,hat'],
 
-            // Home
             ['Coffee Maker', 'home', 2200, null, 'HomeBrew', false, 'coffee,machine'],
             ['Table Lamp', 'home', 450, 399, 'BrightHome', false, 'lamp'],
             ['Ceramic Mug Set', 'home', 350, null, 'HomeBrew', false, 'mug,coffee'],
@@ -69,7 +62,6 @@ class DatabaseSeeder extends Seeder
             ['Kitchen Knife Set', 'home', 1250, null, 'ChefPro', true, 'knife,kitchen'],
             ['Countertop Blender', 'home', 1600, 1399, 'ChefPro', false, 'blender'],
 
-            // Sports
             ['Running Shoes', 'sports', 1800, 1500, 'RunFast', true, 'running,shoes'],
             ['Yoga Mat', 'sports', 350, null, 'FlexFit', false, 'yoga,mat'],
             ['Adjustable Dumbbell', 'sports', 2400, 2100, 'IronCore', true, 'dumbbell'],
@@ -90,7 +82,6 @@ class DatabaseSeeder extends Seeder
                     'price' => $price,
                     'sale_price' => $sale,
                     'stock' => mt_rand(15, 80),
-                    // 3 keyword-matched images for the gallery.
                     'images' => [$this->img($kw, 1), $this->img($kw, 2), $this->img($kw, 3)],
                     'rating' => round(mt_rand(35, 50) / 10, 1),
                     'rating_count' => mt_rand(5, 240),
@@ -99,10 +90,8 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        // --- Variants (size / color) for clothing & shoes ---
         $this->seedVariants();
 
-        // --- Coupon ---
         Coupon::updateOrCreate(
             ['code' => 'WELCOME10'],
             ['discount_type' => 'percent', 'amount' => 10, 'min_total' => 500, 'is_active' => true]
@@ -112,10 +101,8 @@ class DatabaseSeeder extends Seeder
         $this->command->info('admin@shopsphere.com / admin123  |  customer@shopsphere.com / password');
     }
 
-    /** Create size/color variants for apparel & footwear products. */
     private function seedVariants(): void
     {
-        // title => list of [size, color, priceDiff]
         $sizes = ['S', 'M', 'L', 'XL'];
         $shoeSizes = ['40', '41', '42', '43', '44'];
 
@@ -132,7 +119,6 @@ class DatabaseSeeder extends Seeder
             if (! $product) {
                 continue;
             }
-            // Reset then recreate to stay idempotent.
             $product->variants()->delete();
             foreach ($variants as [$size, $color, $diff]) {
                 ProductVariant::create([
@@ -148,14 +134,12 @@ class DatabaseSeeder extends Seeder
 
     private function sizeVariants(array $sizes): array
     {
-        // XL adds a small surcharge; others are +0.
         return array_map(
             fn ($s) => [$s, null, $s === 'XL' ? 50 : 0],
             $sizes
         );
     }
 
-    /** Keyword-matched image via loremflickr (deterministic per lock). */
     private function img(string $keyword, int $lock): string
     {
         return "https://loremflickr.com/600/600/{$keyword}?lock={$lock}";
@@ -164,7 +148,7 @@ class DatabaseSeeder extends Seeder
     private function describe(string $title, string $brand): string
     {
         return "The $title by $brand combines premium quality with a sleek, "
-            ."modern design. Built to last and perfect for everyday use — a "
+            .'modern design. Built to last and perfect for everyday use — a '
             ."reliable choice you'll love.";
     }
 }

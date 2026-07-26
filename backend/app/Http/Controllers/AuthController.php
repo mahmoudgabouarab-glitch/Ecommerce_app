@@ -13,16 +13,12 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    /**
-     * Register a new customer, then email a verification code. No token is
-     * issued until the email is verified.
-     */
     public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password, // hashed via model cast
+            'password' => $request->password,
             'phone' => $request->phone,
             'role' => 'customer',
         ]);
@@ -40,10 +36,6 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * Authenticate a user and return an API token. Unverified accounts are
-     * blocked and re-sent a fresh verification code.
-     */
     public function login(LoginRequest $request): JsonResponse
     {
         $user = User::where('email', $request->email)->first();
@@ -70,17 +62,11 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Return the currently authenticated user.
-     */
     public function me(Request $request): UserResource
     {
         return new UserResource($request->user());
     }
 
-    /**
-     * Revoke the token used for the current request.
-     */
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();

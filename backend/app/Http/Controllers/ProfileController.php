@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    /**
-     * POST /api/profile — update the authenticated user's profile.
-     * Accepts multipart with optional `avatar` image (POST, not PATCH, so PHP
-     * parses the uploaded file correctly).
-     */
     public function update(Request $request)
     {
         $user = $request->user();
@@ -24,11 +19,10 @@ class ProfileController extends Controller
             'gender' => ['nullable', 'in:male,female,other'],
             'birth_date' => ['nullable', 'date'],
             'bio' => ['nullable', 'string', 'max:500'],
-            'avatar' => ['nullable', 'image', 'max:2048'], // 2 MB
+            'avatar' => ['nullable', 'image', 'max:2048'],
         ]);
 
         if ($request->hasFile('avatar')) {
-            // Remove the previous avatar, if any.
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }

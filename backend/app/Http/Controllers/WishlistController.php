@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class WishlistController extends Controller
 {
-    // GET /api/wishlist
     public function index(Request $request)
     {
         $products = Product::whereIn(
@@ -19,7 +18,6 @@ class WishlistController extends Controller
         return ProductResource::collection($products);
     }
 
-    // POST /api/wishlist/{product}  — toggle
     public function toggle(Request $request, Product $product)
     {
         $existing = $request->user()->wishlistItems()

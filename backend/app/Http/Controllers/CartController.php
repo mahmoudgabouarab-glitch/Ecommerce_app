@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    // GET /api/cart
     public function index(Request $request)
     {
         $items = $this->cartQuery($request)->get();
@@ -22,7 +21,6 @@ class CartController extends Controller
         ]);
     }
 
-    // POST /api/cart  { product_id, variant_id?, quantity }
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -33,7 +31,6 @@ class CartController extends Controller
 
         $product = Product::findOrFail($data['product_id']);
 
-        // Resolve the variant and make sure it belongs to this product.
         $variant = null;
         if (! empty($data['variant_id'])) {
             $variant = ProductVariant::find($data['variant_id']);
@@ -42,7 +39,6 @@ class CartController extends Controller
             }
         }
 
-        // Increment quantity if the same product/variant is already in the cart.
         $item = CartItem::firstOrNew([
             'user_id' => $request->user()->id,
             'product_id' => $data['product_id'],
@@ -50,7 +46,6 @@ class CartController extends Controller
         ]);
         $newQuantity = ($item->exists ? $item->quantity : 0) + $data['quantity'];
 
-        // Check against variant stock when a variant is chosen, else product stock.
         $available = $variant ? $variant->stock : $product->stock;
         if ($available < $newQuantity) {
             return response()->json(['message' => 'Not enough stock.'], 422);
@@ -62,7 +57,6 @@ class CartController extends Controller
         return new CartItemResource($item->load(['product', 'variant']));
     }
 
-    // PUT /api/cart/{cartItem}  { quantity }
     public function update(Request $request, CartItem $cartItem)
     {
         $this->authorizeOwner($request, $cartItem);
@@ -84,7 +78,6 @@ class CartController extends Controller
         return new CartItemResource($cartItem->load(['product', 'variant']));
     }
 
-    // DELETE /api/cart/{cartItem}
     public function destroy(Request $request, CartItem $cartItem)
     {
         $this->authorizeOwner($request, $cartItem);
@@ -93,7 +86,6 @@ class CartController extends Controller
         return response()->json(['message' => 'Item removed.']);
     }
 
-    // DELETE /api/cart  — clear the whole cart
     public function clear(Request $request)
     {
         $request->user()->cartItems()->delete();

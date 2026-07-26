@@ -11,10 +11,6 @@ use Illuminate\Support\Facades\Hash;
 
 class EmailVerificationController extends Controller
 {
-    /**
-     * Generate a 6-digit code, store it hashed, and email it to the address.
-     * Never throws — a mail failure is logged so the calling flow continues.
-     */
     public static function sendCode(string $email): void
     {
         $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
@@ -32,7 +28,6 @@ class EmailVerificationController extends Controller
         );
     }
 
-    // POST /api/email/verify  { email, code }
     public function verify(Request $request)
     {
         $data = $request->validate([
@@ -59,7 +54,6 @@ class EmailVerificationController extends Controller
         ]);
     }
 
-    // POST /api/email/resend  { email }
     public function resend(Request $request)
     {
         $data = $request->validate(['email' => ['required', 'email']]);

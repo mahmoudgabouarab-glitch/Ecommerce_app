@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class TrustProxies extends Middleware
 {
-    /**
-     * Trust the platform's load balancer (Railway/Render terminate TLS in front
-     * of the app) so the request is seen as HTTPS and url() builds https:// links
-     * — including the absolute image URLs returned by the API.
-     */
     protected $proxies = '*';
 
     protected $headers =

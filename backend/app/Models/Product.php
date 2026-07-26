@@ -33,7 +33,6 @@ class Product extends Model
         'is_featured' => 'boolean',
     ];
 
-    // Effective price = sale price when present, otherwise the base price.
     public function getEffectivePriceAttribute(): float
     {
         return (float) ($this->sale_price ?? $this->price);
@@ -54,9 +53,6 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
-    /**
-     * Recalculate and persist the cached rating average and count.
-     */
     public function refreshRating(): void
     {
         $this->rating = round((float) $this->reviews()->avg('rating'), 1);

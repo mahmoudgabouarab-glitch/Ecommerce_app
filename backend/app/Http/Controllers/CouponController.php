@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
-    // POST /api/coupons/apply  { code }
-    // Validates a coupon against the user's current cart subtotal.
     public function apply(Request $request)
     {
         $request->validate(['code' => ['required', 'string']]);
@@ -38,15 +36,11 @@ class CouponController extends Controller
         ]);
     }
 
-    // --- Admin CRUD ---
-
-    // GET /api/admin/coupons
     public function index()
     {
         return response()->json(Coupon::latest()->get());
     }
 
-    // POST /api/admin/coupons
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -61,7 +55,6 @@ class CouponController extends Controller
         return response()->json(Coupon::create($data), 201);
     }
 
-    // DELETE /api/admin/coupons/{coupon}
     public function destroy(Coupon $coupon)
     {
         $coupon->delete();

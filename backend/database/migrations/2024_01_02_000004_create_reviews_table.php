@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('comment')->nullable();
             $table->timestamps();
 
-            $table->unique(['product_id', 'user_id']); // one review per user/product
+            $table->unique(['product_id', 'user_id']);
         });
     }
 

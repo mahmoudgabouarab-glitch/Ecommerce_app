@@ -5,9 +5,6 @@ namespace App\Services;
 use App\Models\AppNotification;
 use App\Models\DeviceToken;
 
-/**
- * Creates an in-app notification and fires a matching FCM push in one call.
- */
 class Notifier
 {
     public static function order(int $userId, string $title, string $body, int $orderId): void

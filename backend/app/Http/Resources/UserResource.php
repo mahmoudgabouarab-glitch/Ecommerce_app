@@ -19,7 +19,6 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'birth_date' => $this->birth_date?->format('Y-m-d'),
             'bio' => $this->bio,
-            // url() uses the request host, so the avatar loads on mobile too.
             'avatar' => $this->avatar ? url('storage/'.$this->avatar) : null,
             'created_at' => $this->created_at,
         ];

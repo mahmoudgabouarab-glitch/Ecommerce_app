@@ -25,9 +25,6 @@ class Coupon extends Model
         'is_active' => 'boolean',
     ];
 
-    /**
-     * Whether this coupon can currently be applied to the given subtotal.
-     */
     public function isValidFor(float $subtotal): bool
     {
         if (! $this->is_active) {
@@ -40,16 +37,12 @@ class Coupon extends Model
         return $subtotal >= (float) $this->min_total;
     }
 
-    /**
-     * Discount amount (in currency) for the given subtotal.
-     */
     public function discountFor(float $subtotal): float
     {
         $discount = $this->discount_type === 'percent'
             ? $subtotal * ((float) $this->amount / 100)
             : (float) $this->amount;
 
-        // Never discount more than the subtotal itself.
         return round(min($discount, $subtotal), 2);
     }
 }

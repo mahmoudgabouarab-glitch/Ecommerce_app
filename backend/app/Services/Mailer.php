@@ -5,10 +5,6 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Sends transactional email through the Brevo HTTP API (port 443), because
- * cloud hosts such as Railway block outbound SMTP ports. Never throws.
- */
 class Mailer
 {
     public static function sendOtp(string $to, string $subject, string $intro, string $code): void

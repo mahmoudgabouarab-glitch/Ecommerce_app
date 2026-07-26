@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class StatsController extends Controller
 {
-    // GET /api/admin/stats — dashboard summary
     public function index()
     {
         return response()->json([
@@ -32,12 +31,8 @@ class StatsController extends Controller
         ]);
     }
 
-    /**
-     * Revenue per day for the last 7 days (always 7 entries, zero-filled).
-     */
     private function salesLast7Days(): array
     {
-        // Sum totals grouped by day.
         $rows = Order::where('status', '!=', 'cancelled')
             ->where('created_at', '>=', Carbon::today()->subDays(6))
             ->select(DB::raw('DATE(created_at) as day'), DB::raw('SUM(total) as total'))
@@ -50,7 +45,7 @@ class StatsController extends Controller
             $key = $date->format('Y-m-d');
             $result[] = [
                 'date' => $key,
-                'label' => $date->format('D'), // Mon, Tue...
+                'label' => $date->format('D'),
                 'total' => round((float) ($rows[$key] ?? 0), 2),
             ];
         }

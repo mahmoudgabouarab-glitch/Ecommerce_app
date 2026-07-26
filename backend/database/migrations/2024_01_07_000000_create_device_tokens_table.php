@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('token', 512)->unique();
-            $table->string('platform')->nullable(); // android | ios
+            $table->string('platform')->nullable();
             $table->timestamps();
 
             $table->index('user_id');

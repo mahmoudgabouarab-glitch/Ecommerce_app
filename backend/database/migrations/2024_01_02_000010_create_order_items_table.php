@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();
-            // Snapshot of the product at purchase time (kept even if product changes).
             $table->string('product_title');
             $table->string('product_image')->nullable();
             $table->decimal('unit_price', 10, 2);

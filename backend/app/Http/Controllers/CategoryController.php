@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    // GET /api/categories
     public function index()
     {
         $categories = Category::withCount('products')->orderBy('name')->get();
@@ -16,13 +15,11 @@ class CategoryController extends Controller
         return CategoryResource::collection($categories);
     }
 
-    // GET /api/categories/{category}
     public function show(Category $category)
     {
         return new CategoryResource($category->loadCount('products'));
     }
 
-    // POST /api/admin/categories
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -39,7 +36,6 @@ class CategoryController extends Controller
         return new CategoryResource(Category::create($data));
     }
 
-    // PUT /api/admin/categories/{category}
     public function update(Request $request, Category $category)
     {
         $data = $request->validate([
@@ -58,7 +54,6 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
-    // DELETE /api/admin/categories/{category}
     public function destroy(Category $category)
     {
         $category->delete();

@@ -13,10 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    // Flat shipping fee (could be moved to config/DB later).
     private const SHIPPING_FEE = 50.0;
 
-    // GET /api/orders  — the authenticated user's orders
     public function index(Request $request)
     {
         $orders = $request->user()->orders()
@@ -27,7 +25,6 @@ class OrderController extends Controller
         return OrderResource::collection($orders);
     }
 
-    // GET /api/orders/{order}
     public function show(Request $request, Order $order)
     {
         abort_if($order->user_id !== $request->user()->id && ! $request->user()->isAdmin(), 403);
@@ -35,10 +32,6 @@ class OrderController extends Controller
         return new OrderResource($order->load(['items', 'address']));
     }
 
-    /**
-     * POST /api/orders  — checkout the current cart.
-     * Body: { address_id, payment_method: cash|card, coupon_code? }
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -47,7 +40,6 @@ class OrderController extends Controller
             'coupon_code' => ['nullable', 'string'],
         ]);
 
-        // Address must belong to the user.
         abort_unless(
             $request->user()->addresses()->whereKey($data['address_id'])->exists(),
             403,
@@ -59,12 +51,9 @@ class OrderController extends Controller
             return response()->json(['message' => 'Your cart is empty.'], 422);
         }
 
-        // Run the whole checkout atomically so partial orders never persist.
         $order = DB::transaction(function () use ($request, $items, $data) {
             $subtotal = 0.0;
 
-            // Aggregate quantities so multiple cart lines of the same product
-            // (e.g. different variants) are checked against stock cumulatively.
             $productQty = [];
             $variantQty = [];
             foreach ($items as $item) {
@@ -78,14 +67,12 @@ class OrderController extends Controller
             }
             $subtotal = round($subtotal, 2);
 
-            // Verify and lock product stock (cumulative).
             foreach ($productQty as $productId => $qty) {
                 $product = Product::whereKey($productId)->lockForUpdate()->first();
                 if (! $product || $product->stock < $qty) {
                     abort(422, "Not enough stock for {$product?->title}.");
                 }
             }
-            // Verify and lock variant stock (cumulative).
             foreach ($variantQty as $variantId => $qty) {
                 $variant = ProductVariant::whereKey($variantId)->lockForUpdate()->first();
                 if (! $variant || $variant->stock < $qty) {
@@ -93,7 +80,6 @@ class OrderController extends Controller
                 }
             }
 
-            // Apply coupon if provided and valid.
             $discount = 0.0;
             $couponCode = null;
             if (! empty($data['coupon_code'])) {
@@ -118,7 +104,6 @@ class OrderController extends Controller
                 'coupon_code' => $couponCode,
             ]);
 
-            // Snapshot each line into order_items.
             foreach ($items as $item) {
                 $order->items()->create([
                     'product_id' => $item->product_id,
@@ -130,7 +115,6 @@ class OrderController extends Controller
                 ]);
             }
 
-            // Decrement stock once per product / variant (aggregated above).
             foreach ($productQty as $productId => $qty) {
                 Product::whereKey($productId)->decrement('stock', $qty);
             }
@@ -138,7 +122,6 @@ class OrderController extends Controller
                 ProductVariant::whereKey($variantId)->decrement('stock', $qty);
             }
 
-            // Empty the cart.
             $request->user()->cartItems()->delete();
 
             return $order;
@@ -154,7 +137,6 @@ class OrderController extends Controller
         return new OrderResource($order->load(['items', 'address']));
     }
 
-    // PATCH /api/orders/{order}/cancel  — customer cancels their own pending order
     public function cancel(Request $request, Order $order)
     {
         abort_if($order->user_id !== $request->user()->id, 403);
@@ -167,14 +149,13 @@ class OrderController extends Controller
         }
 
         DB::transaction(function () use ($order) {
-            $this->adjustStock($order->load('items'), +1); // return stock
+            $this->adjustStock($order->load('items'), +1);
             $order->update(['status' => 'cancelled']);
         });
 
         return new OrderResource($order->load(['items', 'address']));
     }
 
-    // PATCH /api/admin/orders/{order}/status  { status }  (admin)
     public function updateStatus(Request $request, Order $order)
     {
         $data = $request->validate([
@@ -185,11 +166,10 @@ class OrderController extends Controller
         $to = $data['status'];
 
         DB::transaction(function () use ($order, $from, $to) {
-            // Keep inventory in sync with cancellation transitions.
             if ($to === 'cancelled' && $from !== 'cancelled') {
-                $this->adjustStock($order->load('items'), +1); // give stock back
+                $this->adjustStock($order->load('items'), +1);
             } elseif ($from === 'cancelled' && $to !== 'cancelled') {
-                $this->adjustStock($order->load('items'), -1); // take it again
+                $this->adjustStock($order->load('items'), -1);
             }
             $order->update(['status' => $to]);
         });
@@ -206,9 +186,6 @@ class OrderController extends Controller
         return new OrderResource($order->load('items'));
     }
 
-    /**
-     * A friendly message for each order status transition.
-     */
     private function statusMessage(string $status, int $orderId): string
     {
         return match ($status) {
@@ -220,10 +197,6 @@ class OrderController extends Controller
         };
     }
 
-    /**
-     * Return ($sign = +1) or re-deduct ($sign = -1) an order's line quantities
-     * against product and variant stock.
-     */
     private function adjustStock(Order $order, int $sign): void
     {
         foreach ($order->items as $item) {
@@ -236,7 +209,6 @@ class OrderController extends Controller
         }
     }
 
-    // GET /api/admin/orders  — all orders (admin)
     public function adminIndex(Request $request)
     {
         $query = Order::with(['items', 'user'])->latest();

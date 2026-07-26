@@ -24,9 +24,6 @@ class CartItem extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Unit price for this line = product effective price + variant adjustment.
-     */
     public function unitPrice(): float
     {
         $base = $this->product->effective_price;

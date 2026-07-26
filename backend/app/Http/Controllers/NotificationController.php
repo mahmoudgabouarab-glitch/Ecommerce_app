@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    // GET /api/notifications — the user's notifications + unread count.
     public function index(Request $request)
     {
         $notifications = $request->user()->appNotifications()->paginate(20);
@@ -19,7 +18,6 @@ class NotificationController extends Controller
         ]);
     }
 
-    // POST /api/notifications/read-all
     public function readAll(Request $request)
     {
         $request->user()->appNotifications()
@@ -28,7 +26,6 @@ class NotificationController extends Controller
         return response()->json(['message' => 'All notifications marked as read.']);
     }
 
-    // PATCH /api/notifications/{notification}/read
     public function read(Request $request, AppNotification $notification)
     {
         abort_if($notification->user_id !== $request->user()->id, 403);

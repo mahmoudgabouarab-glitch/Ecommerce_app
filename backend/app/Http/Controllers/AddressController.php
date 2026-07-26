@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
-    // GET /api/addresses
     public function index(Request $request)
     {
         return AddressResource::collection(
@@ -16,12 +15,10 @@ class AddressController extends Controller
         );
     }
 
-    // POST /api/addresses
     public function store(Request $request)
     {
         $data = $this->validateData($request);
 
-        // First address becomes the default automatically.
         if ($request->user()->addresses()->count() === 0) {
             $data['is_default'] = true;
         }
@@ -34,7 +31,6 @@ class AddressController extends Controller
         return new AddressResource($address);
     }
 
-    // PUT /api/addresses/{address}
     public function update(Request $request, Address $address)
     {
         $this->authorizeOwner($request, $address);
@@ -49,7 +45,6 @@ class AddressController extends Controller
         return new AddressResource($address);
     }
 
-    // DELETE /api/addresses/{address}
     public function destroy(Request $request, Address $address)
     {
         $this->authorizeOwner($request, $address);
