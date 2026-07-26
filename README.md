@@ -15,18 +15,18 @@ categories, coupons, and orders.
 
 <table>
   <tr>
-    <td align="center"><img src="screenshots/home.png" width="230"><br><sub>Home</sub></td>
-    <td align="center"><img src="screenshots/details.png" width="230"><br><sub>Product details</sub></td>
-    <td align="center"><img src="screenshots/suggestions.png" width="230"><br><sub>You may also like</sub></td>
+    <td align="center"><img src="frontend/screenshots/home.png" width="230"><br><sub>Home</sub></td>
+    <td align="center"><img src="frontend/screenshots/details.png" width="230"><br><sub>Product details</sub></td>
+    <td align="center"><img src="frontend/screenshots/suggestions.png" width="230"><br><sub>You may also like</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="screenshots/cart.png" width="230"><br><sub>Cart</sub></td>
-    <td align="center"><img src="screenshots/profile.png" width="230"><br><sub>Profile</sub></td>
-    <td align="center"><img src="screenshots/admin.png" width="230"><br><sub>Admin dashboard</sub></td>
+    <td align="center"><img src="frontend/screenshots/cart.png" width="230"><br><sub>Cart</sub></td>
+    <td align="center"><img src="frontend/screenshots/profile.png" width="230"><br><sub>Profile</sub></td>
+    <td align="center"><img src="frontend/screenshots/admin.png" width="230"><br><sub>Admin dashboard</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="screenshots/home_light.png" width="230"><br><sub>Home (light theme)</sub></td>
-    <td align="center"><img src="screenshots/admin_product_form.png" width="230"><br><sub>Admin — photos &amp; variants</sub></td>
+    <td align="center"><img src="frontend/screenshots/home_light.png" width="230"><br><sub>Home (light theme)</sub></td>
+    <td align="center"><img src="frontend/screenshots/admin_product_form.png" width="230"><br><sub>Admin — photos &amp; variants</sub></td>
     <td></td>
   </tr>
 </table>
@@ -79,16 +79,17 @@ categories, coupons, and orders.
 
 ```
 ecommerce_app/
-├── lib/                      # Flutter app
-│   ├── core/                 # theme, network (Dio + service locator), widgets, utils
-│   └── features/             # feature-first modules
-│       ├── auth/  home/  cart/  checkout/  order/
-│       ├── address/  wishlist/  settings/  admin/
-│       └── onboarding/  splash/
-│           └── <feature>/
-│               ├── data/          (models, repo, repo_impl)
-│               └── presentation/  (view, view_model/cubit)
-├── assets/translations/      # en.json, ar.json
+├── frontend/                 # Flutter app
+│   ├── lib/
+│   │   ├── core/             # theme, network (Dio + service locator), widgets, utils
+│   │   └── features/         # feature-first modules
+│   │       ├── auth/  home/  cart/  checkout/  order/
+│   │       ├── address/  wishlist/  settings/  admin/
+│   │       └── onboarding/  splash/
+│   │           └── <feature>/
+│   │               ├── data/          (models, repo, repo_impl)
+│   │               └── presentation/  (view, view_model/cubit)
+│   └── assets/translations/  # en.json, ar.json
 └── backend/                  # Laravel API
     ├── app/Http/Controllers  # Auth, Product, Cart, Order, Coupon, Admin…
     ├── app/Models
@@ -130,6 +131,7 @@ php artisan serve                 # http://127.0.0.1:8000
 ### 2. Frontend (Flutter)
 
 ```bash
+cd frontend
 flutter pub get
 ```
 
@@ -140,7 +142,7 @@ flutter run --dart-define=API_BASE_URL=https://your-app.up.railway.app/api/
 ```
 
 If you omit it, the app falls back to a local address (edit `_defaultBaseUrl`
-in [`lib/core/network/api_service.dart`](lib/core/network/api_service.dart)):
+in [`frontend/lib/core/network/api_service.dart`](frontend/lib/core/network/api_service.dart)):
 
 | Target | Base URL |
 |--------|----------|
@@ -191,7 +193,7 @@ GET  /admin/stats
 
 ## Localization & Theming
 
-- Strings live in [`assets/translations/en.json`](assets/translations/en.json) and `ar.json`.
+- Strings live in [`frontend/assets/translations/en.json`](frontend/assets/translations/en.json) and `ar.json`.
 - Arabic switches the app to RTL automatically.
 - Theme (System / Light / Dark) and language are toggled from the Profile screen.
 
@@ -260,9 +262,9 @@ update. The device token is registered from the app after login via
 
 ## App icon
 
-The launcher icon is generated from `assets/icon/` with
+The launcher icon is generated from `frontend/assets/icon/` with
 [`flutter_launcher_icons`](https://pub.dev/packages/flutter_launcher_icons).
-To use your own logo, replace `assets/icon/icon_full.png` (1024×1024) and run:
+To use your own logo, replace `frontend/assets/icon/icon_full.png` (1024×1024) and run:
 
 ```bash
 dart run flutter_launcher_icons
