@@ -135,6 +135,8 @@
   "profile": "حسابي",
   "user_profile": "الملف الشخصي",
   "member_since": "عضو منذ",
+  "details": "التفاصيل",
+  "no_details": "لا توجد تفاصيل",
   "edit_profile": "تعديل الملف الشخصي",
   "change_photo": "تغيير الصورة",
   "name": "الاسم",

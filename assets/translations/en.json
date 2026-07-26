@@ -135,6 +135,8 @@
   "profile": "Profile",
   "user_profile": "Profile",
   "member_since": "Member since",
+  "details": "Details",
+  "no_details": "No details provided",
   "edit_profile": "Edit Profile",
   "change_photo": "Change photo",
   "name": "Name",
