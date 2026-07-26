@@ -37,6 +37,7 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{product}', [ProductController::class, 'show']);
 Route::get('/products/{product}/related', [ProductController::class, 'related']);
 Route::get('/products/{product}/reviews', [ReviewController::class, 'index']);
+Route::get('/users/{user}/profile', [UserController::class, 'publicProfile']);
 
 /*
 |--------------------------------------------------------------------------

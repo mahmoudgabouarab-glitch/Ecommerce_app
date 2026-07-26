@@ -133,6 +133,8 @@
   "step_delivered": "Delivered",
 
   "profile": "Profile",
+  "user_profile": "Profile",
+  "member_since": "Member since",
   "edit_profile": "Edit Profile",
   "change_photo": "Change photo",
   "name": "Name",

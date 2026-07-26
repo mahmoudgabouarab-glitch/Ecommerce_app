@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failure.dart';
 import '../models/category_model.dart';
 import '../models/product_model.dart';
+import '../models/public_profile_model.dart';
 import '../models/review_model.dart';
 
 abstract class HomeRepo {
@@ -30,4 +31,6 @@ abstract class HomeRepo {
     required int rating,
     required String comment,
   });
+
+  Future<Either<Failure, PublicProfileModel>> getPublicProfile(int userId);
 }

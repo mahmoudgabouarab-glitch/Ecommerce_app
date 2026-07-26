@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/app_functions.dart';
 import '../../../../../../core/utils/styles.dart';
@@ -10,6 +12,7 @@ import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../auth/presentation/view/widgets/login_required.dart';
 import '../../../../data/models/review_model.dart';
 import '../../../view_model/reviews_cubit/reviews_cubit.dart';
+import '../../public_profile_view.dart';
 
 /// Reviews list + "Write a review" action for the product details page.
 class ReviewsSection extends StatelessWidget {
@@ -97,18 +100,41 @@ class _ReviewTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 16.r,
-                backgroundColor: AppColors.primary.withValues(alpha: 0.15),
-                child: Text(
-                  review.userName.isNotEmpty
-                      ? review.userName[0].toUpperCase()
-                      : '?',
-                  style: AppStyles.semiBold14.copyWith(color: AppColors.primary),
+              // Tap the reviewer (avatar + name) to open their public profile.
+              InkWell(
+                borderRadius: BorderRadius.circular(20.r),
+                onTap: () => push(
+                  context,
+                  PublicProfileView(
+                    userId: review.userId,
+                    userName: review.userName,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 16.r,
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+                      backgroundImage: (review.userAvatar != null &&
+                              review.userAvatar!.isNotEmpty)
+                          ? CachedNetworkImageProvider(review.userAvatar!)
+                          : null,
+                      child: (review.userAvatar == null ||
+                              review.userAvatar!.isEmpty)
+                          ? Text(
+                              review.userName.isNotEmpty
+                                  ? review.userName[0].toUpperCase()
+                                  : '?',
+                              style: AppStyles.semiBold14
+                                  .copyWith(color: AppColors.primary),
+                            )
+                          : null,
+                    ),
+                    SizedBox(width: 10.w),
+                    Text(review.userName, style: AppStyles.semiBold14),
+                  ],
                 ),
               ),
-              SizedBox(width: 10.w),
-              Text(review.userName, style: AppStyles.semiBold14),
               const Spacer(),
               Row(
                 children: List.generate(

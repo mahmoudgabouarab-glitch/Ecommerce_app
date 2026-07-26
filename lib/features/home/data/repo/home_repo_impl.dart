@@ -5,6 +5,7 @@ import '../../../../core/errors/failure.dart';
 import '../../../../core/network/api_service.dart';
 import '../models/category_model.dart';
 import '../models/product_model.dart';
+import '../models/public_profile_model.dart';
 import '../models/review_model.dart';
 import 'home_repo.dart';
 
@@ -105,6 +106,17 @@ class HomeRepoImpl implements HomeRepo {
       );
       final map = data['data'] as Map<String, dynamic>? ?? data;
       return Right(ReviewModel.fromJson(map));
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PublicProfileModel>> getPublicProfile(
+      int userId) async {
+    try {
+      final data = await _api.get(endpoint: "users/$userId/profile");
+      return Right(PublicProfileModel.fromJson(data));
     } catch (e) {
       return Left(_handle(e));
     }
