@@ -21,6 +21,7 @@ abstract class AdminRepo {
     required String brand,
     required double price,
     double? salePrice,
+    DateTime? dealEndsAt,
     required int stock,
     int? categoryId,
     List<String> newImagePaths,

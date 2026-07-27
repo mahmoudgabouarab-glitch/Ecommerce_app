@@ -8,6 +8,7 @@ import '../../../../../../core/utils/app_colors.dart';
 import '../../../view_model/products_cubit/products_cubit.dart';
 import '../suggested_products_section.dart';
 import 'category_list.dart';
+import 'flash_deals_section.dart';
 import 'header.dart';
 import 'home_banner.dart';
 import 'popular_products_build.dart';
@@ -59,6 +60,7 @@ class _HomeBodyState extends State<HomeBody> {
           SizedBox(height: 20.h),
           const HomeBanner(),
           SizedBox(height: 22.h),
+          const FlashDealsSection(),
           SuggestedProductsSection(title: 'recommended_for_you'.tr()),
           const ProductsHeader(),
           SizedBox(height: 14.h),

@@ -80,6 +80,19 @@ class HomeRepoImpl implements HomeRepo {
   }
 
   @override
+  Future<Either<Failure, List<ProductModel>>> getDeals() async {
+    try {
+      final data = await _api.get(endpoint: "products/deals");
+      final list = (data['data'] as List<dynamic>? ?? [])
+          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return Right(list);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<ReviewModel>>> getReviews(int productId) async {
     try {
       final data = await _api.get(endpoint: "products/$productId/reviews");

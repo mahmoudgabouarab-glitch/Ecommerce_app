@@ -49,6 +49,8 @@ class ProductModel extends Equatable {
   final bool isFeatured;
   final String? categoryName;
   final List<ProductVariantModel> variants;
+  final DateTime? dealEndsAt;
+  final bool onDeal;
 
   const ProductModel({
     required this.id,
@@ -67,7 +69,13 @@ class ProductModel extends Equatable {
     required this.isFeatured,
     required this.categoryName,
     this.variants = const [],
+    this.dealEndsAt,
+    this.onDeal = false,
   });
+
+  int get discountPercent => (salePrice != null && price > 0)
+      ? (((price - salePrice!) / price) * 100).round()
+      : 0;
 
   String get image => images.isNotEmpty ? images.first : '';
 
@@ -94,6 +102,10 @@ class ProductModel extends Equatable {
       variants: (json['variants'] as List<dynamic>? ?? [])
           .map((e) => ProductVariantModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      dealEndsAt: json['deal_ends_at'] == null
+          ? null
+          : DateTime.tryParse('${json['deal_ends_at']}'),
+      onDeal: json['on_deal'] as bool? ?? false,
     );
   }
 

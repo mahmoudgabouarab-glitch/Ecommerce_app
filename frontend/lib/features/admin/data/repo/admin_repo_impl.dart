@@ -63,6 +63,7 @@ class AdminRepoImpl implements AdminRepo {
     required String brand,
     required double price,
     double? salePrice,
+    DateTime? dealEndsAt,
     required int stock,
     int? categoryId,
     List<String> newImagePaths = const [],
@@ -81,6 +82,8 @@ class AdminRepoImpl implements AdminRepo {
       field('brand', brand);
       field('price', price);
       field('sale_price', salePrice);
+      form.fields.add(
+          MapEntry('deal_ends_at', dealEndsAt?.toIso8601String() ?? ''));
       field('stock', stock);
       field('category_id', categoryId);
       field('is_featured', isFeatured ? 1 : 0);

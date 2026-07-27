@@ -52,6 +52,7 @@ class _ProductFormState extends State<_ProductForm> {
   late final _stock =
       TextEditingController(text: '${widget.existing?.stock ?? ''}');
   late bool _featured = widget.existing?.isFeatured ?? false;
+  late DateTime? _dealEndsAt = widget.existing?.dealEndsAt;
   int? _categoryId;
   List<CategoryModel> _categories = [];
   final _formKey = GlobalKey<FormState>();
@@ -199,6 +200,18 @@ class _ProductFormState extends State<_ProductForm> {
                 onChanged: (v) => setState(() => _featured = v),
               ),
               SizedBox(height: 8.h),
+              Text('deal_ends_at'.tr(), style: AppStyles.semiBold14),
+              SizedBox(height: 8.h),
+              _DealEndField(
+                date: _dealEndsAt,
+                onTap: _pickDealEnd,
+                onClear: () => setState(() => _dealEndsAt = null),
+              ),
+              SizedBox(height: 6.h),
+              Text('deal_hint'.tr(),
+                  style: AppStyles.regular12
+                      .copyWith(color: cs.onSurfaceVariant)),
+              SizedBox(height: 12.h),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -241,6 +254,30 @@ class _ProductFormState extends State<_ProductForm> {
     );
   }
 
+  Future<void> _pickDealEnd() async {
+    final now = DateTime.now();
+    final base = (_dealEndsAt != null && _dealEndsAt!.isAfter(now))
+        ? _dealEndsAt!
+        : now.add(const Duration(days: 1));
+    final date = await showDatePicker(
+      context: context,
+      initialDate: base,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 365)),
+    );
+    if (date == null || !mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(base),
+    );
+    if (!mounted) return;
+    final t = time ?? TimeOfDay.fromDateTime(base);
+    setState(() {
+      _dealEndsAt =
+          DateTime(date.year, date.month, date.day, t.hour, t.minute);
+    });
+  }
+
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
 
@@ -259,6 +296,7 @@ class _ProductFormState extends State<_ProductForm> {
           salePrice: _sale.text.trim().isEmpty
               ? null
               : double.tryParse(_sale.text.trim()),
+          dealEndsAt: _dealEndsAt,
           stock: int.tryParse(_stock.text.trim()) ?? 0,
           categoryId: _categoryId,
           newImagePaths: _newImages,
@@ -266,6 +304,55 @@ class _ProductFormState extends State<_ProductForm> {
           variants: variants,
           isFeatured: _featured,
         );
+  }
+}
+
+class _DealEndField extends StatelessWidget {
+  const _DealEndField(
+      {required this.date, required this.onTap, required this.onClear});
+  final DateTime? date;
+  final VoidCallback onTap;
+  final VoidCallback onClear;
+
+  String _fmt(DateTime d) {
+    two(int n) => n.toString().padLeft(2, '0');
+    return '${d.year}-${two(d.month)}-${two(d.day)}  ${two(d.hour)}:${two(d.minute)}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 54.h,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        decoration: BoxDecoration(
+          color: cs.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(14.r),
+          border: Border.all(color: cs.outline),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.timer_outlined, size: 20.r, color: cs.onSurfaceVariant),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                date == null ? 'no_deal'.tr() : _fmt(date!),
+                style: AppStyles.regular14.copyWith(
+                    color: date == null ? cs.onSurfaceVariant : cs.onSurface),
+              ),
+            ),
+            if (date != null)
+              GestureDetector(
+                onTap: onClear,
+                child:
+                    Icon(Icons.close, size: 18.r, color: cs.onSurfaceVariant),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
