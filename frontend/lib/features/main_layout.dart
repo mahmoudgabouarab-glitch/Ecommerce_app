@@ -1,8 +1,9 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../core/network/service_locator.dart';
 import '../core/services/push_service.dart';
+import '../core/utils/app_colors.dart';
 import '../core/utils/app_functions.dart';
 import 'cart/data/repo/cart_repo_impl.dart';
 import 'cart/presentation/view/cart_view.dart';
@@ -24,8 +25,16 @@ class MainLayout extends StatefulWidget {
   State<MainLayout> createState() => _MainLayoutState();
 }
 
-class _MainLayoutState extends State<MainLayout> {
+class _MainLayoutState extends State<MainLayout>
+    with SingleTickerProviderStateMixin {
   late int _index = widget.initialIndex;
+
+  late final AnimationController _pageAnim = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 280),
+  )..forward();
+  late final Animation<double> _pageCurve =
+      CurvedAnimation(parent: _pageAnim, curve: Curves.easeOutCubic);
 
   late final CartCubit _cartCubit = CartCubit(getIt<CartRepoImpl>())..getCart();
   late final OrdersCubit _ordersCubit = OrdersCubit(getIt<OrderRepoImpl>())
@@ -45,6 +54,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   void _onSelect(int i) {
     setState(() => _index = i);
+    _pageAnim.forward(from: 0);
     if (!isLoggedInUser()) return;
     if (i == 1) _cartCubit.getCart();
     if (i == 2) _ordersCubit.getOrders();
@@ -53,6 +63,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   void dispose() {
+    _pageAnim.dispose();
     _cartCubit.close();
     _ordersCubit.close();
     super.dispose();
@@ -60,57 +71,95 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: _cartCubit),
         BlocProvider.value(value: _ordersCubit),
       ],
       child: Scaffold(
-        body: IndexedStack(index: _index, children: _pages),
-        bottomNavigationBar: DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: cs.outlineVariant)),
+        body: FadeTransition(
+          opacity: _pageCurve,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.03),
+              end: Offset.zero,
+            ).animate(_pageCurve),
+            child: IndexedStack(index: _index, children: _pages),
           ),
+        ),
+        bottomNavigationBar: _buildNavBar(context),
+      ),
+    );
+  }
+
+  Widget _buildNavBar(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: cs.surface,
+        border: Border(top: BorderSide(color: cs.outlineVariant)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 64.h,
           child: BlocBuilder<CartCubit, CartState>(
             builder: (context, state) {
               final count = state is CartSuccess ? state.cart.count : 0;
-              return NavigationBar(
-                selectedIndex: _index,
-                onDestinationSelected: _onSelect,
-                destinations: [
-                  NavigationDestination(
-                    icon: const Icon(Icons.home_outlined),
-                    selectedIcon: const Icon(Icons.home_rounded),
-                    label: 'home'.tr(),
-                  ),
-                  NavigationDestination(
-                    icon: Badge(
-                      isLabelVisible: count > 0,
-                      label: Text('$count'),
-                      child: const Icon(Icons.shopping_cart_outlined),
-                    ),
-                    selectedIcon: Badge(
-                      isLabelVisible: count > 0,
-                      label: Text('$count'),
-                      child: const Icon(Icons.shopping_cart_rounded),
-                    ),
-                    label: 'cart'.tr(),
-                  ),
-                  NavigationDestination(
-                    icon: const Icon(Icons.receipt_long_outlined),
-                    selectedIcon: const Icon(Icons.receipt_long_rounded),
-                    label: 'orders'.tr(),
-                  ),
-                  NavigationDestination(
-                    icon: const Icon(Icons.person_outline),
-                    selectedIcon: const Icon(Icons.person_rounded),
-                    label: 'profile'.tr(),
-                  ),
+              return Row(
+                children: [
+                  _navItem(0, Icons.home_outlined, Icons.home_rounded),
+                  _navItem(1, Icons.shopping_cart_outlined,
+                      Icons.shopping_cart_rounded,
+                      badge: count),
+                  _navItem(2, Icons.receipt_long_outlined,
+                      Icons.receipt_long_rounded),
+                  _navItem(3, Icons.person_outline, Icons.person_rounded),
                 ],
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _navItem(int index, IconData icon, IconData activeIcon,
+      {int badge = 0}) {
+    final cs = Theme.of(context).colorScheme;
+    final selected = _index == index;
+
+    Widget iconWidget = Icon(
+      selected ? activeIcon : icon,
+      color: selected ? AppColors.primary : cs.onSurfaceVariant,
+      size: 25.r,
+    );
+    if (badge > 0) {
+      iconWidget = Badge(label: Text('$badge'), child: iconWidget);
+    }
+
+    return Expanded(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => _onSelect(index),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            iconWidget,
+            SizedBox(height: 6.h),
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 220),
+              opacity: selected ? 1 : 0,
+              child: Container(
+                width: 6.r,
+                height: 6.r,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: AppColors.brandGradient),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
