@@ -22,6 +22,7 @@ class ProductRequest extends FormRequest
             'brand' => ['nullable', 'string', 'max:255'],
             'price' => [$required, 'numeric', 'min:0'],
             'sale_price' => ['nullable', 'numeric', 'min:0', 'lte:price'],
+            'deal_ends_at' => ['nullable', 'date'],
             'stock' => ['nullable', 'integer', 'min:0'],
             'image' => ['nullable', 'image', 'max:2048'],
             'images' => ['nullable', 'array'],

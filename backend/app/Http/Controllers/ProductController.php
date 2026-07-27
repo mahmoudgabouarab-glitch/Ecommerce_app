@@ -62,6 +62,20 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
+    public function deals()
+    {
+        $deals = Product::query()
+            ->with('category')
+            ->whereNotNull('sale_price')
+            ->whereNotNull('deal_ends_at')
+            ->where('deal_ends_at', '>', now())
+            ->orderBy('deal_ends_at')
+            ->limit(10)
+            ->get();
+
+        return ProductResource::collection($deals);
+    }
+
     public function related(Product $product)
     {
         $query = Product::query()

@@ -18,6 +18,7 @@ class Product extends Model
         'brand',
         'price',
         'sale_price',
+        'deal_ends_at',
         'stock',
         'images',
         'rating',
@@ -29,6 +30,7 @@ class Product extends Model
         'images' => 'array',
         'price' => 'decimal:2',
         'sale_price' => 'decimal:2',
+        'deal_ends_at' => 'datetime',
         'rating' => 'decimal:1',
         'is_featured' => 'boolean',
     ];

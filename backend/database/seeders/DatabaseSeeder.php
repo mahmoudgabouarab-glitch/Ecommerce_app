@@ -81,6 +81,7 @@ class DatabaseSeeder extends Seeder
                     'brand' => $brand,
                     'price' => $price,
                     'sale_price' => $sale,
+                    'deal_ends_at' => $sale !== null ? now()->addHours(mt_rand(6, 72)) : null,
                     'stock' => mt_rand(15, 80),
                     'images' => [$this->img($kw, 1), $this->img($kw, 2), $this->img($kw, 3)],
                     'rating' => round(mt_rand(35, 50) / 10, 1),
