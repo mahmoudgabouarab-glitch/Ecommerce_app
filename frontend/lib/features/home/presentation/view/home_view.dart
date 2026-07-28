@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/network/service_locator.dart';
 import '../../data/repo/home_repo_impl.dart';
+import '../view_model/banners_cubit/banners_cubit.dart';
 import '../view_model/categories_cubit/categories_cubit.dart';
 import '../view_model/deals_cubit/deals_cubit.dart';
 import '../view_model/products_cubit/products_cubit.dart';
@@ -27,6 +28,9 @@ class HomeView extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => DealsCubit(getIt<HomeRepoImpl>())..load(),
+        ),
+        BlocProvider(
+          create: (_) => BannersCubit(getIt<HomeRepoImpl>())..load(),
         ),
       ],
       child: const Scaffold(body: SafeArea(child: HomeBody())),

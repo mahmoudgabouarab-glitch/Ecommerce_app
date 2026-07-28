@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/network/api_service.dart';
+import '../../../home/data/models/banner_model.dart';
 import '../../../home/data/models/product_model.dart';
 import '../../../order/data/models/order_model.dart';
 import '../models/admin_user_model.dart';
@@ -236,6 +237,68 @@ class AdminRepoImpl implements AdminRepo {
       );
       final map = (data['data'] ?? data) as Map<String, dynamic>;
       return Right(AdminUserModel.fromJson(map));
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BannerModel>>> getBanners() async {
+    try {
+      final data = await _api.get(endpoint: "admin/banners");
+      final list = (data['data'] as List<dynamic>? ?? [])
+          .map((e) => BannerModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return Right(list);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> saveBanner({
+    int? id,
+    String? title,
+    String? subtitle,
+    required String linkType,
+    int? linkValue,
+    required bool isActive,
+    int sortOrder = 0,
+    String? imagePath,
+  }) async {
+    try {
+      final form = FormData();
+      void field(String key, Object? value) {
+        if (value != null) form.fields.add(MapEntry(key, '$value'));
+      }
+
+      field('title', title ?? '');
+      field('subtitle', subtitle ?? '');
+      field('link_type', linkType);
+      field('link_value', linkType == 'none' ? '' : linkValue);
+      field('is_active', isActive ? 1 : 0);
+      field('sort_order', sortOrder);
+      if (imagePath != null) {
+        form.files
+            .add(MapEntry('image', await MultipartFile.fromFile(imagePath)));
+      }
+      if (id != null) field('_method', 'PUT');
+
+      await _api.post(
+        endpoint: id == null ? "admin/banners" : "admin/banners/$id",
+        data: form,
+      );
+      return const Right(unit);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteBanner(int id) async {
+    try {
+      await _api.delete(endpoint: "admin/banners/$id");
+      return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
     }

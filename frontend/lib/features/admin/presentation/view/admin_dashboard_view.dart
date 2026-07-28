@@ -6,10 +6,12 @@ import '../../../../core/network/service_locator.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../home/data/repo/home_repo_impl.dart';
 import '../../data/repo/admin_repo_impl.dart';
+import '../view_model/admin_banners_cubit/admin_banners_cubit.dart';
 import '../view_model/admin_categories_cubit/admin_categories_cubit.dart';
 import '../view_model/admin_coupons_cubit/admin_coupons_cubit.dart';
 import '../view_model/admin_products_cubit/admin_products_cubit.dart';
 import '../view_model/admin_users_cubit/admin_users_cubit.dart';
+import 'widgets/admin_banners_tab.dart';
 import 'widgets/admin_categories_tab.dart';
 import 'widgets/admin_coupons_tab.dart';
 import 'widgets/admin_orders_tab.dart';
@@ -23,7 +25,7 @@ class AdminDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 7,
       child: Scaffold(
         appBar: AppBar(
           title: Text('admin_dashboard'.tr()),
@@ -38,6 +40,7 @@ class AdminDashboardView extends StatelessWidget {
               Tab(text: 'products'.tr()),
               Tab(text: 'categories'.tr()),
               Tab(text: 'coupons'.tr()),
+              Tab(text: 'banners'.tr()),
               Tab(text: 'users'.tr()),
             ],
           ),
@@ -65,6 +68,11 @@ class AdminDashboardView extends StatelessWidget {
                 create: (_) =>
                     AdminCouponsCubit(getIt<AdminRepoImpl>())..getCoupons(),
                 child: const AdminCouponsTab(),
+              ),
+              BlocProvider(
+                create: (_) =>
+                    AdminBannersCubit(getIt<AdminRepoImpl>())..getBanners(),
+                child: const AdminBannersTab(),
               ),
               BlocProvider(
                 create: (_) =>

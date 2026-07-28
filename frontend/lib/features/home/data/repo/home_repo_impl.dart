@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/network/api_service.dart';
+import '../models/banner_model.dart';
 import '../models/category_model.dart';
 import '../models/product_model.dart';
 import '../models/public_profile_model.dart';
@@ -13,6 +14,19 @@ class HomeRepoImpl implements HomeRepo {
   final ApiServise _api;
 
   HomeRepoImpl(this._api);
+
+  @override
+  Future<Either<Failure, List<BannerModel>>> getBanners() async {
+    try {
+      final data = await _api.get(endpoint: "banners");
+      final list = (data['data'] as List<dynamic>? ?? [])
+          .map((e) => BannerModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return Right(list);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
 
   @override
   Future<Either<Failure, CategoriesResponse>> getCategories() async {
