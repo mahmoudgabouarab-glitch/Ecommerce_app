@@ -19,6 +19,23 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/_diag', function () {
+    return response()->json([
+        'sessions_dir' => is_dir(storage_path('framework/sessions')),
+        'views_dir' => is_dir(storage_path('framework/views')),
+        'cache_dir' => is_dir(storage_path('framework/cache/data')),
+        'logs_writable' => is_writable(storage_path('logs')),
+        'banners_dir' => is_dir(storage_path('app/public/banners')),
+        'link_target' => is_link(public_path('storage'))
+            ? readlink(public_path('storage'))
+            : (file_exists(public_path('storage')) ? 'exists-notlink' : 'missing'),
+        'last_log' => array_slice(
+            @file(storage_path('logs/laravel.log')) ?: ['no log'],
+            -12
+        ),
+    ]);
+});
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/email/verify', [EmailVerificationController::class, 'verify']);
