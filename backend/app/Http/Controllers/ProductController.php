@@ -59,7 +59,18 @@ class ProductController extends Controller
     {
         $product->load(['category', 'variants', 'reviews.user']);
 
-        return new ProductResource($product);
+        $counts = $product->reviews()
+            ->selectRaw('rating, count(*) as total')
+            ->groupBy('rating')
+            ->pluck('total', 'rating');
+
+        $breakdown = [];
+        for ($star = 5; $star >= 1; $star--) {
+            $breakdown[$star] = (int) ($counts[$star] ?? 0);
+        }
+
+        return (new ProductResource($product))
+            ->additional(['ratings_breakdown' => $breakdown]);
     }
 
     public function deals()
