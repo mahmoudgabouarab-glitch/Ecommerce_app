@@ -15,19 +15,19 @@ categories, coupons, and orders.
 
 <table>
   <tr>
-    <td align="center"><img src="frontend/screenshots/home.png" width="230"><br><sub>Home</sub></td>
+    <td align="center"><img src="frontend/screenshots/home.png" width="230"><br><sub>Home — banners &amp; flash deals</sub></td>
     <td align="center"><img src="frontend/screenshots/details.png" width="230"><br><sub>Product details</sub></td>
-    <td align="center"><img src="frontend/screenshots/suggestions.png" width="230"><br><sub>You may also like</sub></td>
-  </tr>
-  <tr>
     <td align="center"><img src="frontend/screenshots/cart.png" width="230"><br><sub>Cart</sub></td>
-    <td align="center"><img src="frontend/screenshots/profile.png" width="230"><br><sub>Profile</sub></td>
-    <td align="center"><img src="frontend/screenshots/admin.png" width="230"><br><sub>Admin dashboard</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="frontend/screenshots/home_light.png" width="230"><br><sub>Home (light theme)</sub></td>
-    <td align="center"><img src="frontend/screenshots/admin_product_form.png" width="230"><br><sub>Admin — photos &amp; variants</sub></td>
-    <td></td>
+    <td align="center"><img src="frontend/screenshots/orders.png" width="230"><br><sub>Orders</sub></td>
+    <td align="center"><img src="frontend/screenshots/profile.png" width="230"><br><sub>Profile</sub></td>
+    <td align="center"><img src="frontend/screenshots/home_light.png" width="230"><br><sub>Light theme</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="frontend/screenshots/admin.png" width="230"><br><sub>Admin dashboard</sub></td>
+    <td align="center"><img src="frontend/screenshots/admin_products.png" width="230"><br><sub>Products management</sub></td>
+    <td align="center"><img src="frontend/screenshots/admin_product_form.png" width="230"><br><sub>Add product — photos, variants, deals</sub></td>
   </tr>
 </table>
 
@@ -36,23 +36,25 @@ categories, coupons, and orders.
 ## Features
 
 ### Customer
-- **Auth** — register, login, forgot/reset password, change password (Sanctum tokens)
-- **Home** — banners, categories, "Recommended for you", popular products with infinite scroll
-- **Search & filters** — debounced search, recent searches, price range, sort (newest / price / rating)
-- **Product details** — image gallery, **variants (size / colour)** with live price, stock status, reviews & ratings, "You may also like"
-- **Wishlist** — favourite products, synced across the app
-- **Cart** — add variants, update quantity, stock-aware
+- **Auth** — register with email verification (OTP), login, forgot/reset password, change password, guest mode (Sanctum tokens)
+- **Home** — admin-managed **banner carousel**, **flash deals with live countdown**, "Recently viewed", "Recommended for you", categories, and popular products with infinite scroll; pull-to-refresh with shimmer skeletons
+- **Search & filters** — debounced search, recent searches, price range (auto-scaled to the catalogue), sort (newest / price / rating)
+- **Product details** — image gallery with **Hero transition**, **variants (size / colour)** with live price, stock status, **ratings summary (per-star bars)**, reviews (tap a reviewer to open their public profile), "You may also like"
+- **Wishlist** — favourite products with an animated heart, synced across the app
+- **Cart** — add variants, update quantity, stock-aware, animated cart badge
 - **Checkout** — saved addresses, cash on delivery / card, coupon codes, order summary
 - **Orders** — history, order details, status timeline, cancel, reorder
-- **Notifications** — in-app centre with an unread badge (home + profile) **and
+- **Notifications** — localized in-app centre with an unread badge (home + profile) **and
   FCM push** to the system tray when an order's status changes
-- **Profile** — avatar upload, edit profile, change password, theme & language switch
+- **Profile** — avatar upload, edit profile, phone-visibility toggle, change password, theme & language switch (English / Arabic RTL)
 
 ### Admin
 - **Dashboard** — revenue, orders, pending, customers, 7-day sales chart, top products
-- **Products** — full CRUD with **multiple image upload** and **variant management**
-- **Categories** — create / update / delete
+- **Products** — full CRUD with **multiple image upload**, **variant management**, and **flash-deal scheduling**
+- **Categories** — create / update / delete (image upload from device)
 - **Coupons** — percentage or fixed, min-total and expiry rules
+- **Banners** — manage the home carousel, link a banner to a product or category
+- **Users** — search users, promote / demote admins (primary admin protected)
 - **Orders** — view all, update status (stock is returned automatically on cancel)
 
 ---
