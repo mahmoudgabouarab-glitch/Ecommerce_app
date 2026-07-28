@@ -10,6 +10,20 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/_diag', function () {
+    $link = public_path('storage');
+    $dir = storage_path('app/public/banners');
+
+    return response()->json([
+        'link_exists' => file_exists($link),
+        'is_link' => is_link($link),
+        'link_target' => is_link($link) ? readlink($link) : null,
+        'banners_is_dir' => is_dir($dir),
+        'banners_files' => is_dir($dir) ? array_values(array_slice(scandir($dir), 2, 8)) : [],
+        'sample_isfile' => is_file(storage_path('app/public/banners/gJ9bBU4slG7VZi9ijkWCrQ6CVVz9a9M5enxoScr6.jpg')),
+    ]);
+});
+
 Route::get('storage/{path}', function (string $path) {
     try {
         if (str_contains($path, '..')) {
