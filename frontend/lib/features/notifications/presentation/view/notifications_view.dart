@@ -141,7 +141,7 @@ class _NotificationTile extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(item.title,
+                        child: Text(_notifTitle(item),
                             style: unread
                                 ? AppStyles.semiBold14
                                 : AppStyles.medium14),
@@ -159,7 +159,7 @@ class _NotificationTile extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 3.h),
-                  Text(item.body,
+                  Text(_notifBody(item),
                       style: AppStyles.regular12
                           .copyWith(color: cs.onSurfaceVariant, height: 1.4)),
                   SizedBox(height: 6.h),
@@ -173,6 +173,30 @@ class _NotificationTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  static const _localizedKeys = {
+    'order_placed',
+    'order_confirmed',
+    'order_processing',
+    'order_shipped',
+    'order_delivered',
+    'order_cancelled',
+    'order_pending',
+  };
+
+  String _notifTitle(NotificationModel n) {
+    if (n.key != null && _localizedKeys.contains(n.key)) {
+      return 'notif_${n.key}_title'.tr(args: ['${n.orderId ?? ''}']);
+    }
+    return n.title;
+  }
+
+  String _notifBody(NotificationModel n) {
+    if (n.key != null && _localizedKeys.contains(n.key)) {
+      return 'notif_${n.key}_body'.tr(args: ['${n.orderId ?? ''}']);
+    }
+    return n.body;
   }
 
   String _relativeTime(BuildContext context, DateTime? time) {
