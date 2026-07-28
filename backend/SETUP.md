@@ -1,6 +1,6 @@
-# ShopSphere Backend (Laravel 10 + Sanctum + XAMPP MySQL)
+# Bazar Backend (Laravel 10 + Sanctum + XAMPP MySQL)
 
-REST API for the ShopSphere e-commerce app. Runs on XAMPP's bundled PHP 8.1
+REST API for the Bazar e-commerce app. Runs on XAMPP's bundled PHP 8.1
 and MySQL (MariaDB) — no Homebrew needed.
 
 ## Stack

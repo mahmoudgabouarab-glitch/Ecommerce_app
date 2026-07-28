@@ -33,7 +33,7 @@ class Mailer
                 ->post('https://api.brevo.com/v3/smtp/email', [
                     'sender' => [
                         'email' => config('mail.from.address'),
-                        'name' => config('mail.from.name') ?? 'ShopSphere',
+                        'name' => config('mail.from.name') ?? 'Bazar',
                     ],
                     'to' => [['email' => $to]],
                     'subject' => $subject,

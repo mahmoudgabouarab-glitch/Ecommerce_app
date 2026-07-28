@@ -6,7 +6,7 @@
     <tr><td align="center">
       <table role="presentation" width="440" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;max-width:440px;">
         <tr><td style="background:linear-gradient(135deg,#FB923C,#F97316);padding:26px 32px;">
-          <span style="color:#ffffff;font-size:22px;font-weight:bold;">ShopSphere</span>
+          <span style="color:#ffffff;font-size:22px;font-weight:bold;">Bazar</span>
         </td></tr>
         <tr><td style="padding:32px;">
           <p style="margin:0 0 8px;color:#14140f;font-size:18px;font-weight:bold;">{{ $subjectLine }}</p>
@@ -17,7 +17,7 @@
           <p style="margin:24px 0 0;color:#9aa0aa;font-size:12px;line-height:1.6;">This code expires in 15 minutes. If you didn't request it, you can safely ignore this email.</p>
         </td></tr>
         <tr><td style="padding:18px 32px;border-top:1px solid #eef0f2;">
-          <span style="color:#9aa0aa;font-size:12px;">&copy; {{ date('Y') }} ShopSphere</span>
+          <span style="color:#9aa0aa;font-size:12px;">&copy; {{ date('Y') }} Bazar</span>
         </td></tr>
       </table>
     </td></tr>

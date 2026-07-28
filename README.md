@@ -1,4 +1,4 @@
-# ShopSphere — Full-Stack E-Commerce App
+# Bazar — Full-Stack E-Commerce App
 
 A complete shopping application built with a **Flutter** mobile client and a
 **Laravel 10 REST API**. It covers the full commerce flow — browsing, search,

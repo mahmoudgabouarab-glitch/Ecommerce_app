@@ -27,6 +27,6 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@shopsphere.test'),
-        'name' => env('MAIL_FROM_NAME', 'ShopSphere'),
+        'name' => env('MAIL_FROM_NAME', 'Bazar'),
     ],
 ];
