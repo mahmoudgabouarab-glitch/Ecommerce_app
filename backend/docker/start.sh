@@ -1,8 +1,15 @@
 #!/bin/sh
 set -e
 
-# Ensure the upload folders exist (they live on the mounted persistent volume).
-mkdir -p storage/app/public/products storage/app/public/avatars
+# Generate an app key if none is configured (needed for cookie/session crypto).
+if [ -z "${APP_KEY}" ]; then
+    php artisan key:generate --force
+fi
+
+# Ensure the upload + framework folders exist (storage may be a fresh volume).
+mkdir -p storage/app/public/products storage/app/public/avatars \
+    storage/app/public/banners storage/framework/sessions \
+    storage/framework/views storage/framework/cache/data storage/logs
 
 # Public symlink so uploaded images are served under /storage/...
 # Remove any stale/broken link first (a committed link points at a dev path).
