@@ -5,7 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/network/cache_helper.dart';
 import '../../../../../../core/network/cache_keys.dart';
 import '../../../../../../core/utils/app_colors.dart';
+import '../../../view_model/banners_cubit/banners_cubit.dart';
+import '../../../view_model/categories_cubit/categories_cubit.dart';
+import '../../../view_model/deals_cubit/deals_cubit.dart';
 import '../../../view_model/products_cubit/products_cubit.dart';
+import '../../../view_model/suggested_cubit/suggested_cubit.dart';
 import '../suggested_products_section.dart';
 import 'category_list.dart';
 import 'flash_deals_section.dart';
@@ -44,12 +48,20 @@ class _HomeBodyState extends State<HomeBody> {
     super.dispose();
   }
 
+  Future<void> _refresh() {
+    context.read<BannersCubit>().load();
+    context.read<CategoriesCubit>().getCategories();
+    context.read<DealsCubit>().load();
+    context.read<SuggestedCubit>().loadFeatured();
+    return context.read<ProductsCubit>().getProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final name = CacheHelper.getDataString(key: CacheKeys.userName) ?? 'there';
     return RefreshIndicator(
       color: AppColors.primary,
-      onRefresh: () => context.read<ProductsCubit>().getProducts(),
+      onRefresh: _refresh,
       child: ListView(
         controller: _scrollController,
         padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),

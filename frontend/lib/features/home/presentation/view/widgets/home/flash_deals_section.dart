@@ -12,6 +12,7 @@ import '../../../../../../core/utils/styles.dart';
 import '../../../../data/models/product_model.dart';
 import '../../../view_model/deals_cubit/deals_cubit.dart';
 import '../../details_view.dart';
+import 'home_shimmers.dart';
 
 class FlashDealsSection extends StatefulWidget {
   const FlashDealsSection({super.key});
@@ -41,6 +42,12 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
   Widget build(BuildContext context) {
     return BlocBuilder<DealsCubit, DealsState>(
       builder: (context, state) {
+        if (state is DealsLoading || state is DealsInitial) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: 22.h),
+            child: HCardsShimmer(height: 262.h, cardWidth: 160),
+          );
+        }
         if (state is! DealsSuccess) return const SizedBox.shrink();
 
         final now = DateTime.now();

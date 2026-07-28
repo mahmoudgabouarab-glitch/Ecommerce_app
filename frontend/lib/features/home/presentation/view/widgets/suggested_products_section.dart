@@ -8,6 +8,7 @@ import '../../../../../core/utils/styles.dart';
 import '../../../data/models/product_model.dart';
 import '../../view_model/suggested_cubit/suggested_cubit.dart';
 import '../details_view.dart';
+import 'home/home_shimmers.dart';
 
 class SuggestedProductsSection extends StatelessWidget {
   const SuggestedProductsSection({super.key, required this.title});
@@ -18,6 +19,17 @@ class SuggestedProductsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SuggestedCubit, SuggestedState>(
       builder: (context, state) {
+        if (state is SuggestedLoading || state is SuggestedInitial) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: AppStyles.bold20),
+              SizedBox(height: 14.h),
+              HCardsShimmer(height: 235.h),
+              SizedBox(height: 22.h),
+            ],
+          );
+        }
         if (state is! SuggestedSuccess || state.products.isEmpty) {
           return const SizedBox.shrink();
         }

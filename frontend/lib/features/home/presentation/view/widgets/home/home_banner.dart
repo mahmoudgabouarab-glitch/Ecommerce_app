@@ -12,6 +12,7 @@ import '../../../../data/models/banner_model.dart';
 import '../../../view_model/banners_cubit/banners_cubit.dart';
 import '../../category_products_view.dart';
 import '../../details_view.dart';
+import 'home_shimmers.dart';
 
 class HomeBanner extends StatefulWidget {
   const HomeBanner({super.key});
@@ -66,13 +67,7 @@ class _HomeBannerState extends State<HomeBanner> {
     return BlocBuilder<BannersCubit, BannersState>(
       builder: (context, state) {
         if (state is BannersLoading || state is BannersInitial) {
-          return Container(
-            height: 140.h,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-          );
+          return const BannerShimmer();
         }
         final banners =
             state is BannersSuccess ? state.banners : <BannerModel>[];

@@ -6,6 +6,7 @@ import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../view_model/categories_cubit/categories_cubit.dart';
 import '../../../view_model/products_cubit/products_cubit.dart';
+import 'home_shimmers.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({super.key});
@@ -23,6 +24,9 @@ class _CategoryListState extends State<CategoryList> {
 
     return BlocBuilder<CategoriesCubit, CategoriesState>(
       builder: (context, state) {
+        if (state is CategoriesLoading || state is CategoriesInitial) {
+          return const CategoryChipsShimmer();
+        }
         if (state is! CategoriesSuccess) return SizedBox(height: 42.h);
 
         final ids = [null, ...state.categories.map((c) => c.id)];
