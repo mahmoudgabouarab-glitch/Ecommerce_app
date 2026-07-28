@@ -12,6 +12,7 @@ import 'details_bottom_bar.dart';
 import 'product_description.dart';
 import 'product_gallery.dart';
 import 'product_info.dart';
+import 'rating_summary.dart';
 import 'reviews_section.dart';
 import 'stock_status.dart';
 import 'variant_selector.dart';
@@ -85,6 +86,8 @@ class _DetailsContentState extends State<_DetailsContent> {
               SizedBox(height: 18.h),
               StockStatus(product: product),
               SizedBox(height: 24.h),
+              RatingSummary(product: product),
+              SizedBox(height: 16.h),
               ReviewsSection(productId: product.id),
               SizedBox(height: 28.h),
               SuggestedProductsSection(title: 'similar_products'.tr()),

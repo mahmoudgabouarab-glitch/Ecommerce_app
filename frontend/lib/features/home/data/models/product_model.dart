@@ -51,6 +51,7 @@ class ProductModel extends Equatable {
   final List<ProductVariantModel> variants;
   final DateTime? dealEndsAt;
   final bool onDeal;
+  final Map<int, int> ratingsBreakdown;
 
   const ProductModel({
     required this.id,
@@ -71,6 +72,7 @@ class ProductModel extends Equatable {
     this.variants = const [],
     this.dealEndsAt,
     this.onDeal = false,
+    this.ratingsBreakdown = const {},
   });
 
   int get discountPercent => (salePrice != null && price > 0)
@@ -106,6 +108,10 @@ class ProductModel extends Equatable {
           ? null
           : DateTime.tryParse('${json['deal_ends_at']}'),
       onDeal: json['on_deal'] as bool? ?? false,
+      ratingsBreakdown: (json['ratings_breakdown'] as Map<String, dynamic>?)
+              ?.map((k, v) =>
+                  MapEntry(int.tryParse(k) ?? 0, (v as num?)?.toInt() ?? 0)) ??
+          const {},
     );
   }
 

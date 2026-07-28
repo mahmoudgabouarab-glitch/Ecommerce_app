@@ -74,6 +74,9 @@ class HomeRepoImpl implements HomeRepo {
     try {
       final data = await _api.get(endpoint: "products/$id");
       final map = data['data'] as Map<String, dynamic>? ?? data;
+      if (data['ratings_breakdown'] != null) {
+        map['ratings_breakdown'] = data['ratings_breakdown'];
+      }
       return Right(ProductModel.fromJson(map));
     } catch (e) {
       return Left(_handle(e));
