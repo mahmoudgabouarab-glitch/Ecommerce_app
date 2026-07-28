@@ -24,5 +24,8 @@ Route::get('storage/{path}', function (string $path) {
         default => 'application/octet-stream',
     };
 
-    return response()->file($full, ['Content-Type' => $mime]);
+    return response(file_get_contents($full), 200, [
+        'Content-Type' => $mime,
+        'Cache-Control' => 'public, max-age=31536000',
+    ]);
 })->where('path', '.*');
