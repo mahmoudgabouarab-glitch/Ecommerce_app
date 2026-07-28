@@ -7,6 +7,7 @@ import '../../../../core/network/service_locator.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_functions.dart';
 import '../../../../core/utils/styles.dart';
+import '../../../../core/widgets/skeletons.dart';
 import '../../../../core/widgets/state_views.dart';
 import '../../../auth/presentation/view/widgets/login_required.dart';
 import '../../../order/data/repo/order_repo_impl.dart';
@@ -51,9 +52,7 @@ class NotificationsView extends StatelessWidget {
                   builder: (context, state) {
                     if (state is NotificationsLoading ||
                         state is NotificationsInitial) {
-                      return const Center(
-                          child: CircularProgressIndicator(
-                              color: AppColors.primary));
+                      return const ListRowsShimmer(rowHeight: 84);
                     }
                     if (state is NotificationsFailure) {
                       return ErrorState(

@@ -9,6 +9,7 @@ import '../../../../../core/utils/app_functions.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/custom_snackbar.dart';
+import '../../../../../core/widgets/skeletons.dart';
 import '../../../../../core/widgets/state_views.dart';
 import '../../../../auth/presentation/view/widgets/login_required.dart';
 import '../../../../checkout/presentation/view/checkout_view.dart';
@@ -30,8 +31,7 @@ class CartBody extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is CartLoading || state is CartInitial) {
-          return const Center(
-              child: CircularProgressIndicator(color: AppColors.primary));
+          return const ListRowsShimmer(rowHeight: 96);
         }
         if (state is CartFailure) {
           return ErrorState(

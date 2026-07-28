@@ -9,6 +9,7 @@ import '../../../../core/utils/styles.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_snackbar.dart';
 import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../core/widgets/skeletons.dart';
 import '../../../../core/widgets/state_views.dart';
 import '../../data/models/address_model.dart';
 import '../../data/repo/address_repo_impl.dart';
@@ -37,8 +38,7 @@ class AddressesView extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is AddressLoading || state is AddressInitial) {
-                  return const Center(
-                      child: CircularProgressIndicator(color: AppColors.primary));
+                  return const ListRowsShimmer(rowHeight: 92);
                 }
                 final addresses =
                     state is AddressLoaded ? state.addresses : <AddressModel>[];

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/network/service_locator.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/styles.dart';
+import '../../../../core/widgets/product_grid_shimmer.dart';
 import '../../../../core/widgets/state_views.dart';
 import '../../data/repo/home_repo_impl.dart';
 import '../view_model/search_cubit/search_cubit.dart';
@@ -99,8 +100,9 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
         child: BlocBuilder<SearchCubit, SearchState>(
           builder: (context, state) {
             if (state is SearchLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: AppColors.primary),
+              return Padding(
+                padding: EdgeInsets.all(16.w),
+                child: const ProductGridShimmer(),
               );
             }
             if (state is SearchFailure) {

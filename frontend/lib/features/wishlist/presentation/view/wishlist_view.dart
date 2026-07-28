@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/utils/app_colors.dart';
+import '../../../../core/widgets/product_grid_shimmer.dart';
 import '../../../../core/widgets/state_views.dart';
 import '../../../home/presentation/view/widgets/home/product_item.dart';
 import '../view_model/wishlist_cubit/wishlist_cubit.dart';
@@ -21,8 +21,10 @@ class WishlistView extends StatelessWidget {
         child: BlocBuilder<WishlistCubit, WishlistState>(
           builder: (context, state) {
             if (state is WishlistLoading || state is WishlistInitial) {
-              return const Center(
-                  child: CircularProgressIndicator(color: AppColors.primary));
+              return Padding(
+                padding: EdgeInsets.all(16.w),
+                child: const ProductGridShimmer(),
+              );
             }
             if (state is WishlistError) {
               return ErrorState(

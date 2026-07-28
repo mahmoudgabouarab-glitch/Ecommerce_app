@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_functions.dart';
 import '../../../../core/utils/styles.dart';
+import '../../../../core/widgets/skeletons.dart';
 import '../../../../core/widgets/state_views.dart';
 import '../../../auth/presentation/view/widgets/login_required.dart';
 import '../../data/models/order_model.dart';
@@ -26,8 +27,7 @@ class OrdersView extends StatelessWidget {
             : BlocBuilder<OrdersCubit, OrdersState>(
           builder: (context, state) {
             if (state is OrdersLoading || state is OrdersInitial) {
-              return const Center(
-                  child: CircularProgressIndicator(color: AppColors.primary));
+              return const ListRowsShimmer(rowHeight: 110);
             }
             if (state is OrdersFailure) {
               return ErrorState(

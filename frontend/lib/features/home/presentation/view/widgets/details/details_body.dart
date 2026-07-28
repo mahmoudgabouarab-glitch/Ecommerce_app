@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/styles.dart';
+import '../../../../../../core/widgets/skeletons.dart';
 import '../../../../data/models/product_model.dart';
 import '../../../view_model/details_cubit/details_cubit.dart';
 import '../suggested_products_section.dart';
@@ -24,9 +24,7 @@ class DetailsBody extends StatelessWidget {
     return BlocBuilder<DetailsCubit, DetailsState>(
       builder: (context, state) {
         if (state is DetailsLoading || state is DetailsInitial) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.primary),
-          );
+          return const DetailsShimmer();
         }
         if (state is DetailsFailure) {
           return Center(
