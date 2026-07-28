@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -106,16 +107,22 @@ class _MainLayoutState extends State<MainLayout>
           child: BlocBuilder<CartCubit, CartState>(
             builder: (context, state) {
               final count = state is CartSuccess ? state.cart.count : 0;
-              return Row(
-                children: [
-                  _navItem(0, Icons.home_outlined, Icons.home_rounded),
-                  _navItem(1, Icons.shopping_cart_outlined,
-                      Icons.shopping_cart_rounded,
-                      badge: count),
-                  _navItem(2, Icons.receipt_long_outlined,
-                      Icons.receipt_long_rounded),
-                  _navItem(3, Icons.person_outline, Icons.person_rounded),
-                ],
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _navItem(0, Icons.home_outlined, Icons.home_rounded,
+                        'home'.tr()),
+                    _navItem(1, Icons.shopping_cart_outlined,
+                        Icons.shopping_cart_rounded, 'cart'.tr(),
+                        badge: count),
+                    _navItem(2, Icons.receipt_long_outlined,
+                        Icons.receipt_long_rounded, 'orders'.tr()),
+                    _navItem(3, Icons.person_outline, Icons.person_rounded,
+                        'profile'.tr()),
+                  ],
+                ),
               );
             },
           ),
@@ -124,40 +131,56 @@ class _MainLayoutState extends State<MainLayout>
     );
   }
 
-  Widget _navItem(int index, IconData icon, IconData activeIcon,
+  Widget _navItem(int index, IconData icon, IconData activeIcon, String label,
       {int badge = 0}) {
     final cs = Theme.of(context).colorScheme;
     final selected = _index == index;
+    const duration = Duration(milliseconds: 260);
 
     Widget iconWidget = Icon(
       selected ? activeIcon : icon,
       color: selected ? AppColors.primary : cs.onSurfaceVariant,
-      size: 25.r,
+      size: 23.r,
     );
     if (badge > 0) {
       iconWidget = Badge(label: Text('$badge'), child: iconWidget);
     }
 
-    return Expanded(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => _onSelect(index),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _onSelect(index),
+      child: AnimatedContainer(
+        duration: duration,
+        curve: Curves.easeOut,
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: selected
+              ? AppColors.primary.withValues(alpha: 0.12)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(14.r),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             iconWidget,
-            SizedBox(height: 6.h),
-            AnimatedOpacity(
-              duration: const Duration(milliseconds: 220),
-              opacity: selected ? 1 : 0,
-              child: Container(
-                width: 6.r,
-                height: 6.r,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: AppColors.brandGradient),
-                  shape: BoxShape.circle,
-                ),
-              ),
+            AnimatedSize(
+              duration: duration,
+              curve: Curves.easeOut,
+              child: selected
+                  ? Padding(
+                      padding: EdgeInsets.only(left: 7.w),
+                      child: Text(
+                        label,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
