@@ -15,5 +15,14 @@ Route::get('storage/{path}', function (string $path) {
     $full = storage_path('app/public/'.$path);
     abort_unless(is_file($full), 404);
 
-    return response()->file($full);
+    $mime = match (strtolower(pathinfo($full, PATHINFO_EXTENSION))) {
+        'jpg', 'jpeg' => 'image/jpeg',
+        'png' => 'image/png',
+        'gif' => 'image/gif',
+        'webp' => 'image/webp',
+        'svg' => 'image/svg+xml',
+        default => 'application/octet-stream',
+    };
+
+    return response()->file($full, ['Content-Type' => $mime]);
 })->where('path', '.*');
