@@ -9,3 +9,11 @@ Route::get('/', function () {
         'docs' => '/api/products',
     ]);
 });
+
+Route::get('storage/{path}', function (string $path) {
+    abort_if(str_contains($path, '..'), 404);
+    $full = storage_path('app/public/'.$path);
+    abort_unless(is_file($full), 404);
+
+    return response()->file($full);
+})->where('path', '.*');

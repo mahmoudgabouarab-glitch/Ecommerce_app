@@ -5,7 +5,9 @@ set -e
 mkdir -p storage/app/public/products storage/app/public/avatars
 
 # Public symlink so uploaded images are served under /storage/...
-php artisan storage:link || true
+# Remove any stale/broken link first (a committed link points at a dev path).
+rm -f public/storage
+php artisan storage:link
 
 # Apply any pending migrations (safe to run on every deploy).
 php artisan migrate --force
