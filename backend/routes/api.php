@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/_diag', function () {
     return response()->json([
+        'session_driver' => config('session.driver'),
+        'sessions_table' => \Illuminate\Support\Facades\Schema::hasTable('sessions'),
         'sessions_dir' => is_dir(storage_path('framework/sessions')),
         'views_dir' => is_dir(storage_path('framework/views')),
         'cache_dir' => is_dir(storage_path('framework/cache/data')),
