@@ -51,14 +51,17 @@ class ProductItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14.r),
                       ),
                       clipBehavior: Clip.antiAlias,
-                      child: CachedNetworkImage(
-                        imageUrl: product.image,
-                        fit: BoxFit.cover,
-                        placeholder: (_, _) =>
-                            Container(color: cs.surfaceContainerHigh),
-                        errorWidget: (_, _, _) => Icon(
-                          Icons.image_outlined,
-                          color: cs.onSurfaceVariant,
+                      child: Hero(
+                        tag: 'product-image-${product.id}',
+                        child: CachedNetworkImage(
+                          imageUrl: product.image,
+                          fit: BoxFit.cover,
+                          placeholder: (_, _) =>
+                              Container(color: cs.surfaceContainerHigh),
+                          errorWidget: (_, _, _) => Icon(
+                            Icons.image_outlined,
+                            color: cs.onSurfaceVariant,
+                          ),
                         ),
                       ),
                     ),
@@ -177,10 +180,17 @@ class _WishlistHeart extends StatelessWidget {
           color: cs.surface.withValues(alpha: 0.92),
           shape: BoxShape.circle,
         ),
-        child: Icon(
-          isFav ? Icons.favorite : Icons.favorite_border,
-          size: 17.r,
-          color: isFav ? AppColors.danger : cs.onSurfaceVariant,
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 280),
+          switchInCurve: Curves.easeOutBack,
+          transitionBuilder: (child, anim) =>
+              ScaleTransition(scale: anim, child: child),
+          child: Icon(
+            isFav ? Icons.favorite : Icons.favorite_border,
+            key: ValueKey(isFav),
+            size: 17.r,
+            color: isFav ? AppColors.danger : cs.onSurfaceVariant,
+          ),
         ),
       ),
     );

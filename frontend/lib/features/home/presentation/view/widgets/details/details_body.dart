@@ -66,7 +66,10 @@ class _DetailsContentState extends State<_DetailsContent> {
           child: ListView(
             padding: EdgeInsets.all(16.w),
             children: [
-              ProductGallery(images: product.images),
+              ProductGallery(
+                images: product.images,
+                heroTag: 'product-image-${product.id}',
+              ),
               SizedBox(height: 20.h),
               ProductInfo(product: product),
               if (product.variants.isNotEmpty) ...[

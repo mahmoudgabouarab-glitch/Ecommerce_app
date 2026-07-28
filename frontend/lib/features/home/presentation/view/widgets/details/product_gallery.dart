@@ -5,9 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/utils/app_colors.dart';
 
 class ProductGallery extends StatefulWidget {
-  const ProductGallery({super.key, required this.images});
+  const ProductGallery({super.key, required this.images, this.heroTag});
 
   final List<String> images;
+  final String? heroTag;
 
   @override
   State<ProductGallery> createState() => _ProductGalleryState();
@@ -41,13 +42,19 @@ class _ProductGalleryState extends State<ProductGallery> {
             controller: _controller,
             itemCount: images.length,
             onPageChanged: (i) => setState(() => _index = i),
-            itemBuilder: (_, i) => CachedNetworkImage(
-              imageUrl: images[i],
-              fit: BoxFit.cover,
-              placeholder: (_, _) => Container(color: cs.surfaceContainerHigh),
-              errorWidget: (_, _, _) =>
-                  Icon(Icons.image_outlined, color: cs.onSurfaceVariant),
-            ),
+            itemBuilder: (_, i) {
+              final image = CachedNetworkImage(
+                imageUrl: images[i],
+                fit: BoxFit.cover,
+                placeholder: (_, _) =>
+                    Container(color: cs.surfaceContainerHigh),
+                errorWidget: (_, _, _) =>
+                    Icon(Icons.image_outlined, color: cs.onSurfaceVariant),
+              );
+              return (i == 0 && widget.heroTag != null)
+                  ? Hero(tag: widget.heroTag!, child: image)
+                  : image;
+            },
           ),
         ),
         if (images.length > 1) ...[

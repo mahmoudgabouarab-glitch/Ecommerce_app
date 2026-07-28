@@ -145,6 +145,9 @@ class _MainLayoutState extends State<MainLayout>
     if (badge > 0) {
       iconWidget = Badge(label: Text('$badge'), child: iconWidget);
     }
+    if (index == 1) {
+      iconWidget = _BounceOnIncrease(value: badge, child: iconWidget);
+    }
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -186,5 +189,43 @@ class _MainLayoutState extends State<MainLayout>
         ),
       ),
     );
+  }
+}
+
+class _BounceOnIncrease extends StatefulWidget {
+  const _BounceOnIncrease({required this.value, required this.child});
+  final int value;
+  final Widget child;
+
+  @override
+  State<_BounceOnIncrease> createState() => _BounceOnIncreaseState();
+}
+
+class _BounceOnIncreaseState extends State<_BounceOnIncrease>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 320),
+  );
+  late final Animation<double> _scale = TweenSequence<double>([
+    TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.35), weight: 45),
+    TweenSequenceItem(tween: Tween(begin: 1.35, end: 1.0), weight: 55),
+  ]).animate(CurvedAnimation(parent: _c, curve: Curves.easeOut));
+
+  @override
+  void didUpdateWidget(_BounceOnIncrease old) {
+    super.didUpdateWidget(old);
+    if (widget.value > old.value) _c.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(scale: _scale, child: widget.child);
   }
 }
