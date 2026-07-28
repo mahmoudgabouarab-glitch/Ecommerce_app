@@ -132,6 +132,7 @@ class OrderController extends Controller
             "Order #{$order->id} placed",
             'Your order has been placed and is pending confirmation.',
             $order->id,
+            'order_placed',
         );
 
         return new OrderResource($order->load(['items', 'address']));
@@ -180,6 +181,7 @@ class OrderController extends Controller
                 "Order #{$order->id} {$to}",
                 $this->statusMessage($to, $order->id),
                 $order->id,
+                'order_'.$to,
             );
         }
 

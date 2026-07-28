@@ -7,13 +7,14 @@ use App\Models\DeviceToken;
 
 class Notifier
 {
-    public static function order(int $userId, string $title, string $body, int $orderId): void
+    public static function order(int $userId, string $title, string $body, int $orderId, ?string $key = null): void
     {
         AppNotification::create([
             'user_id' => $userId,
             'title' => $title,
             'body' => $body,
             'type' => 'order',
+            'key' => $key,
             'order_id' => $orderId,
         ]);
 
