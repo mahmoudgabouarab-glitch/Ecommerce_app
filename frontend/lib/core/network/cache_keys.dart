@@ -13,5 +13,6 @@ class CacheKeys {
   static const String themeMode = "themeMode";
   static const String onboardingSeen = "onboardingSeen";
   static const String recentSearches = "recentSearches";
+  static const String recentlyViewed = "recentlyViewed";
   static const String lastEmail = "lastEmail";
 }

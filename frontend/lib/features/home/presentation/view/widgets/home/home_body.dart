@@ -17,6 +17,7 @@ import 'header.dart';
 import 'home_banner.dart';
 import 'popular_products_build.dart';
 import 'products_header.dart';
+import 'recently_viewed_section.dart';
 import 'search_bar_home.dart';
 
 class HomeBody extends StatefulWidget {
@@ -73,6 +74,7 @@ class _HomeBodyState extends State<HomeBody> {
           const HomeBanner(),
           SizedBox(height: 22.h),
           const FlashDealsSection(),
+          const RecentlyViewedSection(),
           SuggestedProductsSection(title: 'recommended_for_you'.tr()),
           const ProductsHeader(),
           SizedBox(height: 14.h),

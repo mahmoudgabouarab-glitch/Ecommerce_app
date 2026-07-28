@@ -115,6 +115,24 @@ class ProductModel extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'description': description,
+        'brand': brand,
+        'price': price,
+        'sale_price': salePrice,
+        'effective_price': effectivePrice,
+        'on_sale': onSale,
+        'stock': stock,
+        'in_stock': inStock,
+        'images': images,
+        'rating': rating,
+        'rating_count': ratingCount,
+        'is_featured': isFeatured,
+        'category': categoryName == null ? null : {'name': categoryName},
+      };
+
   static double _toDouble(dynamic v) {
     if (v == null) return 0;
     if (v is num) return v.toDouble();

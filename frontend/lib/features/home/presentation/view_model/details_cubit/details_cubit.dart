@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/utils/recently_viewed.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/repo/home_repo.dart';
 
@@ -16,7 +17,10 @@ class DetailsCubit extends Cubit<DetailsState> {
     final result = await _repo.getProductDetails(id);
     result.fold(
       (failure) => emit(DetailsFailure(failure.errorMessage)),
-      (product) => emit(DetailsSuccess(product)),
+      (product) {
+        RecentlyViewed.add(product);
+        emit(DetailsSuccess(product));
+      },
     );
   }
 }
