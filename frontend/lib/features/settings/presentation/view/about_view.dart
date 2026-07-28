@@ -67,7 +67,7 @@ class AboutView extends StatelessWidget {
             ),
             SizedBox(height: 6.h),
             Center(
-              child: Text('© 2026 ShopSphere · ${'rights_reserved'.tr()}',
+              child: Text('© 2026 Bazar · ${'rights_reserved'.tr()}',
                   style: AppStyles.regular12
                       .copyWith(color: cs.onSurfaceVariant)),
             ),

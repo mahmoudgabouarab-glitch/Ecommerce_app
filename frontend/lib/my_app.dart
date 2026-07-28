@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         builder: (context, _) => BlocBuilder<ThemeCubit, ThemeMode>(
           builder: (context, mode) => MaterialApp(
-            title: 'ShopSphere',
+            title: 'Bazar',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
