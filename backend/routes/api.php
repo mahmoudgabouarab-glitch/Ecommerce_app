@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
@@ -24,6 +25,8 @@ Route::post('/email/verify', [EmailVerificationController::class, 'verify']);
 Route::post('/email/resend', [EmailVerificationController::class, 'resend']);
 Route::post('/password/forgot', [PasswordController::class, 'forgot']);
 Route::post('/password/reset', [PasswordController::class, 'reset']);
+
+Route::get('/banners', [BannerController::class, 'index']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category}', [CategoryController::class, 'show']);
@@ -81,6 +84,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/coupons', [CouponController::class, 'index']);
         Route::post('/coupons', [CouponController::class, 'store']);
         Route::delete('/coupons/{coupon}', [CouponController::class, 'destroy']);
+
+        Route::get('/banners', [BannerController::class, 'adminIndex']);
+        Route::post('/banners', [BannerController::class, 'store']);
+        Route::put('/banners/{banner}', [BannerController::class, 'update']);
+        Route::delete('/banners/{banner}', [BannerController::class, 'destroy']);
 
         Route::get('/orders', [OrderController::class, 'adminIndex']);
         Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus']);

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Product;
@@ -132,6 +133,18 @@ class DatabaseSeeder extends Seeder
             ['code' => 'WELCOME10'],
             ['discount_type' => 'percent', 'amount' => 10, 'min_total' => 500, 'is_active' => true]
         );
+
+        $banners = [
+            ['https://images.pexels.com/photos/7987759/pexels-photo-7987759.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=400', 'Mega Sale', 'Up to 30% off electronics', 'category', $id('electronics'), 1],
+            ['https://images.pexels.com/photos/16888144/pexels-photo-16888144.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=400', 'New Gadgets', 'Latest tech just landed', 'category', $id('electronics'), 2],
+            ['https://images.pexels.com/photos/8311880/pexels-photo-8311880.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=400', 'Fashion Picks', 'Fresh styles for the season', 'category', $id('fashion'), 3],
+        ];
+        foreach ($banners as [$image, $title, $subtitle, $lt, $lv, $sort]) {
+            Banner::updateOrCreate(
+                ['title' => $title],
+                ['image' => $image, 'subtitle' => $subtitle, 'link_type' => $lt, 'link_value' => $lv, 'is_active' => true, 'sort_order' => $sort]
+            );
+        }
 
         $this->command->info('Seeded '.count($products).' products with matching images.');
         $this->command->info('admin@shopsphere.com / admin123  |  customer@shopsphere.com / password');
