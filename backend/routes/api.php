@@ -19,12 +19,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/email/verify', [EmailVerificationController::class, 'verify']);
-Route::post('/email/resend', [EmailVerificationController::class, 'resend']);
-Route::post('/password/forgot', [PasswordController::class, 'forgot']);
-Route::post('/password/reset', [PasswordController::class, 'reset']);
+Route::middleware('throttle:auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/email/verify', [EmailVerificationController::class, 'verify']);
+    Route::post('/email/resend', [EmailVerificationController::class, 'resend']);
+    Route::post('/password/forgot', [PasswordController::class, 'forgot']);
+    Route::post('/password/reset', [PasswordController::class, 'reset']);
+});
 
 Route::get('/banners', [BannerController::class, 'index']);
 
