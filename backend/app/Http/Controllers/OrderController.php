@@ -97,6 +97,7 @@ class OrderController extends Controller
                 'address_id' => $data['address_id'],
                 'status' => 'pending',
                 'payment_method' => $data['payment_method'],
+                'payment_status' => 'unpaid',
                 'subtotal' => $subtotal,
                 'discount' => $discount,
                 'shipping_fee' => self::SHIPPING_FEE,

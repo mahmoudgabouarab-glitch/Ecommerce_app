@@ -76,7 +76,8 @@ Future<void> _startCardPayment(
   if (!context.mounted) return;
 
   if (paid) {
-    showSnackBar(context, 'payment_success'.tr(), success: true);
+    showSnackBar(context, 'payment_success'.tr(args: ['${state.order.id}']),
+        success: true);
   } else {
     showSnackBar(context, 'payment_pending'.tr());
   }

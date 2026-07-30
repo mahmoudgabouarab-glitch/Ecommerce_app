@@ -68,6 +68,7 @@ class CheckoutTest extends TestCase
 
         $response->assertCreated()
             ->assertJsonPath('data.status', 'pending')
+            ->assertJsonPath('data.payment_status', 'unpaid')
             ->assertJsonPath('data.subtotal', 400)
             ->assertJsonPath('data.shipping_fee', 50)
             ->assertJsonPath('data.total', 450);

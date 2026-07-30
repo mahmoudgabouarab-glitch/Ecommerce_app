@@ -317,6 +317,6 @@
   "compare_empty": "Nothing to compare yet.\nTap the compare icon on a product to add it here.",
   "payment": "Payment",
   "confirming_payment": "Confirming your payment…",
-  "payment_success": "Payment successful. Your order is confirmed.",
+  "payment_success": "Payment received! Order #{} is confirmed.",
   "payment_pending": "We couldn’t confirm the payment yet. You can retry from your orders."
 }
