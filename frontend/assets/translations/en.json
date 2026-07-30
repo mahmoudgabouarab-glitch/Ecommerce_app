@@ -318,5 +318,8 @@
   "payment": "Payment",
   "confirming_payment": "Confirming your payment…",
   "payment_success": "Payment received! Order #{} is confirmed.",
-  "payment_pending": "We couldn’t confirm the payment yet. You can retry from your orders."
+  "payment_pending": "We couldn’t confirm the payment yet. You can retry from your orders.",
+  "pay_paid": "Paid",
+  "pay_failed": "Failed",
+  "pay_unpaid": "Unpaid"
 }

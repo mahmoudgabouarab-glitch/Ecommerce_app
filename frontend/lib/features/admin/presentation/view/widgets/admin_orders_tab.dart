@@ -87,8 +87,17 @@ class _AdminOrderCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: 4.h),
-          Text('${'items_count'.tr(args: ['${order.items.length}'])} • ${order.paymentMethod.toUpperCase()}',
-              style: AppStyles.regular12.copyWith(color: cs.onSurfaceVariant)),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                    '${'items_count'.tr(args: ['${order.items.length}'])} • ${order.paymentMethod.toUpperCase()}',
+                    style: AppStyles.regular12
+                        .copyWith(color: cs.onSurfaceVariant)),
+              ),
+              if (order.paymentMethod == 'card') _paymentBadge(order.paymentStatus),
+            ],
+          ),
           SizedBox(height: 12.h),
           Row(
             children: [
@@ -122,6 +131,32 @@ class _AdminOrderCard extends StatelessWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _paymentBadge(String status) {
+    final (Color color, IconData icon, String key) = switch (status) {
+      'paid' => (AppColors.success, Icons.check_circle, 'pay_paid'),
+      'failed' => (AppColors.danger, Icons.cancel, 'pay_failed'),
+      _ => (AppColors.warning, Icons.schedule, 'pay_unpaid'),
+    };
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13.r, color: color),
+          SizedBox(width: 4.w),
+          Text(key.tr(),
+              style: AppStyles.regular12
+                  .copyWith(color: color, fontWeight: FontWeight.w600)),
         ],
       ),
     );
