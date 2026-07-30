@@ -9,6 +9,8 @@ import '../core/utils/app_functions.dart';
 import 'cart/data/repo/cart_repo_impl.dart';
 import 'cart/presentation/view/cart_view.dart';
 import 'cart/presentation/view_model/cart_cubit/cart_cubit.dart';
+import 'compare/presentation/view/compare_view.dart';
+import 'compare/presentation/view_model/compare_cubit/compare_cubit.dart';
 import 'home/presentation/view/home_view.dart';
 import 'notifications/presentation/view_model/notifications_cubit/notifications_cubit.dart';
 import 'order/data/repo/order_repo_impl.dart';
@@ -34,14 +36,22 @@ class _MainLayoutState extends State<MainLayout>
     vsync: this,
     duration: const Duration(milliseconds: 280),
   )..forward();
-  late final Animation<double> _pageCurve =
-      CurvedAnimation(parent: _pageAnim, curve: Curves.easeOutCubic);
+  late final Animation<double> _pageCurve = CurvedAnimation(
+    parent: _pageAnim,
+    curve: Curves.easeOutCubic,
+  );
 
   late final CartCubit _cartCubit = CartCubit(getIt<CartRepoImpl>())..getCart();
   late final OrdersCubit _ordersCubit = OrdersCubit(getIt<OrderRepoImpl>())
     ..getOrders();
 
-  final _pages = const [HomeView(), CartView(), OrdersView(), SettingsView()];
+  final _pages = const [
+    HomeView(),
+    CartView(),
+    OrdersView(),
+    CompareView(),
+    SettingsView(),
+  ];
 
   @override
   void initState() {
@@ -59,7 +69,7 @@ class _MainLayoutState extends State<MainLayout>
     if (!isLoggedInUser()) return;
     if (i == 1) _cartCubit.getCart();
     if (i == 2) _ordersCubit.getOrders();
-    if (i == 3) context.read<NotificationsCubit>().refreshBadge();
+    if (i == 4) context.read<NotificationsCubit>().refreshBadge();
   }
 
   @override
@@ -77,24 +87,31 @@ class _MainLayoutState extends State<MainLayout>
         BlocProvider.value(value: _cartCubit),
         BlocProvider.value(value: _ordersCubit),
       ],
-      child: Scaffold(
-        body: FadeTransition(
-          opacity: _pageCurve,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.03),
-              end: Offset.zero,
-            ).animate(_pageCurve),
-            child: IndexedStack(index: _index, children: _pages),
+      child: BlocListener<CompareCubit, CompareState>(
+        listener: (context, state) {
+          final count = state is CompareUpdated ? state.items.length : 0;
+          if (count == 0 && _index == 3) setState(() => _index = 0);
+        },
+        child: Scaffold(
+          body: FadeTransition(
+            opacity: _pageCurve,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 0.03),
+                end: Offset.zero,
+              ).animate(_pageCurve),
+              child: IndexedStack(index: _index, children: _pages),
+            ),
           ),
+          bottomNavigationBar: _buildNavBar(context),
         ),
-        bottomNavigationBar: _buildNavBar(context),
       ),
     );
   }
 
   Widget _buildNavBar(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final compareCount = context.watch<CompareCubit>().count;
     return Container(
       decoration: BoxDecoration(
         color: cs.surface,
@@ -112,15 +129,39 @@ class _MainLayoutState extends State<MainLayout>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _navItem(0, Icons.home_outlined, Icons.home_rounded,
-                        'home'.tr()),
-                    _navItem(1, Icons.shopping_cart_outlined,
-                        Icons.shopping_cart_rounded, 'cart'.tr(),
-                        badge: count),
-                    _navItem(2, Icons.receipt_long_outlined,
-                        Icons.receipt_long_rounded, 'orders'.tr()),
-                    _navItem(3, Icons.person_outline, Icons.person_rounded,
-                        'profile'.tr()),
+                    _navItem(
+                      0,
+                      Icons.home_outlined,
+                      Icons.home_rounded,
+                      'home'.tr(),
+                    ),
+                    _navItem(
+                      1,
+                      Icons.shopping_cart_outlined,
+                      Icons.shopping_cart_rounded,
+                      'cart'.tr(),
+                      badge: count,
+                    ),
+                    _navItem(
+                      2,
+                      Icons.receipt_long_outlined,
+                      Icons.receipt_long_rounded,
+                      'orders'.tr(),
+                    ),
+                    if (compareCount > 0)
+                      _navItem(
+                        3,
+                        Icons.compare_arrows_rounded,
+                        Icons.compare_arrows_rounded,
+                        'compare'.tr(),
+                        badge: compareCount,
+                      ),
+                    _navItem(
+                      4,
+                      Icons.person_outline,
+                      Icons.person_rounded,
+                      'profile'.tr(),
+                    ),
                   ],
                 ),
               );
@@ -131,8 +172,13 @@ class _MainLayoutState extends State<MainLayout>
     );
   }
 
-  Widget _navItem(int index, IconData icon, IconData activeIcon, String label,
-      {int badge = 0}) {
+  Widget _navItem(
+    int index,
+    IconData icon,
+    IconData activeIcon,
+    String label, {
+    int badge = 0,
+  }) {
     final cs = Theme.of(context).colorScheme;
     final selected = _index == index;
     const duration = Duration(milliseconds: 260);

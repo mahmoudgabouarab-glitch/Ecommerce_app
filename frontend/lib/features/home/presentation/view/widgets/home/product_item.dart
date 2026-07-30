@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/app_functions.dart';
 import '../../../../../../core/utils/styles.dart';
+import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../auth/presentation/view/widgets/login_required.dart';
+import '../../../../../compare/presentation/view_model/compare_cubit/compare_cubit.dart';
 import '../../../../../wishlist/presentation/view_model/wishlist_cubit/wishlist_cubit.dart';
 import '../../../../data/models/product_model.dart';
 import '../../details_view.dart';
@@ -85,10 +88,15 @@ class ProductItem extends StatelessWidget {
                             )),
                       ),
                     ),
-                  Positioned(
+                  PositionedDirectional(
                     top: 12.h,
-                    right: 12.w,
+                    end: 12.w,
                     child: _WishlistHeart(productId: product.id),
+                  ),
+                  PositionedDirectional(
+                    top: 50.h,
+                    end: 12.w,
+                    child: _CompareToggle(product: product),
                   ),
                 ],
               ),
@@ -191,6 +199,42 @@ class _WishlistHeart extends StatelessWidget {
             size: 17.r,
             color: isFav ? AppColors.danger : cs.onSurfaceVariant,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CompareToggle extends StatelessWidget {
+  const _CompareToggle({required this.product});
+  final ProductModel product;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    context.watch<CompareCubit>();
+    final cubit = context.read<CompareCubit>();
+    final inList = cubit.isSelected(product.id);
+
+    return GestureDetector(
+      onTap: () {
+        if (!inList && cubit.isFull) {
+          showSnackBar(
+              context, 'compare_full'.tr(args: ['${CompareCubit.maxItems}']));
+          return;
+        }
+        cubit.toggle(product);
+      },
+      child: Container(
+        padding: EdgeInsets.all(6.r),
+        decoration: BoxDecoration(
+          color: cs.surface.withValues(alpha: 0.92),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          Icons.compare_arrows_rounded,
+          size: 17.r,
+          color: inList ? AppColors.primary : cs.onSurfaceVariant,
         ),
       ),
     );

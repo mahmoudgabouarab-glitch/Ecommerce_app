@@ -14,5 +14,6 @@ class CacheKeys {
   static const String onboardingSeen = "onboardingSeen";
   static const String recentSearches = "recentSearches";
   static const String recentlyViewed = "recentlyViewed";
+  static const String compareList = "compareList";
   static const String lastEmail = "lastEmail";
 }

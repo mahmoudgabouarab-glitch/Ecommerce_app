@@ -307,5 +307,12 @@
   "verification_code": "Verification code",
   "verify": "Verify",
   "resend_code": "Resend code",
-  "code_sent": "A new code has been sent"
+  "code_sent": "A new code has been sent",
+  "rating": "Rating",
+  "compare": "Compare",
+  "compare_title": "Compare products",
+  "compare_view": "Compare",
+  "compare_count": "{} selected to compare",
+  "compare_full": "You can compare up to {} products.",
+  "compare_empty": "Nothing to compare yet.\nTap the compare icon on a product to add it here."
 }
