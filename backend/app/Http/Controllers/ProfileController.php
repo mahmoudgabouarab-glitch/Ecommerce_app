@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Support\ImageUploader;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -23,10 +23,8 @@ class ProfileController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
-            }
-            $user->avatar = $request->file('avatar')->store('avatars', 'public');
+            ImageUploader::delete($user->avatar);
+            $user->avatar = ImageUploader::upload($request->file('avatar'), 'avatars');
         }
 
         foreach (['name', 'phone', 'gender', 'birth_date', 'bio'] as $field) {

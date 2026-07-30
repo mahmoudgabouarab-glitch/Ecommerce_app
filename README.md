@@ -210,8 +210,9 @@ script, so Railway can build and run it as-is.
    choose **New Project → Deploy from GitHub repo**.
 2. In the service **Settings**, set **Root Directory** to `backend`.
 3. Add a **MySQL** database to the project (**New → Database → MySQL**).
-4. Add a **Volume** to the service, mounted at `/app/storage/app/public`
-   (keeps uploaded product/profile images across redeploys).
+4. Uploaded images (products, avatars, banners, categories) go to
+   **Cloudinary**, so no persistent volume is needed. Grab the single
+   `CLOUDINARY_URL` from your Cloudinary dashboard for the variables below.
 5. Set the service **Variables**:
 
    | Variable | Value |
@@ -221,20 +222,19 @@ script, so Railway can build and run it as-is.
    | `APP_DEBUG` | `false` |
    | `APP_URL` | `https://your-app.up.railway.app` |
    | `DB_URL` | `${{MySQL.MYSQL_URL}}` (Railway reference variable) |
-   | `FILESYSTEM_DISK` | `public` |
+   | `CLOUDINARY_URL` | `cloudinary://API_KEY:API_SECRET@CLOUD_NAME` |
    | `LOG_CHANNEL` | `stderr` |
    | `FCM_CREDENTIALS` | *(optional)* Firebase service-account JSON — see below |
 
-6. Deploy. On boot the container runs `storage:link` and `migrate --force`
-   automatically.
+6. Deploy. On boot the container runs `migrate --force` automatically.
 7. One-off, to load demo data, open the service **Shell** and run:
    `php artisan db:seed --force`.
 8. Point the app at it:
    `flutter run --dart-define=API_BASE_URL=https://your-app.up.railway.app/api/`
 
-> `TrustProxies` is set to `*` so image URLs are generated as `https://`
-> behind Railway's load balancer. The dev server (`php artisan serve`) is fine
-> for a demo; swap in nginx + php-fpm for heavier production traffic.
+> Uploaded images are served from Cloudinary's CDN over `https://`, so they
+> survive redeploys and load fast anywhere. The dev server (`php artisan serve`)
+> is fine for a demo; swap in nginx + php-fpm for heavier production traffic.
 
 ---
 

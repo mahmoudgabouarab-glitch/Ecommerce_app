@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Support\ImageUploader;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -143,10 +144,10 @@ class ProductController extends Controller
                 : ($product?->images ?? []);
 
             if ($request->hasFile('image')) {
-                $images[] = url('storage/'.$request->file('image')->store('products', 'public'));
+                $images[] = ImageUploader::upload($request->file('image'), 'products');
             }
             foreach ($request->file('photos', []) as $photo) {
-                $images[] = url('storage/'.$photo->store('products', 'public'));
+                $images[] = ImageUploader::upload($photo, 'products');
             }
 
             $data['images'] = $images;

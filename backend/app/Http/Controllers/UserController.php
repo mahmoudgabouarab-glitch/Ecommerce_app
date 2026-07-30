@@ -15,7 +15,7 @@ class UserController extends Controller
         return response()->json([
             'id' => $user->id,
             'name' => $user->name,
-            'avatar' => $user->avatar ? url('storage/'.$user->avatar) : null,
+            'avatar' => str_starts_with((string) $user->avatar, 'http') ? $user->avatar : null,
             'gender' => $user->gender,
             'birth_date' => $user->birth_date?->format('Y-m-d'),
             'phone' => $user->show_phone ? $user->phone : null,

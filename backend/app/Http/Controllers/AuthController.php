@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Support\ImageUploader;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +25,7 @@ class AuthController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
-            $user->avatar = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = ImageUploader::upload($request->file('avatar'), 'avatars');
             $user->save();
         }
 

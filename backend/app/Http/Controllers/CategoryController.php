@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Support\ImageUploader;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -30,7 +31,7 @@ class CategoryController extends Controller
 
         unset($data['image']);
         if ($request->hasFile('image')) {
-            $data['image_url'] = url('storage/'.$request->file('image')->store('categories', 'public'));
+            $data['image_url'] = ImageUploader::upload($request->file('image'), 'categories');
         }
 
         return new CategoryResource(Category::create($data));
@@ -46,7 +47,7 @@ class CategoryController extends Controller
 
         unset($data['image']);
         if ($request->hasFile('image')) {
-            $data['image_url'] = url('storage/'.$request->file('image')->store('categories', 'public'));
+            $data['image_url'] = ImageUploader::upload($request->file('image'), 'categories');
         }
 
         $category->update($data);

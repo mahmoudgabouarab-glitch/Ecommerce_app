@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'birth_date' => $this->birth_date?->format('Y-m-d'),
             'bio' => $this->bio,
-            'avatar' => $this->avatar ? url('storage/'.$this->avatar) : null,
+            'avatar' => str_starts_with((string) $this->avatar, 'http') ? $this->avatar : null,
             'created_at' => $this->created_at,
         ];
     }

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\BannerResource;
 use App\Models\Banner;
+use App\Support\ImageUploader;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
@@ -29,7 +29,7 @@ class BannerController extends Controller
     public function store(Request $request)
     {
         $data = $this->validated($request, true);
-        $data['image'] = $request->file('image')->store('banners', 'public');
+        $data['image'] = ImageUploader::upload($request->file('image'), 'banners');
 
         return new BannerResource(Banner::create($data));
     }
@@ -39,10 +39,8 @@ class BannerController extends Controller
         $data = $this->validated($request, false);
 
         if ($request->hasFile('image')) {
-            if ($banner->image && ! str_starts_with($banner->image, 'http')) {
-                Storage::disk('public')->delete($banner->image);
-            }
-            $data['image'] = $request->file('image')->store('banners', 'public');
+            ImageUploader::delete($banner->image);
+            $data['image'] = ImageUploader::upload($request->file('image'), 'banners');
         }
 
         $banner->update($data);
@@ -52,9 +50,7 @@ class BannerController extends Controller
 
     public function destroy(Banner $banner)
     {
-        if ($banner->image && ! str_starts_with($banner->image, 'http')) {
-            Storage::disk('public')->delete($banner->image);
-        }
+        ImageUploader::delete($banner->image);
         $banner->delete();
 
         return response()->json(['message' => 'Banner deleted.']);
