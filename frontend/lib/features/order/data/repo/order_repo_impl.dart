@@ -69,6 +69,27 @@ class OrderRepoImpl implements OrderRepo {
   }
 
   @override
+  Future<Either<Failure, OrderModel>> getOrder(int orderId) async {
+    try {
+      final data = await _api.get(endpoint: "orders/$orderId");
+      final map = data['data'] as Map<String, dynamic>? ?? data;
+      return Right(OrderModel.fromJson(map));
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> payCard(int orderId) async {
+    try {
+      final data = await _api.post(endpoint: "orders/$orderId/pay");
+      return Right(data['iframe_url'] as String? ?? '');
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
   Future<Either<Failure, double>> applyCoupon(String code) async {
     try {
       final data = await _api.post(

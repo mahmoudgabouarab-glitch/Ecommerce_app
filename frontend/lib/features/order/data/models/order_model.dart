@@ -19,6 +19,7 @@ class OrderModel extends Equatable {
   final int id;
   final String status;
   final String paymentMethod;
+  final String paymentStatus;
   final double subtotal;
   final double discount;
   final double shippingFee;
@@ -31,6 +32,7 @@ class OrderModel extends Equatable {
     required this.id,
     required this.status,
     required this.paymentMethod,
+    this.paymentStatus = 'unpaid',
     required this.subtotal,
     required this.discount,
     required this.shippingFee,
@@ -44,6 +46,7 @@ class OrderModel extends Equatable {
         id: json['id'] as int? ?? 0,
         status: json['status'] as String? ?? 'pending',
         paymentMethod: json['payment_method'] as String? ?? 'cash',
+        paymentStatus: json['payment_status'] as String? ?? 'unpaid',
         subtotal: _d(json['subtotal']),
         discount: _d(json['discount']),
         shippingFee: _d(json['shipping_fee']),

@@ -7,16 +7,21 @@ import 'package:ecommerce_app/features/order/data/models/order_model.dart';
 import 'package:ecommerce_app/features/order/data/repo/order_repo.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-OrderModel _order() => const OrderModel(
+OrderModel _order({
+  String paymentMethod = 'cash',
+  String paymentStatus = 'unpaid',
+}) =>
+    OrderModel(
       id: 1,
       status: 'pending',
-      paymentMethod: 'cash',
+      paymentMethod: paymentMethod,
+      paymentStatus: paymentStatus,
       subtotal: 200,
       discount: 0,
       shippingFee: 50,
       total: 250,
       couponCode: null,
-      items: [],
+      items: const [],
       createdAt: null,
     );
 
@@ -40,6 +45,9 @@ class _FakeAddressRepo implements AddressRepo {
 class _FakeOrderRepo implements OrderRepo {
   Either<Failure, double> couponResult = right(20);
   Either<Failure, OrderModel> placeResult = right(_order());
+  Either<Failure, String> payResult = right('https://paymob/iframe?token=abc');
+  Either<Failure, OrderModel> getOrderResult =
+      right(_order(paymentStatus: 'paid'));
 
   @override
   Future<Either<Failure, double>> applyCoupon(String code) async =>
@@ -64,6 +72,11 @@ class _FakeOrderRepo implements OrderRepo {
   @override
   Future<Either<Failure, OrdersResponse>> getOrders() =>
       throw UnimplementedError();
+  @override
+  Future<Either<Failure, OrderModel>> getOrder(int orderId) async =>
+      getOrderResult;
+  @override
+  Future<Either<Failure, String>> payCard(int orderId) async => payResult;
   @override
   Future<Either<Failure, Unit>> cancelOrder(int orderId) =>
       throw UnimplementedError();
@@ -121,6 +134,53 @@ void main() {
     await cubit.placeOrder();
 
     expect(cubit.state, isA<CheckoutFailure>());
+    await cubit.close();
+  });
+
+  test('a card order starts payment and emits CheckoutCardPayment', () async {
+    orderRepo.placeResult = right(_order(paymentMethod: 'card'));
+    orderRepo.payResult = right('https://paymob/iframe?token=xyz');
+    final cubit = build();
+    cubit.setPaymentMethod('card');
+    cubit.selectAddress(3);
+
+    await cubit.placeOrder();
+
+    expect(cubit.state, isA<CheckoutCardPayment>());
+    expect((cubit.state as CheckoutCardPayment).iframeUrl,
+        'https://paymob/iframe?token=xyz');
+    await cubit.close();
+  });
+
+  test('a failed payment start emits CheckoutFailure', () async {
+    orderRepo.placeResult = right(_order(paymentMethod: 'card'));
+    orderRepo.payResult = left(ServiseFailure('gateway down'));
+    final cubit = build();
+    cubit.setPaymentMethod('card');
+    cubit.selectAddress(3);
+
+    await cubit.placeOrder();
+
+    expect(cubit.state, isA<CheckoutFailure>());
+    await cubit.close();
+  });
+
+  test('confirmCardPayment returns true when the order is paid', () async {
+    orderRepo.getOrderResult = right(_order(paymentStatus: 'paid'));
+    final cubit = build();
+
+    expect(await cubit.confirmCardPayment(1), isTrue);
+    await cubit.close();
+  });
+
+  test('confirmCardPayment returns false when it stays unpaid', () async {
+    orderRepo.getOrderResult = right(_order(paymentStatus: 'unpaid'));
+    final cubit = build();
+
+    expect(
+      await cubit.confirmCardPayment(1, retries: 2, delay: Duration.zero),
+      isFalse,
+    );
     await cubit.close();
   });
 }

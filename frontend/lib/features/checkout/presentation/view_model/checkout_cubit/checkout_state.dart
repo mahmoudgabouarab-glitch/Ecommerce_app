@@ -54,6 +54,15 @@ final class CheckoutSuccess extends CheckoutState {
   List<Object> get props => [order];
 }
 
+final class CheckoutCardPayment extends CheckoutState {
+  final OrderModel order;
+  final String iframeUrl;
+  const CheckoutCardPayment(this.order, this.iframeUrl);
+
+  @override
+  List<Object> get props => [order, iframeUrl];
+}
+
 final class CheckoutFailure extends CheckoutState {
   final String error;
   const CheckoutFailure(this.error);

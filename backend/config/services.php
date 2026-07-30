@@ -22,4 +22,12 @@ return [
     'cloudinary' => [
         'url' => env('CLOUDINARY_URL'),
     ],
+
+    'paymob' => [
+        'base_url' => env('PAYMOB_BASE_URL', 'https://accept.paymob.com'),
+        'api_key' => env('PAYMOB_API_KEY'),
+        'card_integration_id' => env('PAYMOB_CARD_INTEGRATION_ID'),
+        'iframe_id' => env('PAYMOB_IFRAME_ID'),
+        'hmac_secret' => env('PAYMOB_HMAC_SECRET'),
+    ],
 ];
