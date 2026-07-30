@@ -59,6 +59,8 @@ abstract class AdminRepo {
 
   Future<Either<Failure, AdminUserModel>> updateUserRole(int id, String role);
 
+  Future<Either<Failure, Unit>> deleteUser(int id);
+
   Future<Either<Failure, List<BannerModel>>> getBanners();
 
   Future<Either<Failure, Unit>> saveBanner({

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\WishlistItem;
+use App\Services\Notifier;
 use App\Support\ImageUploader;
 use Illuminate\Http\Request;
 
@@ -123,11 +125,35 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, Product $product)
     {
+        $oldSalePrice = $product->sale_price;
         $data = $this->buildData($request, $product);
         $product->update($data);
         $this->syncVariants($request, $product);
+        $this->notifySaleIfDropped($product, $oldSalePrice);
 
         return new ProductResource($product->load(['category', 'variants']));
+    }
+
+    private function notifySaleIfDropped(Product $product, $oldSalePrice): void
+    {
+        $newSale = $product->sale_price;
+        if ($newSale === null || (float) $newSale >= (float) $product->price) {
+            return;
+        }
+        if ($oldSalePrice !== null && (float) $oldSalePrice <= (float) $newSale) {
+            return;
+        }
+
+        $userIds = WishlistItem::where('product_id', $product->id)->pluck('user_id');
+        $price = (int) round((float) $newSale);
+        foreach ($userIds as $userId) {
+            Notifier::sale(
+                $userId,
+                'Price drop!',
+                "{$product->title} is now on sale for {$price} EGP.",
+                $product->id,
+            );
+        }
     }
 
     private function buildData(ProductRequest $request, ?Product $product): array

@@ -168,39 +168,59 @@ class _UserTile extends StatelessWidget {
                   strokeWidth: 2, color: AppColors.primary),
             )
           else
-            _RoleButton(user: user),
+            _UserActionsMenu(user: user),
         ],
       ),
     );
   }
 }
 
-class _RoleButton extends StatelessWidget {
-  const _RoleButton({required this.user});
+class _UserActionsMenu extends StatelessWidget {
+  const _UserActionsMenu({required this.user});
   final AdminUserModel user;
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     final makeCustomer = user.isAdmin;
-    final color = makeCustomer ? AppColors.danger : AppColors.primary;
-    return TextButton.icon(
-      onPressed: () => _confirm(context),
-      style: TextButton.styleFrom(
-        foregroundColor: color,
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
-        visualDensity: VisualDensity.compact,
-      ),
-      icon: Icon(
-          makeCustomer
-              ? Icons.remove_moderator_outlined
-              : Icons.admin_panel_settings_outlined,
-          size: 18.r),
-      label: Text(makeCustomer ? 'remove_admin'.tr() : 'make_admin'.tr(),
-          style: AppStyles.semiBold14.copyWith(color: color, fontSize: 12.sp)),
+
+    return PopupMenuButton<String>(
+      icon: Icon(Icons.more_vert, color: cs.onSurfaceVariant, size: 22.r),
+      onSelected: (value) {
+        if (value == 'role') _confirmRole(context);
+        if (value == 'delete') _confirmDelete(context);
+      },
+      itemBuilder: (_) => [
+        PopupMenuItem(
+          value: 'role',
+          child: Row(
+            children: [
+              Icon(
+                  makeCustomer
+                      ? Icons.remove_moderator_outlined
+                      : Icons.admin_panel_settings_outlined,
+                  size: 19.r),
+              SizedBox(width: 10.w),
+              Text(makeCustomer ? 'remove_admin'.tr() : 'make_admin'.tr()),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'delete',
+          child: Row(
+            children: [
+              Icon(Icons.delete_outline, size: 19.r, color: AppColors.danger),
+              SizedBox(width: 10.w),
+              Text('delete_user'.tr(),
+                  style: const TextStyle(color: AppColors.danger)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
-  void _confirm(BuildContext context) {
+  void _confirmRole(BuildContext context) {
     final cubit = context.read<AdminUsersCubit>();
     final makeCustomer = user.isAdmin;
     final role = makeCustomer ? 'customer' : 'admin';
@@ -223,7 +243,32 @@ class _RoleButton extends StatelessWidget {
             },
             child: Text('confirm'.tr(),
                 style: TextStyle(
-                    color: makeCustomer ? AppColors.danger : AppColors.primary)),
+                    color:
+                        makeCustomer ? AppColors.danger : AppColors.primary)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmDelete(BuildContext context) {
+    final cubit = context.read<AdminUsersCubit>();
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('delete_user_q'.tr()),
+        content: Text('delete_user_desc'.tr().replaceFirst('{}', user.name)),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('cancel'.tr())),
+          TextButton(
+            onPressed: () {
+              cubit.deleteUser(user);
+              Navigator.pop(context);
+            },
+            child: Text('delete'.tr(),
+                style: const TextStyle(color: AppColors.danger)),
           ),
         ],
       ),

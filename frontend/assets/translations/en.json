@@ -321,5 +321,8 @@
   "payment_pending": "We couldn’t confirm the payment yet. You can retry from your orders.",
   "pay_paid": "Paid",
   "pay_failed": "Failed",
-  "pay_unpaid": "Unpaid"
+  "pay_unpaid": "Unpaid",
+  "delete_user": "Delete user",
+  "delete_user_q": "Delete this account?",
+  "delete_user_desc": "This permanently removes {} and all their data."
 }

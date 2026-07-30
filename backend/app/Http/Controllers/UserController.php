@@ -56,4 +56,18 @@ class UserController extends Controller
 
         return response()->json(new UserResource($user));
     }
+
+    public function destroy(Request $request, User $user)
+    {
+        if ($user->id === $request->user()->id) {
+            return response()->json(['message' => 'You cannot delete your own account.'], 422);
+        }
+        if ($user->email === self::PRIMARY_ADMIN) {
+            return response()->json(['message' => 'The primary admin cannot be deleted.'], 422);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted.']);
+    }
 }

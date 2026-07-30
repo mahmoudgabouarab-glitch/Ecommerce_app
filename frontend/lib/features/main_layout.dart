@@ -56,6 +56,11 @@ class _MainLayoutState extends State<MainLayout>
   @override
   void initState() {
     super.initState();
+    PushService.onForegroundMessage = () {
+      if (mounted && isLoggedInUser()) {
+        context.read<NotificationsCubit>().load();
+      }
+    };
     if (isLoggedInUser()) {
       context.read<WishlistCubit>().getWishlist();
       context.read<NotificationsCubit>().load();

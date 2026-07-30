@@ -39,4 +39,19 @@ class AdminUsersCubit extends Cubit<AdminUsersState> {
       },
     );
   }
+
+  Future<void> deleteUser(AdminUserModel user) async {
+    emit(AdminUsersLoaded(_users, updatingId: user.id));
+    final result = await _repo.deleteUser(user.id);
+    result.fold(
+      (failure) {
+        emit(AdminUsersFailure(failure.errorMessage));
+        emit(AdminUsersLoaded(_users));
+      },
+      (_) {
+        _users = _users.where((u) => u.id != user.id).toList();
+        emit(AdminUsersLoaded(_users));
+      },
+    );
+  }
 }

@@ -101,6 +101,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/users', [UserController::class, 'index']);
         Route::patch('/users/{user}/role', [UserController::class, 'updateRole']);
+        Route::delete('/users/{user}', [UserController::class, 'destroy']);
 
         Route::get('/stats', [StatsController::class, 'index']);
     });

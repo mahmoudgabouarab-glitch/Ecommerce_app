@@ -243,6 +243,16 @@ class AdminRepoImpl implements AdminRepo {
   }
 
   @override
+  Future<Either<Failure, Unit>> deleteUser(int id) async {
+    try {
+      await _api.delete(endpoint: "admin/users/$id");
+      return const Right(unit);
+    } catch (e) {
+      return Left(_handle(e));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<BannerModel>>> getBanners() async {
     try {
       final data = await _api.get(endpoint: "admin/banners");

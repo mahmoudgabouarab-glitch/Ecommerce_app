@@ -24,4 +24,22 @@ class Notifier
             'order_id' => $orderId,
         ]);
     }
+
+    public static function sale(int $userId, string $title, string $body, int $productId): void
+    {
+        AppNotification::create([
+            'user_id' => $userId,
+            'title' => $title,
+            'body' => $body,
+            'type' => 'sale',
+            'key' => 'sale_drop',
+            'order_id' => null,
+        ]);
+
+        $tokens = DeviceToken::where('user_id', $userId)->pluck('token')->all();
+        FcmSender::send($tokens, $title, $body, [
+            'type' => 'sale',
+            'product_id' => $productId,
+        ]);
+    }
 }

@@ -29,6 +29,7 @@ class AdminAuthorizationTest extends TestCase
             ['get', '/api/admin/stats'],
             ['get', '/api/admin/users'],
             ['patch', "/api/admin/users/{$user->id}/role"],
+            ['delete', "/api/admin/users/{$user->id}"],
             ['post', '/api/admin/products'],
             ['put', "/api/admin/products/{$product->id}"],
             ['delete', "/api/admin/products/{$product->id}"],
