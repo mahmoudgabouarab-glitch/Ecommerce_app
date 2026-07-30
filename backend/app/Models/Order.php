@@ -16,6 +16,8 @@ class Order extends Model
         'address_id',
         'status',
         'payment_method',
+        'payment_status',
+        'paymob_order_id',
         'subtotal',
         'discount',
         'shipping_fee',

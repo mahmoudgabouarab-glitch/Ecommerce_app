@@ -11,6 +11,7 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
@@ -27,6 +28,8 @@ Route::middleware('throttle:auth')->group(function () {
     Route::post('/password/forgot', [PasswordController::class, 'forgot']);
     Route::post('/password/reset', [PasswordController::class, 'reset']);
 });
+
+Route::post('/paymob/webhook', [PaymentController::class, 'webhook']);
 
 Route::get('/banners', [BannerController::class, 'index']);
 
@@ -73,6 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show']);
     Route::post('/orders', [OrderController::class, 'store']);
     Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel']);
+    Route::post('/orders/{order}/pay', [PaymentController::class, 'pay']);
 
     Route::middleware('admin')->prefix('admin')->group(function () {
         Route::post('/products', [ProductController::class, 'store']);
