@@ -42,6 +42,12 @@ class _FakeOrderRepo implements OrderRepo {
   Future<Either<Failure, OrdersResponse>> getOrders() =>
       throw UnimplementedError();
   @override
+  Future<Either<Failure, OrderModel>> getOrder(int orderId) =>
+      throw UnimplementedError();
+  @override
+  Future<Either<Failure, String>> payCard(int orderId) =>
+      throw UnimplementedError();
+  @override
   Future<Either<Failure, double>> applyCoupon(String code) =>
       throw UnimplementedError();
   @override

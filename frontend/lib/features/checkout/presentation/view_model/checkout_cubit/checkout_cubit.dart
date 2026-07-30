@@ -110,10 +110,36 @@ class CheckoutCubit extends Cubit<CheckoutState> {
       paymentMethod: paymentMethod,
       couponCode: appliedCoupon,
     );
-    orderResult.fold(
-      (failure) => emit(CheckoutFailure(failure.errorMessage)),
-      (order) => emit(CheckoutSuccess(order)),
+
+    await orderResult.fold(
+      (failure) async => emit(CheckoutFailure(failure.errorMessage)),
+      (order) async {
+        if (order.paymentMethod != 'card') {
+          emit(CheckoutSuccess(order));
+          return;
+        }
+
+        final payResult = await _repo.payCard(order.id);
+        payResult.fold(
+          (failure) => emit(CheckoutFailure(failure.errorMessage)),
+          (iframeUrl) => emit(CheckoutCardPayment(order, iframeUrl)),
+        );
+      },
     );
+  }
+
+  Future<bool> confirmCardPayment(
+    int orderId, {
+    int retries = 5,
+    Duration delay = const Duration(seconds: 2),
+  }) async {
+    for (var attempt = 0; attempt < retries; attempt++) {
+      final result = await _repo.getOrder(orderId);
+      final paid = result.fold((_) => false, (o) => o.paymentStatus == 'paid');
+      if (paid) return true;
+      if (attempt < retries - 1) await Future.delayed(delay);
+    }
+    return false;
   }
 
   @override

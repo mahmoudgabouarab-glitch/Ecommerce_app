@@ -19,6 +19,10 @@ abstract class OrderRepo {
 
   Future<Either<Failure, OrdersResponse>> getOrders();
 
+  Future<Either<Failure, OrderModel>> getOrder(int orderId);
+
+  Future<Either<Failure, String>> payCard(int orderId);
+
   Future<Either<Failure, double>> applyCoupon(String code);
 
   Future<Either<Failure, Unit>> cancelOrder(int orderId);
