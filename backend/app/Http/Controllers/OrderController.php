@@ -173,7 +173,14 @@ class OrderController extends Controller
             } elseif ($from === 'cancelled' && $to !== 'cancelled') {
                 $this->adjustStock($order->load('items'), -1);
             }
-            $order->update(['status' => $to]);
+
+            $updates = ['status' => $to];
+            if ($to === 'delivered'
+                && $order->payment_method === 'cash'
+                && $order->payment_status !== 'paid') {
+                $updates['payment_status'] = 'paid';
+            }
+            $order->update($updates);
         });
 
         if ($from !== $to) {

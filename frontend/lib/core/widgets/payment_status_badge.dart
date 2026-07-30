@@ -29,9 +29,13 @@ class PaymentStatusBadge extends StatelessWidget {
         children: [
           Icon(icon, size: 13.r, color: color),
           SizedBox(width: 4.w),
-          Text(key.tr(),
-              style: AppStyles.regular12
-                  .copyWith(color: color, fontWeight: FontWeight.w600)),
+          Text(
+            key.tr(),
+            style: AppStyles.regular12.copyWith(
+              color: color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );

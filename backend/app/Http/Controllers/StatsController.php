@@ -13,7 +13,8 @@ class StatsController extends Controller
     public function index()
     {
         return response()->json([
-            'revenue' => round((float) Order::where('status', '!=', 'cancelled')->sum('total'), 2),
+            'revenue' => round((float) Order::where('payment_status', 'paid')
+                ->where('status', '!=', 'cancelled')->sum('total'), 2),
             'orders_count' => Order::count(),
             'pending_orders' => Order::where('status', 'pending')->count(),
             'customers_count' => User::where('role', 'customer')->count(),
@@ -33,7 +34,8 @@ class StatsController extends Controller
 
     private function salesLast7Days(): array
     {
-        $rows = Order::where('status', '!=', 'cancelled')
+        $rows = Order::where('payment_status', 'paid')
+            ->where('status', '!=', 'cancelled')
             ->where('created_at', '>=', Carbon::today()->subDays(6))
             ->select(DB::raw('DATE(created_at) as day'), DB::raw('SUM(total) as total'))
             ->groupBy('day')

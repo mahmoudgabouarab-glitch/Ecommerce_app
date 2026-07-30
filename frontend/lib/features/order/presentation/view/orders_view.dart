@@ -107,7 +107,8 @@ class _OrderCard extends StatelessWidget {
                     Text('${'items_count'.tr(args: ['${order.items.length}'])} • ${order.paymentMethod.toUpperCase()}',
                         style: AppStyles.regular12
                             .copyWith(color: cs.onSurfaceVariant)),
-                    if (order.paymentMethod == 'card') ...[
+                    if (order.paymentMethod == 'card' ||
+                        order.paymentStatus == 'paid') ...[
                       SizedBox(height: 6.h),
                       PaymentStatusBadge(status: order.paymentStatus),
                     ],

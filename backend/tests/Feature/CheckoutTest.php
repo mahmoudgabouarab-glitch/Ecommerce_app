@@ -200,4 +200,36 @@ class CheckoutTest extends TestCase
         $this->patchJson('/api/admin/orders/'.$order->id.'/status', ['status' => 'shipped'])
             ->assertForbidden();
     }
+
+    public function test_delivering_a_cash_order_marks_it_paid(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $order = Order::factory()->create([
+            'payment_method' => 'cash',
+            'payment_status' => 'unpaid',
+            'status' => 'shipped',
+        ]);
+        Sanctum::actingAs($admin);
+
+        $this->patchJson('/api/admin/orders/'.$order->id.'/status', ['status' => 'delivered'])
+            ->assertOk();
+
+        $this->assertSame('paid', $order->fresh()->payment_status);
+    }
+
+    public function test_delivering_a_card_order_does_not_auto_mark_paid(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $order = Order::factory()->create([
+            'payment_method' => 'card',
+            'payment_status' => 'unpaid',
+            'status' => 'shipped',
+        ]);
+        Sanctum::actingAs($admin);
+
+        $this->patchJson('/api/admin/orders/'.$order->id.'/status', ['status' => 'delivered'])
+            ->assertOk();
+
+        $this->assertSame('unpaid', $order->fresh()->payment_status);
+    }
 }
