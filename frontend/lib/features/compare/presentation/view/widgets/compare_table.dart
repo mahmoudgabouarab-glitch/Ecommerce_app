@@ -74,42 +74,47 @@ class CompareTable extends StatelessWidget {
 
   Widget _priceCell(BuildContext context, ProductModel p, bool win) {
     final text = formatPrice(p.effectivePrice);
-    if (win) {
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-        decoration: BoxDecoration(
-          color: AppColors.success.withValues(alpha: 0.14),
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.check_circle_rounded,
-                size: 14.r, color: AppColors.success),
-            SizedBox(width: 4.w),
-            Text(text,
-                style: AppStyles.semiBold16.copyWith(color: AppColors.success)),
-          ],
-        ),
-      );
-    }
-    return Text(text, style: AppStyles.semiBold16);
+    final Widget child = win
+        ? Container(
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+            decoration: BoxDecoration(
+              color: AppColors.success.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.check_circle_rounded,
+                    size: 13.r, color: AppColors.success),
+                SizedBox(width: 3.w),
+                Text(text,
+                    style: AppStyles.semiBold14
+                        .copyWith(color: AppColors.success)),
+              ],
+            ),
+          )
+        : Text(text, style: AppStyles.semiBold14);
+
+    return FittedBox(fit: BoxFit.scaleDown, child: child);
   }
 
   Widget _ratingCell(BuildContext context, ProductModel p, bool win) {
     final cs = Theme.of(context).colorScheme;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.star_rounded, size: 16.r, color: AppColors.star),
-        SizedBox(width: 3.w),
-        Text('${p.rating}',
-            style: AppStyles.semiBold14.copyWith(
-                color: win ? AppColors.success : cs.onSurface)),
-        SizedBox(width: 2.w),
-        Text('(${p.ratingCount})',
-            style: AppStyles.regular12.copyWith(color: cs.onSurfaceVariant)),
-      ],
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.star_rounded, size: 16.r, color: AppColors.star),
+          SizedBox(width: 3.w),
+          Text('${p.rating}',
+              style: AppStyles.semiBold14.copyWith(
+                  color: win ? AppColors.success : cs.onSurface)),
+          SizedBox(width: 2.w),
+          Text('(${p.ratingCount})',
+              style: AppStyles.regular12.copyWith(color: cs.onSurfaceVariant)),
+        ],
+      ),
     );
   }
 

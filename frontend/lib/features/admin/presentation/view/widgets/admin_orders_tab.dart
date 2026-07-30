@@ -7,6 +7,7 @@ import '../../../../../core/network/service_locator.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_functions.dart';
 import '../../../../../core/utils/styles.dart';
+import '../../../../../core/widgets/payment_status_badge.dart';
 import '../../../../../core/widgets/state_views.dart';
 import '../../../../order/data/models/order_model.dart';
 import '../../../data/repo/admin_repo_impl.dart';
@@ -95,7 +96,8 @@ class _AdminOrderCard extends StatelessWidget {
                     style: AppStyles.regular12
                         .copyWith(color: cs.onSurfaceVariant)),
               ),
-              if (order.paymentMethod == 'card') _paymentBadge(order.paymentStatus),
+              if (order.paymentMethod == 'card')
+                PaymentStatusBadge(status: order.paymentStatus),
             ],
           ),
           SizedBox(height: 12.h),
@@ -136,29 +138,4 @@ class _AdminOrderCard extends StatelessWidget {
     );
   }
 
-  Widget _paymentBadge(String status) {
-    final (Color color, IconData icon, String key) = switch (status) {
-      'paid' => (AppColors.success, Icons.check_circle, 'pay_paid'),
-      'failed' => (AppColors.danger, Icons.cancel, 'pay_failed'),
-      _ => (AppColors.warning, Icons.schedule, 'pay_unpaid'),
-    };
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(20.r),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 13.r, color: color),
-          SizedBox(width: 4.w),
-          Text(key.tr(),
-              style: AppStyles.regular12
-                  .copyWith(color: color, fontWeight: FontWeight.w600)),
-        ],
-      ),
-    );
-  }
 }

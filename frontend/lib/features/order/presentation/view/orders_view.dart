@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_functions.dart';
 import '../../../../core/utils/styles.dart';
+import '../../../../core/widgets/payment_status_badge.dart';
 import '../../../../core/widgets/skeletons.dart';
 import '../../../../core/widgets/state_views.dart';
 import '../../../auth/presentation/view/widgets/login_required.dart';
@@ -106,6 +107,10 @@ class _OrderCard extends StatelessWidget {
                     Text('${'items_count'.tr(args: ['${order.items.length}'])} • ${order.paymentMethod.toUpperCase()}',
                         style: AppStyles.regular12
                             .copyWith(color: cs.onSurfaceVariant)),
+                    if (order.paymentMethod == 'card') ...[
+                      SizedBox(height: 6.h),
+                      PaymentStatusBadge(status: order.paymentStatus),
+                    ],
                   ],
                 ),
               ),
