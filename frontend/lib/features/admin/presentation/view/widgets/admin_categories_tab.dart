@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../../core/utils/app_colors.dart';
+import '../../../../../core/utils/image_crop_helper.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/custom_snackbar.dart';
@@ -194,7 +195,10 @@ class _CategoryFormState extends State<_CategoryForm> {
   Future<void> _pickImage() async {
     final file = await _picker.pickImage(
         source: ImageSource.gallery, imageQuality: 80, maxWidth: 1000);
-    if (file != null) setState(() => _pickedPath = file.path);
+    if (file == null) return;
+
+    final cropped = await ImageCropHelper.cropSquare(file.path);
+    if (cropped != null) setState(() => _pickedPath = cropped);
   }
 
   void _submit() {

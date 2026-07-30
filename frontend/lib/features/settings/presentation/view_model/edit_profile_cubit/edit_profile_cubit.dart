@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../../core/utils/image_crop_helper.dart';
 import '../../../../../core/utils/user_cache.dart';
 import '../../../data/repo/profile_repo.dart';
 
@@ -64,10 +65,13 @@ class EditProfileCubit extends Cubit<EditProfileState> {
       imageQuality: 80,
       maxWidth: 800,
     );
-    if (file != null) {
-      _pickedPath = file.path;
-      emit(EditProfileImagePicked(file.path));
-    }
+    if (file == null) return;
+
+    final cropped = await ImageCropHelper.cropSquare(file.path);
+    if (cropped == null) return;
+
+    _pickedPath = cropped;
+    emit(EditProfileImagePicked(cropped));
   }
 
   Future<void> save() async {

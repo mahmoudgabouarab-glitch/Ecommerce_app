@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../../core/utils/image_crop_helper.dart';
 import '../../../data/repo/auth_repo.dart';
 
 part 'signup_state.dart';
@@ -28,10 +29,13 @@ class SignupCubit extends Cubit<SignupState> {
       imageQuality: 80,
       maxWidth: 800,
     );
-    if (file != null) {
-      avatarPath = file.path;
-      emit(SignupImagePicked(file.path));
-    }
+    if (file == null) return;
+
+    final cropped = await ImageCropHelper.cropSquare(file.path);
+    if (cropped == null) return;
+
+    avatarPath = cropped;
+    emit(SignupImagePicked(cropped));
   }
 
   Future<void> register() async {

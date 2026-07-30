@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../../core/network/service_locator.dart';
 import '../../../../../core/utils/app_colors.dart';
+import '../../../../../core/utils/image_crop_helper.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/custom_text_field.dart';
@@ -95,8 +96,11 @@ class _ProductFormState extends State<_ProductForm> {
 
   Future<void> _pickImages() async {
     final files = await _picker.pickMultiImage(imageQuality: 80, maxWidth: 1000);
-    if (files.isNotEmpty) {
-      setState(() => _newImages.addAll(files.map((f) => f.path)));
+    for (final file in files) {
+      final cropped = await ImageCropHelper.cropSquare(file.path);
+      if (cropped != null) {
+        setState(() => _newImages.add(cropped));
+      }
     }
   }
 

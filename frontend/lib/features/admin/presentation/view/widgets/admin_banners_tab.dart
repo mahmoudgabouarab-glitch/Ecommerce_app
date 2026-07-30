@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../../core/network/service_locator.dart';
 import '../../../../../core/utils/app_colors.dart';
+import '../../../../../core/utils/image_crop_helper.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/custom_snackbar.dart';
@@ -247,7 +248,10 @@ class _BannerFormState extends State<_BannerForm> {
   Future<void> _pickImage() async {
     final file = await _picker.pickImage(
         source: ImageSource.gallery, imageQuality: 85, maxWidth: 1200);
-    if (file != null) setState(() => _pickedPath = file.path);
+    if (file == null) return;
+
+    final cropped = await ImageCropHelper.cropFree(file.path);
+    if (cropped != null) setState(() => _pickedPath = cropped);
   }
 
   void _submit() {
