@@ -325,5 +325,13 @@
   "pay_refunded": "Refunded",
   "delete_user": "Delete user",
   "delete_user_q": "Delete this account?",
-  "delete_user_desc": "This permanently removes {} and all their data."
+  "delete_user_desc": "This permanently removes {} and all their data.",
+  "genie_title": "Bazar Genie",
+  "genie_hint": "Ask me anything…",
+  "genie_greeting": "Hi! I'm your shopping Genie ✨",
+  "genie_sub": "Ask me to find products, compare deals, or add things to your cart.",
+  "genie_s1": "Recommend a gift under 500 EGP",
+  "genie_s2": "What are the best deals right now?",
+  "genie_s3": "Find me something for the kitchen",
+  "genie_s4": "Where are my orders?"
 }
