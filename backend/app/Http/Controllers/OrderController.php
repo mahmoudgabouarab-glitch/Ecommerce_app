@@ -152,7 +152,11 @@ class OrderController extends Controller
 
         DB::transaction(function () use ($order) {
             $this->adjustStock($order->load('items'), +1);
-            $order->update(['status' => 'cancelled']);
+            $updates = ['status' => 'cancelled'];
+            if ($order->payment_status === 'paid') {
+                $updates['payment_status'] = 'refunded';
+            }
+            $order->update($updates);
         });
 
         return new OrderResource($order->load(['items', 'address']));
@@ -179,6 +183,9 @@ class OrderController extends Controller
                 && $order->payment_method === 'cash'
                 && $order->payment_status !== 'paid') {
                 $updates['payment_status'] = 'paid';
+            }
+            if ($to === 'cancelled' && $order->payment_status === 'paid') {
+                $updates['payment_status'] = 'refunded';
             }
             $order->update($updates);
         });

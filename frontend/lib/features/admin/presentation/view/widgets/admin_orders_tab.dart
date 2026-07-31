@@ -97,7 +97,7 @@ class _AdminOrderCard extends StatelessWidget {
                         .copyWith(color: cs.onSurfaceVariant)),
               ),
               if (order.paymentMethod == 'card' ||
-                  order.paymentStatus == 'paid')
+                  order.paymentStatus != 'unpaid')
                 PaymentStatusBadge(status: order.paymentStatus),
             ],
           ),

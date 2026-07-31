@@ -232,4 +232,34 @@ class CheckoutTest extends TestCase
 
         $this->assertSame('unpaid', $order->fresh()->payment_status);
     }
+
+    public function test_admin_cancelling_a_paid_order_marks_it_refunded(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $order = Order::factory()->create([
+            'payment_status' => 'paid',
+            'status' => 'delivered',
+        ]);
+        Sanctum::actingAs($admin);
+
+        $this->patchJson('/api/admin/orders/'.$order->id.'/status', ['status' => 'cancelled'])
+            ->assertOk();
+
+        $this->assertSame('refunded', $order->fresh()->payment_status);
+    }
+
+    public function test_user_cancelling_a_paid_order_marks_it_refunded(): void
+    {
+        $user = User::factory()->create();
+        $order = Order::factory()->create([
+            'user_id' => $user->id,
+            'payment_status' => 'paid',
+            'status' => 'pending',
+        ]);
+        Sanctum::actingAs($user);
+
+        $this->patchJson('/api/orders/'.$order->id.'/cancel')->assertOk();
+
+        $this->assertSame('refunded', $order->fresh()->payment_status);
+    }
 }

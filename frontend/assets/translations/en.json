@@ -322,6 +322,7 @@
   "pay_paid": "Paid",
   "pay_failed": "Failed",
   "pay_unpaid": "Unpaid",
+  "pay_refunded": "Refunded",
   "delete_user": "Delete user",
   "delete_user_q": "Delete this account?",
   "delete_user_desc": "This permanently removes {} and all their data."

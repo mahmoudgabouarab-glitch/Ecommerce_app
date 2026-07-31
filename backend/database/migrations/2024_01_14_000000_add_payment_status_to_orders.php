@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->enum('payment_status', ['unpaid', 'paid', 'failed'])
+            $table->string('payment_status')
                 ->default('unpaid')
                 ->after('payment_method');
             $table->string('paymob_order_id')->nullable()->after('payment_status');

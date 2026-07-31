@@ -15,6 +15,7 @@ class PaymentStatusBadge extends StatelessWidget {
     final (Color color, IconData icon, String key) = switch (status) {
       'paid' => (AppColors.success, Icons.check_circle, 'pay_paid'),
       'failed' => (AppColors.danger, Icons.cancel, 'pay_failed'),
+      'refunded' => (AppColors.info, Icons.undo, 'pay_refunded'),
       _ => (AppColors.warning, Icons.schedule, 'pay_unpaid'),
     };
 

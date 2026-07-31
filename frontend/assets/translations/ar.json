@@ -322,6 +322,7 @@
   "pay_paid": "مدفوع",
   "pay_failed": "فشل",
   "pay_unpaid": "غير مدفوع",
+  "pay_refunded": "مسترجع",
   "delete_user": "مسح المستخدم",
   "delete_user_q": "مسح الحساب ده؟",
   "delete_user_desc": "ده هيمسح {} وكل بياناته نهائياً."

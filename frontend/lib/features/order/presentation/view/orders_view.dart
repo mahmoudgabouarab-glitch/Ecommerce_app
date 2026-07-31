@@ -108,7 +108,7 @@ class _OrderCard extends StatelessWidget {
                         style: AppStyles.regular12
                             .copyWith(color: cs.onSurfaceVariant)),
                     if (order.paymentMethod == 'card' ||
-                        order.paymentStatus == 'paid') ...[
+                        order.paymentStatus != 'unpaid') ...[
                       SizedBox(height: 6.h),
                       PaymentStatusBadge(status: order.paymentStatus),
                     ],
