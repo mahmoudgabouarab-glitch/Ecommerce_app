@@ -33,10 +33,12 @@ class Genie
         $reply = $driver->run($messages, $this->tools(), $this->systemPrompt(), $runTool);
 
         if ($reply === null) {
-            return [
-                'reply' => "Sorry, I couldn't reach the assistant right now. Please try again.",
-                'products' => $this->cards($productIds),
-            ];
+            $message = "Sorry, I couldn't reach the assistant right now. Please try again.";
+            if ($driver->lastError()) {
+                $message .= "\n\n[debug: {$driver->lastError()}]";
+            }
+
+            return ['reply' => $message, 'products' => $this->cards($productIds)];
         }
 
         return ['reply' => $reply, 'products' => $this->cards($productIds)];

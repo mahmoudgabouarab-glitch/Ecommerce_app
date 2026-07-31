@@ -9,6 +9,13 @@ class AnthropicDriver implements LlmDriver
 {
     private const MAX_TURNS = 6;
 
+    private ?string $lastError = null;
+
+    public function lastError(): ?string
+    {
+        return $this->lastError;
+    }
+
     public function configured(): bool
     {
         return ! empty(config('services.anthropic.key'));
@@ -90,11 +97,13 @@ class AnthropicDriver implements LlmDriver
                 return $response->json();
             }
 
-            Log::warning('Genie Anthropic error: HTTP '.$response->status().': '.substr($response->body(), 0, 300));
+            $this->lastError = 'HTTP '.$response->status().': '.substr($response->body(), 0, 300);
+            Log::warning('Genie Anthropic error: '.$this->lastError);
 
             return null;
         } catch (\Throwable $e) {
-            Log::warning('Genie Anthropic exception: '.$e->getMessage());
+            $this->lastError = $e->getMessage();
+            Log::warning('Genie Anthropic exception: '.$this->lastError);
 
             return null;
         }
