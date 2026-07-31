@@ -34,7 +34,7 @@ class Genie
 
         if ($reply === null) {
             $message = "Sorry, I couldn't reach the assistant right now. Please try again.";
-            if ($driver->lastError()) {
+            if (config('app.debug') && $driver->lastError()) {
                 $message .= "\n\n[debug: {$driver->lastError()}]";
             }
 
