@@ -25,6 +25,8 @@ class NotificationModel extends Equatable {
   final String type;
   final String? key;
   final int? orderId;
+  final int? productId;
+  final String? imageUrl;
   final bool isRead;
   final DateTime? createdAt;
 
@@ -35,6 +37,8 @@ class NotificationModel extends Equatable {
     required this.type,
     required this.key,
     required this.orderId,
+    this.productId,
+    this.imageUrl,
     required this.isRead,
     required this.createdAt,
   });
@@ -47,6 +51,8 @@ class NotificationModel extends Equatable {
         type: json['type'] as String? ?? 'order',
         key: json['key'] as String?,
         orderId: json['order_id'] as int?,
+        productId: json['product_id'] as int?,
+        imageUrl: json['image_url'] as String?,
         isRead: json['is_read'] as bool? ?? false,
         createdAt: json['created_at'] == null
             ? null
@@ -60,11 +66,13 @@ class NotificationModel extends Equatable {
         type: type,
         key: key,
         orderId: orderId,
+        productId: productId,
+        imageUrl: imageUrl,
         isRead: true,
         createdAt: createdAt,
       );
 
   @override
   List<Object?> get props =>
-      [id, title, body, type, key, orderId, isRead, createdAt];
+      [id, title, body, type, key, orderId, productId, imageUrl, isRead, createdAt];
 }

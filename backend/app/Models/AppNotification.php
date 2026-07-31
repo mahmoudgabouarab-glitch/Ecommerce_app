@@ -14,6 +14,8 @@ class AppNotification extends Model
         'type',
         'key',
         'order_id',
+        'image_url',
+        'product_id',
         'read_at',
     ];
 

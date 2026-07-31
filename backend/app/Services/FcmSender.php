@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class FcmSender
 {
-    public static function send(array $tokens, string $title, string $body, array $data = []): void
+    public static function send(array $tokens, string $title, string $body, array $data = [], ?string $image = null): void
     {
         $tokens = array_values(array_filter($tokens));
         if (empty($tokens)) {
@@ -27,12 +27,20 @@ class FcmSender
 
             $url = "https://fcm.googleapis.com/v1/projects/{$sa['project_id']}/messages:send";
             $stringData = array_map(fn ($v) => (string) $v, $data);
+            if ($image) {
+                $stringData['image'] = $image;
+            }
+
+            $notification = ['title' => $title, 'body' => $body];
+            if ($image) {
+                $notification['image'] = $image;
+            }
 
             foreach ($tokens as $token) {
                 Http::withToken($accessToken)->post($url, [
                     'message' => [
                         'token' => $token,
-                        'notification' => ['title' => $title, 'body' => $body],
+                        'notification' => $notification,
                         'data' => $stringData,
                         'android' => ['priority' => 'high'],
                     ],

@@ -175,12 +175,14 @@ class ProductController extends Controller
 
         $userIds = User::where('role', 'customer')->pluck('id');
         $price = (int) round((float) $newSale);
+        $image = $product->images[0] ?? null;
         foreach ($userIds as $userId) {
             Notifier::sale(
                 $userId,
                 'Price drop!',
                 "{$product->title} is now on sale for {$price} EGP.",
                 $product->id,
+                $image,
             );
         }
     }
