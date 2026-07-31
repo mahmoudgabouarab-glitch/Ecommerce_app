@@ -30,6 +30,31 @@ class SaleNotificationTest extends TestCase
         $this->assertDatabaseHas('app_notifications', ['user_id' => $c2->id, 'type' => 'sale']);
     }
 
+    public function test_sale_notification_carries_product_id_and_image(): void
+    {
+        $customer = User::factory()->create(['role' => 'customer']);
+        $product = Product::factory()->create([
+            'price' => 100,
+            'sale_price' => null,
+            'images' => ['https://cdn.example.com/first.jpg', 'https://cdn.example.com/second.jpg'],
+        ]);
+
+        Sanctum::actingAs(User::factory()->admin()->create());
+
+        $this->putJson('/api/admin/products/'.$product->id, [
+            'title' => $product->title,
+            'price' => 100,
+            'sale_price' => 70,
+        ])->assertOk();
+
+        $this->assertDatabaseHas('app_notifications', [
+            'user_id' => $customer->id,
+            'type' => 'sale',
+            'product_id' => $product->id,
+            'image_url' => 'https://cdn.example.com/first.jpg',
+        ]);
+    }
+
     public function test_admins_are_not_notified_of_sales(): void
     {
         $admin = User::factory()->admin()->create();
