@@ -15,6 +15,12 @@ return [
         'credentials' => env('FCM_CREDENTIALS'),
     ],
 
+    'anthropic' => [
+        'key' => env('ANTHROPIC_API_KEY'),
+        'model' => env('ANTHROPIC_MODEL', 'claude-haiku-4-5-20251001'),
+        'base_url' => env('ANTHROPIC_BASE_URL', 'https://api.anthropic.com'),
+    ],
+
     'brevo' => [
         'key' => env('BREVO_API_KEY'),
     ],
