@@ -137,6 +137,33 @@ class GenieTest extends TestCase
             ->assertJsonPath('products.0.id', $match->id);
     }
 
+    public function test_falls_back_to_groq_when_primary_provider_fails(): void
+    {
+        config([
+            'services.genie.provider' => 'gemini',
+            'services.gemini.key' => 'test-key',
+            'services.groq.key' => 'test-groq-key',
+        ]);
+        Sanctum::actingAs(User::factory()->create());
+
+        Product::factory()->create(['title' => 'Backup Product']);
+
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::response(
+                ['error' => ['code' => 429, 'message' => 'quota exceeded']], 429
+            ),
+            'api.groq.com/*' => Http::sequence()
+                ->push($this->groqToolCall('search_products', ['query' => 'backup']), 200)
+                ->push($this->groqText('Found it on the backup provider.'), 200),
+        ]);
+
+        $this->postJson('/api/genie/chat', [
+            'messages' => [['role' => 'user', 'content' => 'find something']],
+        ])
+            ->assertOk()
+            ->assertJsonPath('reply', 'Found it on the backup provider.');
+    }
+
     public function test_anthropic_provider_also_runs_tools(): void
     {
         config([

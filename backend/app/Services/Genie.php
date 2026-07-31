@@ -17,9 +17,9 @@ class Genie
 {
     public function chat(User $user, array $messages): array
     {
-        $driver = $this->driver();
+        $drivers = array_filter($this->drivers(), fn (LlmDriver $d) => $d->configured());
 
-        if (! $driver->configured()) {
+        if (empty($drivers)) {
             return [
                 'reply' => 'The assistant is not configured yet. Please add an API key.',
                 'products' => [],
@@ -31,27 +31,38 @@ class Genie
             return $this->runTool($user, $name, $input, $productIds);
         };
 
-        $reply = $driver->run($messages, $this->tools(), $this->systemPrompt(), $runTool);
-
-        if ($reply === null) {
-            $message = "Sorry, I couldn't reach the assistant right now. Please try again.";
-            if ($driver->lastError()) {
-                $message .= "\n\n[debug: {$driver->lastError()}]";
+        $lastError = null;
+        foreach ($drivers as $driver) {
+            $productIds = [];
+            $reply = $driver->run($messages, $this->tools(), $this->systemPrompt(), $runTool);
+            if ($reply !== null) {
+                return ['reply' => $reply, 'products' => $this->cards($productIds)];
             }
-
-            return ['reply' => $message, 'products' => $this->cards($productIds)];
+            $lastError = $driver->lastError();
         }
 
-        return ['reply' => $reply, 'products' => $this->cards($productIds)];
+        $message = "Sorry, I couldn't reach the assistant right now. Please try again.";
+        if (config('app.debug') && $lastError) {
+            $message .= "\n\n[debug: {$lastError}]";
+        }
+
+        return ['reply' => $message, 'products' => []];
     }
 
-    private function driver(): LlmDriver
+    private function drivers(): array
     {
-        return match (config('services.genie.provider')) {
+        $primary = match (config('services.genie.provider')) {
             'anthropic' => new AnthropicDriver(),
             'gemini' => new GeminiDriver(),
             default => new GroqDriver(),
         };
+
+        $chain = [$primary];
+        if (! $primary instanceof GroqDriver) {
+            $chain[] = new GroqDriver();
+        }
+
+        return $chain;
     }
 
     private function cards(array $productIds): array
