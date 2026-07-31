@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
 use App\Services\Llm\AnthropicDriver;
+use App\Services\Llm\GeminiDriver;
 use App\Services\Llm\GroqDriver;
 use App\Services\Llm\LlmDriver;
 
@@ -48,6 +49,7 @@ class Genie
     {
         return match (config('services.genie.provider')) {
             'anthropic' => new AnthropicDriver(),
+            'gemini' => new GeminiDriver(),
             default => new GroqDriver(),
         };
     }

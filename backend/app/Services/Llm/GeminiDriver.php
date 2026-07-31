@@ -2,20 +2,20 @@
 
 namespace App\Services\Llm;
 
-class GroqDriver extends OpenAiCompatibleDriver
+class GeminiDriver extends OpenAiCompatibleDriver
 {
     protected function key(): ?string
     {
-        return config('services.groq.key');
+        return config('services.gemini.key');
     }
 
     protected function model(): string
     {
-        return config('services.groq.model');
+        return config('services.gemini.model');
     }
 
     protected function baseUrl(): string
     {
-        return config('services.groq.base_url');
+        return config('services.gemini.base_url');
     }
 }

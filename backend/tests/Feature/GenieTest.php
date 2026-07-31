@@ -113,6 +113,30 @@ class GenieTest extends TestCase
             ->assertJsonPath('products', []);
     }
 
+    public function test_gemini_provider_runs_tools(): void
+    {
+        config([
+            'services.genie.provider' => 'gemini',
+            'services.gemini.key' => 'test-key',
+        ]);
+        Sanctum::actingAs(User::factory()->create());
+
+        $match = Product::factory()->create(['title' => 'Green Yoga Mat']);
+
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::sequence()
+                ->push($this->groqToolCall('search_products', ['query' => 'yoga mat']), 200)
+                ->push($this->groqText('This one is perfect.'), 200),
+        ]);
+
+        $this->postJson('/api/genie/chat', [
+            'messages' => [['role' => 'user', 'content' => 'find a yoga mat']],
+        ])
+            ->assertOk()
+            ->assertJsonPath('reply', 'This one is perfect.')
+            ->assertJsonPath('products.0.id', $match->id);
+    }
+
     public function test_anthropic_provider_also_runs_tools(): void
     {
         config([
