@@ -8,112 +8,46 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use App\Services\Llm\AnthropicDriver;
+use App\Services\Llm\GroqDriver;
+use App\Services\Llm\LlmDriver;
 
 class Genie
 {
-    private const MAX_TURNS = 6;
-
-    private ?string $lastError = null;
-
     public function chat(User $user, array $messages): array
     {
-        $key = config('services.anthropic.key');
-        if (empty($key)) {
+        $driver = $this->driver();
+
+        if (! $driver->configured()) {
             return [
-                'reply' => "The assistant is not configured yet. Please add an Anthropic API key.",
+                'reply' => 'The assistant is not configured yet. Please add an API key.',
                 'products' => [],
             ];
         }
 
         $productIds = [];
+        $runTool = function (string $name, array $input) use ($user, &$productIds) {
+            return $this->runTool($user, $name, $input, $productIds);
+        };
 
-        for ($turn = 0; $turn < self::MAX_TURNS; $turn++) {
-            $response = $this->call($messages);
-            if ($response === null) {
-                $reply = "Sorry, I couldn't reach the assistant right now. Please try again.";
-                if (config('app.debug') && $this->lastError) {
-                    $reply .= "\n\n[debug: {$this->lastError}]";
-                }
+        $reply = $driver->run($messages, $this->tools(), $this->systemPrompt(), $runTool);
 
-                return ['reply' => $reply, 'products' => $this->cards($productIds)];
-            }
-
-            $content = $response['content'] ?? [];
-            $messages[] = ['role' => 'assistant', 'content' => $content];
-
-            if (($response['stop_reason'] ?? null) !== 'tool_use') {
-                return [
-                    'reply' => $this->text($content),
-                    'products' => $this->cards($productIds),
-                ];
-            }
-
-            $results = [];
-            foreach ($content as $block) {
-                if (($block['type'] ?? null) !== 'tool_use') {
-                    continue;
-                }
-                $output = $this->runTool($user, $block['name'], $block['input'] ?? [], $productIds);
-                $results[] = [
-                    'type' => 'tool_result',
-                    'tool_use_id' => $block['id'],
-                    'content' => json_encode($output),
-                ];
-            }
-            $messages[] = ['role' => 'user', 'content' => $results];
+        if ($reply === null) {
+            return [
+                'reply' => "Sorry, I couldn't reach the assistant right now. Please try again.",
+                'products' => $this->cards($productIds),
+            ];
         }
 
-        return [
-            'reply' => "I looked into that but couldn't finish. Could you rephrase?",
-            'products' => $this->cards($productIds),
-        ];
+        return ['reply' => $reply, 'products' => $this->cards($productIds)];
     }
 
-    private function call(array $messages): ?array
+    private function driver(): LlmDriver
     {
-        try {
-            $response = Http::withHeaders([
-                'x-api-key' => config('services.anthropic.key'),
-                'anthropic-version' => '2023-06-01',
-                'content-type' => 'application/json',
-            ])->timeout(60)->post(
-                rtrim(config('services.anthropic.base_url'), '/').'/v1/messages',
-                [
-                    'model' => config('services.anthropic.model'),
-                    'max_tokens' => 1024,
-                    'system' => $this->systemPrompt(),
-                    'tools' => $this->tools(),
-                    'messages' => $messages,
-                ]
-            );
-
-            if ($response->successful()) {
-                return $response->json();
-            }
-
-            $this->lastError = 'HTTP '.$response->status().': '.substr($response->body(), 0, 300);
-            Log::warning('Genie API error: '.$this->lastError);
-
-            return null;
-        } catch (\Throwable $e) {
-            $this->lastError = $e->getMessage();
-            Log::warning('Genie exception: '.$this->lastError);
-
-            return null;
-        }
-    }
-
-    private function text(array $content): string
-    {
-        foreach ($content as $block) {
-            if (($block['type'] ?? null) === 'text') {
-                return trim($block['text']);
-            }
-        }
-
-        return '';
+        return match (config('services.genie.provider')) {
+            'anthropic' => new AnthropicDriver(),
+            default => new GroqDriver(),
+        };
     }
 
     private function cards(array $productIds): array
@@ -362,7 +296,7 @@ PROMPT;
             [
                 'name' => 'search_products',
                 'description' => 'Search the store catalog for discovery, recommendations, or filtering by keywords, category, price range, or sale status.',
-                'input_schema' => [
+                'schema' => [
                     'type' => 'object',
                     'properties' => [
                         'query' => ['type' => 'string', 'description' => 'Keywords matched against title, brand, and description.'],
@@ -377,7 +311,7 @@ PROMPT;
             [
                 'name' => 'get_product',
                 'description' => 'Get full details and available options (variants) for one product.',
-                'input_schema' => [
+                'schema' => [
                     'type' => 'object',
                     'properties' => ['product_id' => ['type' => 'integer']],
                     'required' => ['product_id'],
@@ -386,7 +320,7 @@ PROMPT;
             [
                 'name' => 'add_to_cart',
                 'description' => "Add a product to the current user's cart.",
-                'input_schema' => [
+                'schema' => [
                     'type' => 'object',
                     'properties' => [
                         'product_id' => ['type' => 'integer'],
@@ -399,12 +333,12 @@ PROMPT;
             [
                 'name' => 'view_cart',
                 'description' => "Read the current user's cart items, subtotal, and count.",
-                'input_schema' => ['type' => 'object', 'properties' => new \stdClass()],
+                'schema' => ['type' => 'object', 'properties' => new \stdClass()],
             ],
             [
                 'name' => 'apply_coupon',
                 'description' => "Check a coupon code against the current user's cart and return the discount.",
-                'input_schema' => [
+                'schema' => [
                     'type' => 'object',
                     'properties' => ['code' => ['type' => 'string']],
                     'required' => ['code'],
@@ -413,7 +347,7 @@ PROMPT;
             [
                 'name' => 'list_orders',
                 'description' => "List the current user's recent orders with status and totals.",
-                'input_schema' => ['type' => 'object', 'properties' => new \stdClass()],
+                'schema' => ['type' => 'object', 'properties' => new \stdClass()],
             ],
         ];
     }

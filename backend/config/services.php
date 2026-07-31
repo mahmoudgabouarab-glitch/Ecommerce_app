@@ -15,10 +15,20 @@ return [
         'credentials' => env('FCM_CREDENTIALS'),
     ],
 
+    'genie' => [
+        'provider' => env('GENIE_PROVIDER', 'groq'),
+    ],
+
     'anthropic' => [
         'key' => env('ANTHROPIC_API_KEY'),
         'model' => env('ANTHROPIC_MODEL', 'claude-haiku-4-5-20251001'),
         'base_url' => env('ANTHROPIC_BASE_URL', 'https://api.anthropic.com'),
+    ],
+
+    'groq' => [
+        'key' => env('GROQ_API_KEY'),
+        'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),
+        'base_url' => env('GROQ_BASE_URL', 'https://api.groq.com/openai'),
     ],
 
     'brevo' => [
