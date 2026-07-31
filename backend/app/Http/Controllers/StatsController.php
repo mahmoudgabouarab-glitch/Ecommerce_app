@@ -23,6 +23,8 @@ class StatsController extends Controller
                 ->groupBy('status')
                 ->pluck('count', 'status'),
             'top_products' => DB::table('order_items')
+                ->join('orders', 'orders.id', '=', 'order_items.order_id')
+                ->where('orders.status', '!=', 'cancelled')
                 ->select('product_title', DB::raw('SUM(quantity) as sold'))
                 ->groupBy('product_title')
                 ->orderByDesc('sold')

@@ -70,9 +70,9 @@ class ProductItem extends StatelessWidget {
                     ),
                   ),
                   if (product.onSale)
-                    Positioned(
+                    PositionedDirectional(
                       top: 14.h,
-                      left: 14.w,
+                      start: 14.w,
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),

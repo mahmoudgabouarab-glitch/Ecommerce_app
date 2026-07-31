@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use App\Models\WishlistItem;
+use App\Models\User;
 use App\Services\Notifier;
 use App\Support\ImageUploader;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -116,6 +117,7 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
+        $this->assertVariantStockWithinTotal($request, null);
         $data = $this->buildData($request, null);
         $product = Product::create($data);
         $this->syncVariants($request, $product);
@@ -125,6 +127,7 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, Product $product)
     {
+        $this->assertVariantStockWithinTotal($request, $product);
         $oldSalePrice = $product->sale_price;
         $data = $this->buildData($request, $product);
         $product->update($data);
@@ -132,6 +135,32 @@ class ProductController extends Controller
         $this->notifySaleIfDropped($product, $oldSalePrice);
 
         return new ProductResource($product->load(['category', 'variants']));
+    }
+
+    private function assertVariantStockWithinTotal(ProductRequest $request, ?Product $product): void
+    {
+        if (! $request->boolean('sync_variants')) {
+            return;
+        }
+
+        $variants = $request->input('variants', []);
+        if (empty($variants)) {
+            return;
+        }
+
+        $variantTotal = array_sum(array_map(
+            fn ($v) => (int) ($v['stock'] ?? 0),
+            $variants,
+        ));
+        $productStock = $request->has('stock')
+            ? (int) $request->input('stock')
+            : (int) ($product->stock ?? 0);
+
+        if ($variantTotal > $productStock) {
+            throw ValidationException::withMessages([
+                'variants' => ["Total option stock ({$variantTotal}) exceeds the product stock ({$productStock})."],
+            ]);
+        }
     }
 
     private function notifySaleIfDropped(Product $product, $oldSalePrice): void
@@ -144,7 +173,7 @@ class ProductController extends Controller
             return;
         }
 
-        $userIds = WishlistItem::where('product_id', $product->id)->pluck('user_id');
+        $userIds = User::where('role', 'customer')->pluck('id');
         $price = (int) round((float) $newSale);
         foreach ($userIds as $userId) {
             Notifier::sale(

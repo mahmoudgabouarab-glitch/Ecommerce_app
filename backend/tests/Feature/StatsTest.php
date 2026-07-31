@@ -25,4 +25,21 @@ class StatsTest extends TestCase
             ->assertOk()
             ->assertJsonPath('revenue', 100);
     }
+
+    public function test_top_products_ignores_cancelled_orders(): void
+    {
+        $live = Order::factory()->create(['status' => 'delivered']);
+        $live->items()->create(['product_title' => 'Live Item', 'unit_price' => 10, 'quantity' => 3]);
+
+        $cancelled = Order::factory()->create(['status' => 'cancelled']);
+        $cancelled->items()->create(['product_title' => 'Cancelled Item', 'unit_price' => 10, 'quantity' => 9]);
+
+        Sanctum::actingAs(User::factory()->admin()->create());
+
+        $response = $this->getJson('/api/admin/stats')->assertOk();
+        $titles = array_column($response->json('top_products'), 'product_title');
+
+        $this->assertContains('Live Item', $titles);
+        $this->assertNotContains('Cancelled Item', $titles);
+    }
 }
