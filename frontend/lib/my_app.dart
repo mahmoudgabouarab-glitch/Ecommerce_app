@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/network/service_locator.dart';
+import 'core/services/push_service.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_cubit.dart';
 import 'features/compare/data/repo/compare_repo_impl.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         builder: (context, _) => BlocBuilder<ThemeCubit, ThemeMode>(
           builder: (context, mode) => MaterialApp(
             title: 'Bazar',
+            navigatorKey: PushService.navigatorKey,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,

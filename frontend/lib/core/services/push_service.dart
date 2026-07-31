@@ -4,10 +4,15 @@ import 'dart:typed_data';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../features/home/presentation/view/details_view.dart';
 import '../../features/notifications/data/repo/notifications_repo_impl.dart';
+import '../../features/order/data/repo/order_repo_impl.dart';
+import '../../features/order/presentation/view/orders_view.dart';
+import '../../features/order/presentation/view_model/orders_cubit/orders_cubit.dart';
 import '../network/service_locator.dart';
 
 @pragma('vm:entry-point')
@@ -18,13 +23,17 @@ class PushService {
 
   static bool _ready = false;
 
+  static final navigatorKey = GlobalKey<NavigatorState>();
+
   static final _local = FlutterLocalNotificationsPlugin();
 
   static const _channel = AndroidNotificationChannel(
-    'order_updates',
-    'Order updates',
-    description: 'Order status and payment notifications',
-    importance: Importance.high,
+    'bazar_alerts',
+    'Bazar alerts',
+    description: 'Order updates and sale alerts',
+    importance: Importance.max,
+    enableVibration: true,
+    playSound: true,
   );
 
   static VoidCallback? onForegroundMessage;
@@ -35,10 +44,43 @@ class PushService {
       FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
       await _initLocalNotifications();
       FirebaseMessaging.onMessage.listen(_showForeground);
+      FirebaseMessaging.onMessageOpenedApp.listen((m) => _handleTap(m.data));
+      final initial = await FirebaseMessaging.instance.getInitialMessage();
+      if (initial != null) {
+        Future.delayed(
+            const Duration(seconds: 3), () => _handleTap(initial.data));
+      }
       _ready = true;
     } catch (_) {
       _ready = false;
     }
+  }
+
+  static void _handleTap(Map<String, dynamic> data) {
+    final nav = navigatorKey.currentState;
+    if (nav == null) return;
+    final orderId = int.tryParse('${data['order_id'] ?? ''}');
+    final productId = int.tryParse('${data['product_id'] ?? ''}');
+    if (orderId != null) {
+      nav.push(MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => OrdersCubit(getIt<OrderRepoImpl>())..getOrders(),
+          child: const OrdersView(),
+        ),
+      ));
+    } else if (productId != null) {
+      nav.push(MaterialPageRoute(
+        builder: (_) => DetailsView(productId: productId),
+      ));
+    }
+  }
+
+  static void _onLocalTap(NotificationResponse response) {
+    final payload = response.payload;
+    if (payload == null || payload.isEmpty) return;
+    try {
+      _handleTap(jsonDecode(payload) as Map<String, dynamic>);
+    } catch (_) {}
   }
 
   static Future<void> _initLocalNotifications() async {
@@ -46,7 +88,8 @@ class PushService {
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(),
     );
-    await _local.initialize(settings);
+    await _local.initialize(settings,
+        onDidReceiveNotificationResponse: _onLocalTap);
     await _local
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
@@ -77,8 +120,9 @@ class PushService {
           _channel.id,
           _channel.name,
           channelDescription: _channel.description,
-          importance: Importance.high,
-          priority: Priority.high,
+          importance: Importance.max,
+          priority: Priority.max,
+          enableVibration: true,
           icon: '@mipmap/ic_launcher',
           largeIcon: bytes == null ? null : ByteArrayAndroidBitmap(bytes),
           styleInformation: styleInformation,
