@@ -9,10 +9,13 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Genie
 {
     private const MAX_TURNS = 6;
+
+    private ?string $lastError = null;
 
     public function chat(User $user, array $messages): array
     {
@@ -29,10 +32,12 @@ class Genie
         for ($turn = 0; $turn < self::MAX_TURNS; $turn++) {
             $response = $this->call($messages);
             if ($response === null) {
-                return [
-                    'reply' => "Sorry, I couldn't reach the assistant right now. Please try again.",
-                    'products' => $this->cards($productIds),
-                ];
+                $reply = "Sorry, I couldn't reach the assistant right now. Please try again.";
+                if (config('app.debug') && $this->lastError) {
+                    $reply .= "\n\n[debug: {$this->lastError}]";
+                }
+
+                return ['reply' => $reply, 'products' => $this->cards($productIds)];
             }
 
             $content = $response['content'] ?? [];
@@ -84,8 +89,18 @@ class Genie
                 ]
             );
 
-            return $response->successful() ? $response->json() : null;
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            $this->lastError = 'HTTP '.$response->status().': '.substr($response->body(), 0, 300);
+            Log::warning('Genie API error: '.$this->lastError);
+
+            return null;
         } catch (\Throwable $e) {
+            $this->lastError = $e->getMessage();
+            Log::warning('Genie exception: '.$this->lastError);
+
             return null;
         }
     }
