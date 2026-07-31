@@ -42,7 +42,13 @@ class FcmSender
                         'token' => $token,
                         'notification' => $notification,
                         'data' => $stringData,
-                        'android' => ['priority' => 'high'],
+                        'android' => [
+                            'priority' => 'high',
+                            'notification' => [
+                                'channel_id' => 'bazar_alerts',
+                                'sound' => 'default',
+                            ],
+                        ],
                     ],
                 ]);
             }
