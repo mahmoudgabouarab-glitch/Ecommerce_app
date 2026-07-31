@@ -11,6 +11,7 @@ import 'cart/presentation/view/cart_view.dart';
 import 'cart/presentation/view_model/cart_cubit/cart_cubit.dart';
 import 'compare/presentation/view/compare_view.dart';
 import 'compare/presentation/view_model/compare_cubit/compare_cubit.dart';
+import 'genie/presentation/view/genie_view.dart';
 import 'home/presentation/view/home_view.dart';
 import 'notifications/presentation/view_model/notifications_cubit/notifications_cubit.dart';
 import 'order/data/repo/order_repo_impl.dart';
@@ -108,6 +109,7 @@ class _MainLayoutState extends State<MainLayout>
               child: IndexedStack(index: _index, children: _pages),
             ),
           ),
+          floatingActionButton: _index == 1 ? null : const _GenieFab(),
           bottomNavigationBar: _buildNavBar(context),
         ),
       ),
@@ -238,6 +240,38 @@ class _MainLayoutState extends State<MainLayout>
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _GenieFab extends StatelessWidget {
+  const _GenieFab();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => push(context, const GenieView()),
+      child: Container(
+        width: 58.w,
+        height: 58.w,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [AppColors.primary, Color(0xFFFFB347)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.4),
+              blurRadius: 14,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        alignment: Alignment.center,
+        child: Icon(Icons.auto_awesome, color: Colors.white, size: 27.r),
       ),
     );
   }
