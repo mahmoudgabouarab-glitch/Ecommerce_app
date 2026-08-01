@@ -8,6 +8,7 @@ import '../../../../../../core/utils/app_functions.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../../../notifications/presentation/view/notifications_view.dart';
 import '../../../../../notifications/presentation/view_model/notifications_cubit/notifications_cubit.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key, required this.name});
@@ -27,12 +28,12 @@ class Header extends StatelessWidget {
                 'hello'.tr(args: [name]),
                 style: AppStyles.regular14.copyWith(color: cs.onSurfaceVariant),
               ),
-              SizedBox(height: 2.h),
+              spaceH(2),
               Text('find_favorite'.tr(), style: AppStyles.bold24),
             ],
           ),
         ),
-        SizedBox(width: 12.w),
+        spaceW(12),
         const _NotificationBell(),
       ],
     );

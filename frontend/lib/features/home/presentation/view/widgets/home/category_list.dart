@@ -7,6 +7,7 @@ import '../../../../../../core/utils/styles.dart';
 import '../../../view_model/categories_cubit/categories_cubit.dart';
 import '../../../view_model/products_cubit/products_cubit.dart';
 import 'home_shimmers.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({super.key});
@@ -27,7 +28,7 @@ class _CategoryListState extends State<CategoryList> {
         if (state is CategoriesLoading || state is CategoriesInitial) {
           return const CategoryChipsShimmer();
         }
-        if (state is! CategoriesSuccess) return SizedBox(height: 42.h);
+        if (state is! CategoriesSuccess) return spaceH(42);
 
         final ids = [null, ...state.categories.map((c) => c.id)];
         final names = ['all'.tr(), ...state.categories.map((c) => c.name)];
@@ -37,7 +38,7 @@ class _CategoryListState extends State<CategoryList> {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: ids.length,
-            separatorBuilder: (_, _) => SizedBox(width: 10.w),
+            separatorBuilder: (_, _) => spaceW(10),
             itemBuilder: (context, i) {
               final selected = _selectedId == ids[i];
               return GestureDetector(

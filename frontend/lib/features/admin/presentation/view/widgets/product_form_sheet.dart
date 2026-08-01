@@ -17,6 +17,7 @@ import '../../../../home/data/models/category_model.dart';
 import '../../../../home/data/models/product_model.dart';
 import '../../../../home/data/repo/home_repo_impl.dart';
 import '../../view_model/admin_products_cubit/admin_products_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 void openProductForm(BuildContext context, {ProductModel? existing}) {
   final cubit = context.read<AdminProductsCubit>();
@@ -137,17 +138,17 @@ class _ProductFormState extends State<_ProductForm> {
                       ? 'add_product'.tr()
                       : 'edit_product'.tr(),
                   style: AppStyles.bold20),
-              SizedBox(height: 16.h),
+              spaceH(16),
               CustomTextField(controller: _title, hint: 'title'.tr()),
-              SizedBox(height: 12.h),
+              spaceH(12),
               CustomTextField(
                   controller: _desc,
                   hint: 'description'.tr(),
                   validator: (_) => null),
-              SizedBox(height: 12.h),
+              spaceH(12),
               CustomTextField(
                   controller: _brand, hint: 'brand'.tr(), validator: (_) => null),
-              SizedBox(height: 12.h),
+              spaceH(12),
               Row(
                 children: [
                   Expanded(
@@ -156,7 +157,7 @@ class _ProductFormState extends State<_ProductForm> {
                         hint: 'price'.tr(),
                         keyboardType: TextInputType.number),
                   ),
-                  SizedBox(width: 12.w),
+                  spaceW(12),
                   Expanded(
                     child: CustomTextField(
                         controller: _sale,
@@ -166,15 +167,15 @@ class _ProductFormState extends State<_ProductForm> {
                   ),
                 ],
               ),
-              SizedBox(height: 12.h),
+              spaceH(12),
               CustomTextField(
                   controller: _stock,
                   hint: 'stock'.tr(),
                   keyboardType: TextInputType.number),
-              SizedBox(height: 16.h),
+              spaceH(16),
 
               Text('product_photos'.tr(), style: AppStyles.semiBold16),
-              SizedBox(height: 10.h),
+              spaceH(10),
               _ImagesStrip(
                 existingUrls: _existingImages,
                 newPaths: _newImages,
@@ -183,7 +184,7 @@ class _ProductFormState extends State<_ProductForm> {
                     setState(() => _existingImages.remove(url)),
                 onRemoveNew: (path) => setState(() => _newImages.remove(path)),
               ),
-              SizedBox(height: 16.h),
+              spaceH(16),
 
               DropdownButtonFormField<int>(
                 initialValue: _categoryId,
@@ -195,7 +196,7 @@ class _ProductFormState extends State<_ProductForm> {
                     .toList(),
                 onChanged: (v) => setState(() => _categoryId = v),
               ),
-              SizedBox(height: 4.h),
+              spaceH(4),
               SwitchListTile(
                 value: _featured,
                 activeThumbColor: AppColors.primary,
@@ -203,19 +204,19 @@ class _ProductFormState extends State<_ProductForm> {
                 title: Text('featured'.tr(), style: AppStyles.medium14),
                 onChanged: (v) => setState(() => _featured = v),
               ),
-              SizedBox(height: 8.h),
+              spaceH(8),
               Text('deal_ends_at'.tr(), style: AppStyles.semiBold14),
-              SizedBox(height: 8.h),
+              spaceH(8),
               _DealEndField(
                 date: _dealEndsAt,
                 onTap: _pickDealEnd,
                 onClear: () => setState(() => _dealEndsAt = null),
               ),
-              SizedBox(height: 6.h),
+              spaceH(6),
               Text('deal_hint'.tr(),
                   style: AppStyles.regular12
                       .copyWith(color: cs.onSurfaceVariant)),
-              SizedBox(height: 12.h),
+              spaceH(12),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -239,7 +240,7 @@ class _ProductFormState extends State<_ProductForm> {
                       row.dispose();
                     }),
                   )),
-              SizedBox(height: 16.h),
+              spaceH(16),
 
               BlocConsumer<AdminProductsCubit, AdminProductsState>(
                 listener: (context, state) {
@@ -339,7 +340,7 @@ class _DealEndField extends StatelessWidget {
         child: Row(
           children: [
             Icon(Icons.timer_outlined, size: 20.r, color: cs.onSurfaceVariant),
-            SizedBox(width: 12.w),
+            spaceW(12),
             Expanded(
               child: Text(
                 date == null ? 'no_deal'.tr() : _fmt(date!),
@@ -410,7 +411,7 @@ class _ImagesStrip extends StatelessWidget {
                 children: [
                   Icon(Icons.add_a_photo_outlined,
                       color: cs.onSurfaceVariant, size: 26.r),
-                  SizedBox(height: 4.h),
+                  spaceH(4),
                   Text('add'.tr(),
                       style: AppStyles.regular12
                           .copyWith(color: cs.onSurfaceVariant)),
@@ -495,7 +496,7 @@ class _VariantEditor extends StatelessWidget {
                     hint: 'size'.tr(),
                     validator: (_) => null),
               ),
-              SizedBox(width: 10.w),
+              spaceW(10),
               Expanded(
                 child: CustomTextField(
                     controller: row.color,
@@ -504,7 +505,7 @@ class _VariantEditor extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10.h),
+          spaceH(10),
           Row(
             children: [
               Expanded(
@@ -514,7 +515,7 @@ class _VariantEditor extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     validator: (_) => null),
               ),
-              SizedBox(width: 10.w),
+              spaceW(10),
               Expanded(
                 child: CustomTextField(
                     controller: row.price,

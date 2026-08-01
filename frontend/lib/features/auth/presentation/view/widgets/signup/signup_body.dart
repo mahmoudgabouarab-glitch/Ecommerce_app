@@ -11,6 +11,7 @@ import '../../../../../../core/widgets/custom_text_field.dart';
 import '../../../view_model/signup/signup_cubit.dart';
 import '../../verify_email_view.dart';
 import 'signup_avatar_picker.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class SignupBody extends StatelessWidget {
   const SignupBody({super.key});
@@ -36,10 +37,10 @@ class SignupBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('create_account'.tr(), style: AppStyles.bold28),
-              SizedBox(height: 8.h),
+              spaceH(8),
               Text('join_today'.tr(),
                   style: AppStyles.regular14.copyWith(color: muted)),
-              SizedBox(height: 24.h),
+              spaceH(24),
               Center(
                 child: BlocBuilder<SignupCubit, SignupState>(
                   buildWhen: (_, s) => s is SignupImagePicked,
@@ -47,13 +48,13 @@ class SignupBody extends StatelessWidget {
                       path: cubit.avatarPath, onTap: cubit.pickImage),
                 ),
               ),
-              SizedBox(height: 24.h),
+              spaceH(24),
               CustomTextField(
                 controller: cubit.nameController,
                 hint: 'full_name'.tr(),
                 icon: Icons.person_outline,
               ),
-              SizedBox(height: 16.h),
+              spaceH(16),
               CustomTextField(
                 controller: cubit.emailController,
                 hint: 'email'.tr(),
@@ -62,7 +63,7 @@ class SignupBody extends StatelessWidget {
                 validator: (v) =>
                     (v != null && v.contains('@')) ? null : 'enter_valid_email'.tr(),
               ),
-              SizedBox(height: 16.h),
+              spaceH(16),
               CustomTextField(
                 controller: cubit.phoneController,
                 hint: 'phone_optional'.tr(),
@@ -70,7 +71,7 @@ class SignupBody extends StatelessWidget {
                 keyboardType: TextInputType.phone,
                 validator: (_) => null,
               ),
-              SizedBox(height: 16.h),
+              spaceH(16),
               CustomTextField(
                 controller: cubit.passwordController,
                 hint: 'password'.tr(),
@@ -80,7 +81,7 @@ class SignupBody extends StatelessWidget {
                     ? null
                     : 'password_min'.tr(),
               ),
-              SizedBox(height: 16.h),
+              spaceH(16),
               CustomTextField(
                 controller: cubit.confirmController,
                 hint: 'confirm_password'.tr(),
@@ -90,7 +91,7 @@ class SignupBody extends StatelessWidget {
                     ? null
                     : 'passwords_no_match'.tr(),
               ),
-              SizedBox(height: 30.h),
+              spaceH(30),
               BlocBuilder<SignupCubit, SignupState>(
                 builder: (context, state) => CustomButton(
                   text: 'sign_up'.tr(),
@@ -98,7 +99,7 @@ class SignupBody extends StatelessWidget {
                   onPressed: cubit.register,
                 ),
               ),
-              SizedBox(height: 16.h),
+              spaceH(16),
             ],
           ),
         ),

@@ -9,6 +9,7 @@ import '../../../../../core/utils/styles.dart';
 import '../../../../../core/widgets/custom_text_field.dart';
 import '../../view_model/checkout_cubit/checkout_cubit.dart';
 import 'checkout_section_title.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class CheckoutCouponSection extends StatelessWidget {
   const CheckoutCouponSection({super.key});
@@ -24,7 +25,7 @@ class CheckoutCouponSection extends StatelessWidget {
           children: [
             CheckoutSectionTitle(
                 icon: Icons.local_offer_outlined, text: 'coupon'.tr()),
-            SizedBox(height: 12.h),
+            spaceH(12),
             Row(
               children: [
                 Expanded(
@@ -34,7 +35,7 @@ class CheckoutCouponSection extends StatelessWidget {
                     validator: (_) => null,
                   ),
                 ),
-                SizedBox(width: 10.w),
+                spaceW(10),
                 SizedBox(
                   height: 54.h,
                   child: FilledButton(
@@ -56,19 +57,19 @@ class CheckoutCouponSection extends StatelessWidget {
               ],
             ),
             if (cubit.discount > 0) ...[
-              SizedBox(height: 8.h),
+              spaceH(8),
               Row(
                 children: [
                   const Icon(Icons.check_circle,
                       color: AppColors.success, size: 16),
-                  SizedBox(width: 6.w),
+                  spaceW(6),
                   Text('coupon_applied'.tr(args: [formatPrice(cubit.discount)]),
                       style: AppStyles.regular12
                           .copyWith(color: AppColors.success)),
                 ],
               ),
             ] else if (state is CouponInvalid) ...[
-              SizedBox(height: 8.h),
+              spaceH(8),
               Text(state.message,
                   style: AppStyles.regular12.copyWith(color: AppColors.danger)),
             ],

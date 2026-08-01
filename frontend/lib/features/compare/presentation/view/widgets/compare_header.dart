@@ -8,6 +8,7 @@ import '../../../../../core/utils/styles.dart';
 import '../../../../home/data/models/product_model.dart';
 import '../../../../home/presentation/view/details_view.dart';
 import '../../view_model/compare_cubit/compare_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class CompareHeader extends StatelessWidget {
   const CompareHeader({super.key, required this.products});
@@ -73,7 +74,7 @@ class CompareHeader extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 8.h),
+        spaceH(8),
         Text(
           p.title,
           maxLines: 2,

@@ -8,6 +8,7 @@ import '../../../../../core/utils/styles.dart';
 import '../../../../../core/widgets/custom_text_field.dart';
 import '../../view_model/checkout_cubit/checkout_cubit.dart';
 import 'checkout_section_title.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class CheckoutAddressSection extends StatelessWidget {
   const CheckoutAddressSection({super.key});
@@ -25,7 +26,7 @@ class CheckoutAddressSection extends StatelessWidget {
             CheckoutSectionTitle(
                 icon: Icons.location_on_outlined,
                 text: 'shipping_address'.tr()),
-            SizedBox(height: 14.h),
+            spaceH(14),
             ...cubit.addresses.map((a) {
               final selected =
                   !cubit.useNewAddress && cubit.selectedAddressId == a.id;
@@ -54,7 +55,7 @@ class CheckoutAddressSection extends StatelessWidget {
                             selected ? AppColors.primary : cs.onSurfaceVariant,
                         size: 20.r,
                       ),
-                      SizedBox(width: 12.w),
+                      spaceW(12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +86,7 @@ class CheckoutAddressSection extends StatelessWidget {
                         color: AppColors.primary,
                         size: 20.r,
                       ),
-                      SizedBox(width: 8.w),
+                      spaceW(8),
                       Text('use_new_address'.tr(),
                           style: AppStyles.semiBold14
                               .copyWith(color: AppColors.primary)),
@@ -94,18 +95,18 @@ class CheckoutAddressSection extends StatelessWidget {
                 ),
               ),
             if (cubit.useNewAddress || cubit.addresses.isEmpty) ...[
-              SizedBox(height: 12.h),
+              spaceH(12),
               CustomTextField(
                   controller: cubit.fullNameController, hint: 'full_name'.tr()),
-              SizedBox(height: 12.h),
+              spaceH(12),
               CustomTextField(
                   controller: cubit.phoneController,
                   hint: 'phone'.tr(),
                   keyboardType: TextInputType.phone),
-              SizedBox(height: 12.h),
+              spaceH(12),
               CustomTextField(
                   controller: cubit.line1Controller, hint: 'address_line'.tr()),
-              SizedBox(height: 12.h),
+              spaceH(12),
               CustomTextField(
                   controller: cubit.cityController, hint: 'city'.tr()),
             ],

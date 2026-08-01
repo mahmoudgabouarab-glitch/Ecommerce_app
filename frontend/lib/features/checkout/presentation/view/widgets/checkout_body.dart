@@ -12,6 +12,7 @@ import 'checkout_address_section.dart';
 import 'checkout_coupon_section.dart';
 import 'checkout_payment_section.dart';
 import 'checkout_summary_bar.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class CheckoutBody extends StatelessWidget {
   const CheckoutBody({super.key, required this.subtotal});
@@ -46,9 +47,9 @@ class CheckoutBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const CheckoutAddressSection(),
-                      SizedBox(height: 24.h),
+                      spaceH(24),
                       const CheckoutPaymentSection(),
-                      SizedBox(height: 24.h),
+                      spaceH(24),
                       const CheckoutCouponSection(),
                     ],
                   ),

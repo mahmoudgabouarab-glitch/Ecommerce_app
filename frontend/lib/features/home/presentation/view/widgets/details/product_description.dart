@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/utils/styles.dart';
 import '../../../../data/models/product_model.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class ProductDescription extends StatelessWidget {
   const ProductDescription({super.key, required this.product});
@@ -17,7 +17,7 @@ class ProductDescription extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('description'.tr(), style: AppStyles.semiBold16),
-        SizedBox(height: 8.h),
+        spaceH(8),
         Text(product.description,
             style: AppStyles.regular14
                 .copyWith(color: cs.onSurfaceVariant, height: 1.6)),

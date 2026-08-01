@@ -11,6 +11,7 @@ import '../../../../core/widgets/state_views.dart';
 import '../../data/repo/home_repo_impl.dart';
 import '../view_model/search_cubit/search_cubit.dart';
 import 'widgets/home/product_item.dart';
+import '../../../../core/utils/spacing.dart';
 
 class SearchView extends StatelessWidget {
   const SearchView({super.key});
@@ -159,7 +160,7 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
                     ),
                   ],
                 ),
-                SizedBox(height: 8.h),
+                spaceH(8),
                 Wrap(
                   spacing: 10.w,
                   runSpacing: 10.h,
@@ -188,7 +189,7 @@ class _SearchScaffoldState extends State<_SearchScaffold> {
                                   size: 16.r,
                                   color: cs.onSurfaceVariant,
                                 ),
-                                SizedBox(width: 6.w),
+                                spaceW(6),
                                 Text(q, style: AppStyles.regular14),
                               ],
                             ),

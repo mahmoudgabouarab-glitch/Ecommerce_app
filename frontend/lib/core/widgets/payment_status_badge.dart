@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../utils/app_colors.dart';
 import '../utils/styles.dart';
+import '../../core/utils/spacing.dart';
 
 class PaymentStatusBadge extends StatelessWidget {
   const PaymentStatusBadge({super.key, required this.status});
@@ -29,7 +30,7 @@ class PaymentStatusBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 13.r, color: color),
-          SizedBox(width: 4.w),
+          spaceW(4),
           Text(
             key.tr(),
             style: AppStyles.regular12.copyWith(

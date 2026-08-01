@@ -12,6 +12,7 @@ import '../../../../../core/widgets/state_views.dart';
 import '../../../../order/data/models/order_model.dart';
 import '../../../data/repo/admin_repo_impl.dart';
 import '../../view_model/admin_orders_cubit/admin_orders_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 const _statuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
 
@@ -42,7 +43,7 @@ class AdminOrdersTab extends StatelessWidget {
           return ListView.separated(
             padding: EdgeInsets.all(16.w),
             itemCount: orders.length,
-            separatorBuilder: (_, _) => SizedBox(height: 12.h),
+            separatorBuilder: (_, _) => spaceH(12),
             itemBuilder: (context, i) => _AdminOrderCard(order: orders[i]),
           );
         },
@@ -87,7 +88,7 @@ class _AdminOrderCard extends StatelessWidget {
                   style: AppStyles.semiBold16.copyWith(color: AppColors.primary)),
             ],
           ),
-          SizedBox(height: 4.h),
+          spaceH(4),
           Row(
             children: [
               Expanded(
@@ -101,12 +102,12 @@ class _AdminOrderCard extends StatelessWidget {
                 PaymentStatusBadge(status: order.paymentStatus),
             ],
           ),
-          SizedBox(height: 12.h),
+          spaceH(12),
           Row(
             children: [
               Text('status'.tr(),
                   style: AppStyles.regular14.copyWith(color: cs.onSurfaceVariant)),
-              SizedBox(width: 10.w),
+              spaceW(10),
               PopupMenuButton<String>(
                 onSelected: (s) =>
                     context.read<AdminOrdersCubit>().updateStatus(order.id, s),
@@ -126,7 +127,7 @@ class _AdminOrderCard extends StatelessWidget {
                     children: [
                       Text('status_${order.status}'.tr(),
                           style: AppStyles.semiBold14.copyWith(color: color)),
-                      SizedBox(width: 4.w),
+                      spaceW(4),
                       Icon(Icons.keyboard_arrow_down, color: color, size: 18.r),
                     ],
                   ),

@@ -16,6 +16,7 @@ import '../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../core/widgets/state_views.dart';
 import '../../../../home/data/models/category_model.dart';
 import '../../view_model/admin_categories_cubit/admin_categories_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class AdminCategoriesTab extends StatelessWidget {
   const AdminCategoriesTab({super.key});
@@ -53,7 +54,7 @@ class AdminCategoriesTab extends StatelessWidget {
           return ListView.separated(
             padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 90.h),
             itemCount: categories.length,
-            separatorBuilder: (_, _) => SizedBox(height: 12.h),
+            separatorBuilder: (_, _) => spaceH(12),
             itemBuilder: (context, i) =>
                 _CategoryTile(category: categories[i]),
           );
@@ -98,7 +99,7 @@ class _CategoryTile extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 12.w),
+          spaceW(12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +108,7 @@ class _CategoryTile extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppStyles.semiBold14),
-                SizedBox(height: 2.h),
+                spaceH(2),
                 Text('${category.productsCount ?? 0} ${'products'.tr()}',
                     style: AppStyles.regular12
                         .copyWith(color: cs.onSurfaceVariant)),
@@ -230,15 +231,15 @@ class _CategoryFormState extends State<_CategoryForm> {
                     ? 'add_category'.tr()
                     : 'edit_category'.tr(),
                 style: AppStyles.bold20),
-            SizedBox(height: 16.h),
+            spaceH(16),
             CustomTextField(controller: _name, hint: 'category_name'.tr()),
-            SizedBox(height: 14.h),
+            spaceH(14),
             _ImagePickerField(
               pickedPath: _pickedPath,
               existingUrl: _existingUrl,
               onPick: _pickImage,
             ),
-            SizedBox(height: 20.h),
+            spaceH(20),
             BlocConsumer<AdminCategoriesCubit, AdminCategoriesState>(
               listener: (context, state) {
                 if (state is AdminCategorySaved) Navigator.pop(context);
@@ -284,13 +285,13 @@ class _ImagePickerField extends StatelessWidget {
               child: _thumb(cs),
             ),
           ),
-          SizedBox(width: 14.w),
+          spaceW(14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('category_image'.tr(), style: AppStyles.semiBold14),
-                SizedBox(height: 3.h),
+                spaceH(3),
                 Text(
                   hasImage ? 'change_image'.tr() : 'pick_image'.tr(),
                   style: AppStyles.regular12.copyWith(color: AppColors.primary),

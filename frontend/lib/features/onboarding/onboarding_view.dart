@@ -8,6 +8,7 @@ import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_functions.dart';
 import '../../core/utils/styles.dart';
 import '../auth/presentation/view/login_view.dart';
+import '../../core/utils/spacing.dart';
 
 class _Page {
   const _Page(this.icon, this.title, this.desc, this.colors);
@@ -95,11 +96,11 @@ class _OnboardingViewState extends State<OnboardingView> {
                           ),
                           child: Icon(p.icon, color: Colors.white, size: 84.r),
                         ),
-                        SizedBox(height: 44.h),
+                        spaceH(44),
                         Text(p.title.tr(),
                             textAlign: TextAlign.center,
                             style: AppStyles.bold28),
-                        SizedBox(height: 14.h),
+                        spaceH(14),
                         Text(p.desc.tr(),
                             textAlign: TextAlign.center,
                             style: AppStyles.regular14.copyWith(

@@ -6,6 +6,7 @@ import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_functions.dart';
 import '../../../../../core/utils/styles.dart';
 import '../login_view.dart';
+import '../../../../../core/utils/spacing.dart';
 
 Future<void> showLoginRequired(BuildContext context) {
   final cs = Theme.of(context).colorScheme;
@@ -59,14 +60,14 @@ class GuestState extends StatelessWidget {
               ),
               child: Icon(icon, size: 44.r, color: AppColors.primary),
             ),
-            SizedBox(height: 18.h),
+            spaceH(18),
             Text(title, style: AppStyles.bold20, textAlign: TextAlign.center),
-            SizedBox(height: 8.h),
+            spaceH(8),
             Text('login_required_msg'.tr(),
                 textAlign: TextAlign.center,
                 style: AppStyles.regular14
                     .copyWith(color: cs.onSurfaceVariant)),
-            SizedBox(height: 20.h),
+            spaceH(20),
             FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.primary,

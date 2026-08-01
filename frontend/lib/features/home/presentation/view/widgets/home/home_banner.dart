@@ -13,6 +13,7 @@ import '../../../view_model/banners_cubit/banners_cubit.dart';
 import '../../category_products_view.dart';
 import '../../details_view.dart';
 import 'home_shimmers.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class HomeBanner extends StatefulWidget {
   const HomeBanner({super.key});
@@ -89,7 +90,7 @@ class _HomeBannerState extends State<HomeBanner> {
               ),
             ),
             if (banners.length > 1) ...[
-              SizedBox(height: 10.h),
+              spaceH(10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
@@ -180,7 +181,7 @@ class _BannerCard extends StatelessWidget {
                               AppStyles.bold24.copyWith(color: Colors.white)),
                     if (banner.subtitle != null &&
                         banner.subtitle!.isNotEmpty) ...[
-                      SizedBox(height: 6.h),
+                      spaceH(6),
                       Text(banner.subtitle!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

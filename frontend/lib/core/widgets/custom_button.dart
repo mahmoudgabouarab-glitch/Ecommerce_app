@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../utils/app_colors.dart';
 import '../utils/styles.dart';
+import '../../core/utils/spacing.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -76,7 +77,7 @@ class CustomButton extends StatelessWidget {
                   children: [
                     if (icon != null) ...[
                       Icon(icon, color: Colors.white, size: 20.r),
-                      SizedBox(width: 8.w),
+                      spaceW(8),
                     ],
                     Text(text,
                         style:

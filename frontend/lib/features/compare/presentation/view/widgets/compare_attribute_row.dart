@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/utils/styles.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class CompareAttributeRow extends StatelessWidget {
   const CompareAttributeRow({
@@ -34,7 +35,7 @@ class CompareAttributeRow extends StatelessWidget {
               fontSize: 10.sp,
             ),
           ),
-          SizedBox(height: 10.h),
+          spaceH(10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: cells

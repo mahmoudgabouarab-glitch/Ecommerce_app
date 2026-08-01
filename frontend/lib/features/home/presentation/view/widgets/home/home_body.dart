@@ -19,6 +19,7 @@ import 'popular_products_build.dart';
 import 'products_header.dart';
 import 'recently_viewed_section.dart';
 import 'search_bar_home.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({super.key});
@@ -68,18 +69,18 @@ class _HomeBodyState extends State<HomeBody> {
         padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),
         children: [
           Header(name: name),
-          SizedBox(height: 20.h),
+          spaceH(20),
           const SearchBarHome(),
-          SizedBox(height: 20.h),
+          spaceH(20),
           const HomeBanner(),
-          SizedBox(height: 22.h),
+          spaceH(22),
           const FlashDealsSection(),
           const RecentlyViewedSection(),
           SuggestedProductsSection(title: 'recommended_for_you'.tr()),
           const ProductsHeader(),
-          SizedBox(height: 14.h),
+          spaceH(14),
           const CategoryList(),
-          SizedBox(height: 14.h),
+          spaceH(14),
           const PopularProductsBuild(),
         ],
       ),

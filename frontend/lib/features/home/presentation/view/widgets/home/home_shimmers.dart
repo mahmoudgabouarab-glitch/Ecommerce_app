@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class _ShimmerBox extends StatelessWidget {
   const _ShimmerBox({required this.child});
@@ -48,7 +49,7 @@ class CategoryChipsShimmer extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 5,
-          separatorBuilder: (_, _) => SizedBox(width: 10.w),
+          separatorBuilder: (_, _) => spaceW(10),
           itemBuilder: (_, _) => Container(
             width: 72.w,
             decoration: BoxDecoration(
@@ -77,7 +78,7 @@ class HCardsShimmer extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 3,
-          separatorBuilder: (_, _) => SizedBox(width: 12.w),
+          separatorBuilder: (_, _) => spaceW(12),
           itemBuilder: (_, _) => Container(
             width: cardWidth.w,
             decoration: BoxDecoration(

@@ -10,6 +10,7 @@ import '../../data/repo/genie_repo_impl.dart';
 import '../view_model/genie_cubit/genie_cubit.dart';
 import 'widgets/genie_bubble.dart';
 import 'widgets/genie_composer.dart';
+import '../../../../core/utils/spacing.dart';
 
 class GenieView extends StatelessWidget {
   const GenieView({super.key});
@@ -70,7 +71,7 @@ class _GenieScreenState extends State<_GenieScreen> {
               alignment: Alignment.center,
               child: Icon(Icons.auto_awesome, color: Colors.white, size: 17.r),
             ),
-            SizedBox(width: 10.w),
+            spaceW(10),
             Text('genie_title'.tr()),
           ],
         ),
@@ -89,7 +90,7 @@ class _GenieScreenState extends State<_GenieScreen> {
                         padding: EdgeInsets.all(16.w),
                         itemCount:
                             state.messages.length + (state.sending ? 1 : 0),
-                        separatorBuilder: (_, _) => SizedBox(height: 14.h),
+                        separatorBuilder: (_, _) => spaceH(14),
                         itemBuilder: (context, i) {
                           if (i >= state.messages.length) {
                             return const _TypingBubble();
@@ -127,7 +128,7 @@ class _Intro extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 40.h),
+          spaceH(40),
           Container(
             width: 74.w,
             height: 74.w,
@@ -142,17 +143,17 @@ class _Intro extends StatelessWidget {
             alignment: Alignment.center,
             child: Icon(Icons.auto_awesome, color: Colors.white, size: 38.r),
           ),
-          SizedBox(height: 20.h),
+          spaceH(20),
           Text('genie_greeting'.tr(),
               textAlign: TextAlign.center, style: AppStyles.bold20),
-          SizedBox(height: 10.h),
+          spaceH(10),
           Text(
             'genie_sub'.tr(),
             textAlign: TextAlign.center,
             style:
                 AppStyles.regular14.copyWith(color: cs.onSurfaceVariant),
           ),
-          SizedBox(height: 28.h),
+          spaceH(28),
           Wrap(
             spacing: 10.w,
             runSpacing: 10.h,
@@ -199,7 +200,7 @@ class _TypingBubble extends StatelessWidget {
           alignment: Alignment.center,
           child: Icon(Icons.auto_awesome, color: Colors.white, size: 18.r),
         ),
-        SizedBox(width: 8.w),
+        spaceW(8),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
           decoration: BoxDecoration(

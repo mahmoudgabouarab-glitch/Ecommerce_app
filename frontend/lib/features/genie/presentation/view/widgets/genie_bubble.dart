@@ -5,6 +5,7 @@ import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../../data/models/genie_message.dart';
 import 'genie_product_card.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class GenieBubble extends StatelessWidget {
   const GenieBubble({super.key, required this.message});
@@ -49,20 +50,20 @@ class GenieBubble extends StatelessWidget {
           children: [
             if (!isUser) ...[
               const _GenieAvatar(),
-              SizedBox(width: 8.w),
+              spaceW(8),
             ],
             Flexible(child: bubble),
           ],
         ),
         if (message.products.isNotEmpty) ...[
-          SizedBox(height: 10.h),
+          spaceH(10),
           SizedBox(
             height: 210.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.only(left: 40.w),
               itemCount: message.products.length,
-              separatorBuilder: (_, _) => SizedBox(width: 10.w),
+              separatorBuilder: (_, _) => spaceW(10),
               itemBuilder: (_, i) =>
                   GenieProductCard(product: message.products[i]),
             ),

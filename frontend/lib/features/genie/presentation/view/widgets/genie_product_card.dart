@@ -7,6 +7,7 @@ import '../../../../../core/utils/app_functions.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../../../home/presentation/view/details_view.dart';
 import '../../../data/models/genie_product.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class GenieProductCard extends StatelessWidget {
   const GenieProductCard({super.key, required this.product});
@@ -60,7 +61,7 @@ class GenieProductCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppStyles.semiBold14,
                   ),
-                  SizedBox(height: 6.h),
+                  spaceH(6),
                   Row(
                     children: [
                       Text(
@@ -69,7 +70,7 @@ class GenieProductCard extends StatelessWidget {
                             .copyWith(color: AppColors.primary),
                       ),
                       if (onSale) ...[
-                        SizedBox(width: 6.w),
+                        spaceW(6),
                         Expanded(
                           child: Text(
                             formatPrice(product.price),

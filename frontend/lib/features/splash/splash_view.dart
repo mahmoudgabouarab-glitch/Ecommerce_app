@@ -10,6 +10,7 @@ import '../../core/utils/styles.dart';
 import '../auth/presentation/view/login_view.dart';
 import '../main_layout.dart';
 import '../onboarding/onboarding_view.dart';
+import '../../core/utils/spacing.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -83,9 +84,9 @@ class _SplashViewState extends State<SplashView>
                   child: Icon(Icons.shopping_bag_rounded,
                       color: Colors.white, size: 52.r),
                 ),
-                SizedBox(height: 22.h),
+                spaceH(22),
                 Text('app_name'.tr(), style: AppStyles.bold28),
-                SizedBox(height: 6.h),
+                spaceH(6),
                 Text('shop_smarter'.tr(),
                     style: AppStyles.regular14
                         .copyWith(color: AppStyles.muted(context))),

@@ -7,6 +7,7 @@ import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../../core/widgets/custom_text_field.dart';
 import '../../../view_model/password_cubit/password_cubit.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class ChangePasswordBody extends StatefulWidget {
   const ChangePasswordBody({super.key});
@@ -45,14 +46,14 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 12.h),
+              spaceH(12),
               CustomTextField(
                 controller: _currentController,
                 hint: 'current_password'.tr(),
                 icon: Icons.lock_outline,
                 isPassword: true,
               ),
-              SizedBox(height: 16.h),
+              spaceH(16),
               CustomTextField(
                 controller: _passController,
                 hint: 'new_password'.tr(),
@@ -61,7 +62,7 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                 validator: (v) =>
                     (v != null && v.length >= 6) ? null : 'password_min'.tr(),
               ),
-              SizedBox(height: 28.h),
+              spaceH(28),
               CustomButton(
                 text: 'save_changes'.tr(),
                 isLoading: state is PasswordLoading,

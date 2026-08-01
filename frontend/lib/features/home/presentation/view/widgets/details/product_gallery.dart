@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/utils/app_colors.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class ProductGallery extends StatefulWidget {
   const ProductGallery({super.key, required this.images, this.heroTag});
@@ -58,7 +59,7 @@ class _ProductGalleryState extends State<ProductGallery> {
           ),
         ),
         if (images.length > 1) ...[
-          SizedBox(height: 12.h),
+          spaceH(12),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(

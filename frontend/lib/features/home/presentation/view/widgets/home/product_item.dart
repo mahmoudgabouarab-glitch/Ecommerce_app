@@ -12,6 +12,7 @@ import '../../../../../compare/presentation/view_model/compare_cubit/compare_cub
 import '../../../../../wishlist/presentation/view_model/wishlist_cubit/wishlist_cubit.dart';
 import '../../../../data/models/product_model.dart';
 import '../../details_view.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class ProductItem extends StatelessWidget {
   const ProductItem({super.key, required this.product});
@@ -114,16 +115,16 @@ class ProductItem extends StatelessWidget {
                           letterSpacing: 0.5,
                           color: AppColors.primary,
                         )),
-                  SizedBox(height: 3.h),
+                  spaceH(3),
                   Text(product.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppStyles.semiBold14),
-                  SizedBox(height: 6.h),
+                  spaceH(6),
                   Row(
                     children: [
                       Icon(Icons.star_rounded, color: AppColors.star, size: 15.r),
-                      SizedBox(width: 3.w),
+                      spaceW(3),
                       Text('${product.rating}',
                           style: AppStyles.regular12
                               .copyWith(color: cs.onSurfaceVariant)),
@@ -132,7 +133,7 @@ class ProductItem extends StatelessWidget {
                               .copyWith(color: cs.onSurfaceVariant)),
                     ],
                   ),
-                  SizedBox(height: 8.h),
+                  spaceH(8),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -142,7 +143,7 @@ class ProductItem extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: AppStyles.price),
                       ),
-                      SizedBox(width: 6.w),
+                      spaceW(6),
                       if (product.onSale)
                         Padding(
                           padding: EdgeInsets.only(bottom: 2.h),

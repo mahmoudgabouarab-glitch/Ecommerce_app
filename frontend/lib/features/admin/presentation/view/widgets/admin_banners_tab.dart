@@ -20,6 +20,7 @@ import '../../../../home/data/models/category_model.dart';
 import '../../../../home/data/models/product_model.dart';
 import '../../../../home/data/repo/home_repo_impl.dart';
 import '../../view_model/admin_banners_cubit/admin_banners_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class AdminBannersTab extends StatelessWidget {
   const AdminBannersTab({super.key});
@@ -53,7 +54,7 @@ class AdminBannersTab extends StatelessWidget {
           return ListView.separated(
             padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 90.h),
             itemCount: banners.length,
-            separatorBuilder: (_, _) => SizedBox(height: 12.h),
+            separatorBuilder: (_, _) => spaceH(12),
             itemBuilder: (context, i) => _BannerTile(banner: banners[i]),
           );
         },
@@ -97,7 +98,7 @@ class _BannerTile extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 12.w),
+          spaceW(12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,11 +115,11 @@ class _BannerTile extends StatelessWidget {
                         style: AppStyles.semiBold14,
                       ),
                     ),
-                    SizedBox(width: 8.w),
+                    spaceW(8),
                     _StatusChip(active: banner.isActive),
                   ],
                 ),
-                SizedBox(height: 3.h),
+                spaceH(3),
                 Text(banner.linkType == 'none' ? '—' : banner.linkType,
                     style: AppStyles.regular12
                         .copyWith(color: cs.onSurfaceVariant)),
@@ -290,25 +291,25 @@ class _BannerFormState extends State<_BannerForm> {
                     ? 'add_banner'.tr()
                     : 'edit_banner'.tr(),
                 style: AppStyles.bold20),
-            SizedBox(height: 16.h),
+            spaceH(16),
             _ImagePickerField(
               pickedPath: _pickedPath,
               existingUrl: _existingUrl,
               onPick: _pickImage,
             ),
-            SizedBox(height: 14.h),
+            spaceH(14),
             CustomTextField(
                 controller: _title,
                 hint: 'banner_title'.tr(),
                 validator: (_) => null),
-            SizedBox(height: 12.h),
+            spaceH(12),
             CustomTextField(
                 controller: _subtitle,
                 hint: 'banner_subtitle'.tr(),
                 validator: (_) => null),
-            SizedBox(height: 14.h),
+            spaceH(14),
             Text('banner_link'.tr(), style: AppStyles.semiBold14),
-            SizedBox(height: 8.h),
+            spaceH(8),
             DropdownButtonFormField<String>(
               initialValue: _linkType,
               decoration: const InputDecoration(),
@@ -325,7 +326,7 @@ class _BannerFormState extends State<_BannerForm> {
               }),
             ),
             if (_linkType == 'category') ...[
-              SizedBox(height: 12.h),
+              spaceH(12),
               DropdownButtonFormField<int>(
                 initialValue: _valueIfPresent(_categories.map((c) => c.id)),
                 decoration:
@@ -338,7 +339,7 @@ class _BannerFormState extends State<_BannerForm> {
               ),
             ],
             if (_linkType == 'product') ...[
-              SizedBox(height: 12.h),
+              spaceH(12),
               DropdownButtonFormField<int>(
                 initialValue: _valueIfPresent(_products.map((p) => p.id)),
                 decoration: InputDecoration(hintText: 'select_product'.tr()),
@@ -357,7 +358,7 @@ class _BannerFormState extends State<_BannerForm> {
               title: Text('active'.tr(), style: AppStyles.medium14),
               onChanged: (v) => setState(() => _active = v),
             ),
-            SizedBox(height: 8.h),
+            spaceH(8),
             BlocConsumer<AdminBannersCubit, AdminBannersState>(
               listener: (context, state) {
                 if (state is AdminBannerSaved) Navigator.pop(context);
@@ -420,7 +421,7 @@ class _ImagePickerField extends StatelessWidget {
         children: [
           Icon(Icons.add_a_photo_outlined,
               color: cs.onSurfaceVariant, size: 26.r),
-          SizedBox(height: 6.h),
+          spaceH(6),
           Text('pick_image'.tr(),
               style:
                   AppStyles.regular12.copyWith(color: cs.onSurfaceVariant)),

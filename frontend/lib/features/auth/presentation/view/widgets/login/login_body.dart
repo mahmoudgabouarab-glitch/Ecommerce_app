@@ -16,6 +16,7 @@ import '../../../view_model/login/login_cubit.dart';
 import '../../forgot_password_view.dart';
 import '../../signup_view.dart';
 import '../../verify_email_view.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class LoginBody extends StatelessWidget {
   const LoginBody({super.key});
@@ -42,7 +43,7 @@ class LoginBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30.h),
+              spaceH(30),
               Container(
                 padding: EdgeInsets.all(14.r),
                 decoration: BoxDecoration(
@@ -52,12 +53,12 @@ class LoginBody extends StatelessWidget {
                 child: Icon(Icons.shopping_bag_rounded,
                     color: Colors.white, size: 32.r),
               ),
-              SizedBox(height: 26.h),
+              spaceH(26),
               Text('welcome_back'.tr(), style: AppStyles.bold28),
-              SizedBox(height: 8.h),
+              spaceH(8),
               Text('sign_in_subtitle'.tr(),
                   style: AppStyles.regular14.copyWith(color: muted)),
-              SizedBox(height: 34.h),
+              spaceH(34),
               _label('email'.tr(), muted),
               CustomTextField(
                 controller: cubit.emailController,
@@ -67,7 +68,7 @@ class LoginBody extends StatelessWidget {
                 validator: (v) =>
                     (v != null && v.contains('@')) ? null : 'enter_valid_email'.tr(),
               ),
-              SizedBox(height: 18.h),
+              spaceH(18),
               _label('password'.tr(), muted),
               CustomTextField(
                 controller: cubit.passwordController,
@@ -78,7 +79,7 @@ class LoginBody extends StatelessWidget {
                     ? null
                     : 'password_min'.tr(),
               ),
-              SizedBox(height: 8.h),
+              spaceH(8),
               Align(
                 alignment: AlignmentDirectional.centerEnd,
                 child: TextButton(
@@ -89,7 +90,7 @@ class LoginBody extends StatelessWidget {
                           .copyWith(color: AppColors.primary)),
                 ),
               ),
-              SizedBox(height: 12.h),
+              spaceH(12),
               BlocBuilder<LoginCubit, LoginState>(
                 builder: (context, state) => CustomButton(
                   text: 'login'.tr(),
@@ -97,7 +98,7 @@ class LoginBody extends StatelessWidget {
                   onPressed: cubit.login,
                 ),
               ),
-              SizedBox(height: 12.h),
+              spaceH(12),
               CustomButton(
                 text: 'continue_guest'.tr(),
                 outlined: true,
@@ -113,7 +114,7 @@ class LoginBody extends StatelessWidget {
                   }
                 },
               ),
-              SizedBox(height: 14.h),
+              spaceH(14),
               Center(
                 child: TextButton(
                   onPressed: () => push(context, const SignupView()),

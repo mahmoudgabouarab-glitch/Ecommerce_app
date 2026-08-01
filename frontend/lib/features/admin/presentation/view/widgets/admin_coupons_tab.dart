@@ -12,6 +12,7 @@ import '../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../core/widgets/state_views.dart';
 import '../../../data/models/coupon_model.dart';
 import '../../view_model/admin_coupons_cubit/admin_coupons_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class AdminCouponsTab extends StatelessWidget {
   const AdminCouponsTab({super.key});
@@ -45,7 +46,7 @@ class AdminCouponsTab extends StatelessWidget {
           return ListView.separated(
             padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 90.h),
             itemCount: coupons.length,
-            separatorBuilder: (_, _) => SizedBox(height: 12.h),
+            separatorBuilder: (_, _) => spaceH(12),
             itemBuilder: (context, i) => _CouponTile(coupon: coupons[i]),
           );
         },
@@ -82,7 +83,7 @@ class _CouponTile extends StatelessWidget {
             ),
             child: Icon(Icons.local_offer, color: AppColors.primary, size: 22.r),
           ),
-          SizedBox(width: 12.w),
+          spaceW(12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,11 +91,11 @@ class _CouponTile extends StatelessWidget {
                 Row(
                   children: [
                     Text(coupon.code, style: AppStyles.semiBold14),
-                    SizedBox(width: 8.w),
+                    spaceW(8),
                     _StatusChip(active: coupon.isActive),
                   ],
                 ),
-                SizedBox(height: 3.h),
+                spaceH(3),
                 Text(
                   [
                     '$value ${'off'.tr()}',
@@ -248,22 +249,22 @@ class _CouponFormState extends State<_CouponForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('add_coupon'.tr(), style: AppStyles.bold20),
-            SizedBox(height: 16.h),
+            spaceH(16),
             CustomTextField(
                 controller: _code,
                 hint: 'coupon_code'.tr(),
                 textCapitalization: TextCapitalization.characters),
-            SizedBox(height: 14.h),
+            spaceH(14),
             Text('discount_type'.tr(), style: AppStyles.semiBold14),
-            SizedBox(height: 8.h),
+            spaceH(8),
             Row(
               children: [
                 _typeChip('percent', 'percent'.tr()),
-                SizedBox(width: 10.w),
+                spaceW(10),
                 _typeChip('fixed', 'fixed'.tr()),
               ],
             ),
-            SizedBox(height: 14.h),
+            spaceH(14),
             Row(
               children: [
                 Expanded(
@@ -274,7 +275,7 @@ class _CouponFormState extends State<_CouponForm> {
                           : 'amount'.tr(),
                       keyboardType: TextInputType.number),
                 ),
-                SizedBox(width: 12.w),
+                spaceW(12),
                 Expanded(
                   child: CustomTextField(
                       controller: _minTotal,
@@ -284,7 +285,7 @@ class _CouponFormState extends State<_CouponForm> {
                 ),
               ],
             ),
-            SizedBox(height: 8.h),
+            spaceH(8),
             _DateField(
                 date: _expiresAt,
                 onTap: _pickDate,
@@ -296,7 +297,7 @@ class _CouponFormState extends State<_CouponForm> {
               title: Text('active'.tr(), style: AppStyles.medium14),
               onChanged: (v) => setState(() => _active = v),
             ),
-            SizedBox(height: 8.h),
+            spaceH(8),
             BlocConsumer<AdminCouponsCubit, AdminCouponsState>(
               listener: (context, state) {
                 if (state is AdminCouponSaved) Navigator.pop(context);
@@ -363,7 +364,7 @@ class _DateField extends StatelessWidget {
         child: Row(
           children: [
             Icon(Icons.event_outlined, size: 20.r, color: cs.onSurfaceVariant),
-            SizedBox(width: 12.w),
+            spaceW(12),
             Expanded(
               child: Text(
                 date == null

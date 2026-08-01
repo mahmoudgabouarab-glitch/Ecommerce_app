@@ -11,6 +11,7 @@ import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../main_layout.dart';
 import '../../../view_model/verify_email/verify_email_cubit.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class VerifyEmailBody extends StatelessWidget {
   const VerifyEmailBody({super.key});
@@ -35,28 +36,28 @@ class VerifyEmailBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20.h),
+            spaceH(20),
             Icon(Icons.mark_email_read_outlined,
                 color: AppColors.primary, size: 56.r),
-            SizedBox(height: 20.h),
+            spaceH(20),
             Text('verify_email'.tr(), style: AppStyles.bold24),
-            SizedBox(height: 8.h),
+            spaceH(8),
             Text('verify_email_subtitle'.tr(args: [cubit.email]),
                 style: AppStyles.regular14.copyWith(color: muted)),
-            SizedBox(height: 28.h),
+            spaceH(28),
             CustomTextField(
               controller: cubit.codeController,
               hint: 'verification_code'.tr(),
               icon: Icons.pin_outlined,
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 24.h),
+            spaceH(24),
             CustomButton(
               text: 'verify'.tr(),
               isLoading: state is VerifyEmailLoading,
               onPressed: cubit.verify,
             ),
-            SizedBox(height: 8.h),
+            spaceH(8),
             Center(
               child: TextButton(
                 onPressed: cubit.resend,

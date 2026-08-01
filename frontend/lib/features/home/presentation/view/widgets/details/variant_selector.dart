@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../../data/models/product_model.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class VariantSelector extends StatelessWidget {
   const VariantSelector({
@@ -25,7 +26,7 @@ class VariantSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('size'.tr(), style: AppStyles.semiBold16),
-        SizedBox(height: 10.h),
+        spaceH(10),
         Wrap(
           spacing: 10.w,
           runSpacing: 10.h,

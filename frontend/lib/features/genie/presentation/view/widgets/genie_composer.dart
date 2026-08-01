@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/styles.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class GenieComposer extends StatefulWidget {
   const GenieComposer({super.key, required this.sending, required this.onSend});
@@ -66,7 +67,7 @@ class _GenieComposerState extends State<GenieComposer> {
                 ),
               ),
             ),
-            SizedBox(width: 8.w),
+            spaceW(8),
             GestureDetector(
               onTap: _submit,
               child: Container(

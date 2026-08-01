@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/utils/app_functions.dart';
 import '../../search_view.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class SearchBarHome extends StatelessWidget {
   const SearchBarHome({super.key});
@@ -24,7 +25,7 @@ class SearchBarHome extends StatelessWidget {
         child: Row(
           children: [
             Icon(Icons.search, color: cs.onSurfaceVariant),
-            SizedBox(width: 10.w),
+            spaceW(10),
             Text(
               'search_products'.tr(),
               style: TextStyle(color: cs.onSurfaceVariant, fontSize: 15.sp),

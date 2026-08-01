@@ -12,6 +12,7 @@ import '../../../../../core/widgets/state_views.dart';
 import '../../../data/models/stats_model.dart';
 import '../../../data/repo/admin_repo_impl.dart';
 import '../../view_model/stats_cubit/stats_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class OverviewTab extends StatelessWidget {
   const OverviewTab({super.key});
@@ -71,12 +72,12 @@ class OverviewTab extends StatelessWidget {
                 ],
               ),
               if (stats.sales.isNotEmpty) ...[
-                SizedBox(height: 20.h),
+                spaceH(20),
                 _SalesChart(sales: stats.sales),
               ],
-              SizedBox(height: 20.h),
+              spaceH(20),
               Text('top_products'.tr(), style: AppStyles.bold20),
-              SizedBox(height: 12.h),
+              spaceH(12),
               if (stats.topProducts.isEmpty)
                 Text('no_sales'.tr(),
                     style: AppStyles.regular14
@@ -169,7 +170,7 @@ class _SalesChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('sales_last_7'.tr(), style: AppStyles.semiBold16),
-          SizedBox(height: 18.h),
+          spaceH(18),
           SizedBox(
             height: 170.h,
             child: BarChart(
@@ -259,7 +260,7 @@ class _TopProductTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: AppStyles.medium14),
           ),
-          SizedBox(width: 10.w),
+          spaceW(10),
           Text('sold'.tr(args: ['${product.sold}']),
               style: AppStyles.semiBold14.copyWith(color: AppColors.primary)),
         ],

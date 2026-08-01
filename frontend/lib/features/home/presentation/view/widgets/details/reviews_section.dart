@@ -13,6 +13,7 @@ import '../../../../../auth/presentation/view/widgets/login_required.dart';
 import '../../../../data/models/review_model.dart';
 import '../../../view_model/reviews_cubit/reviews_cubit.dart';
 import '../../public_profile_view.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class ReviewsSection extends StatelessWidget {
   const ReviewsSection({super.key, required this.productId});
@@ -47,7 +48,7 @@ class ReviewsSection extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8.h),
+            spaceH(8),
             if (state is ReviewsLoading)
               const Center(child: CircularProgressIndicator(color: AppColors.primary))
             else if (state is ReviewsSuccess && state.reviews.isEmpty)
@@ -133,7 +134,7 @@ class _ReviewTile extends StatelessWidget {
                             )
                           : null,
                     ),
-                    SizedBox(width: 10.w),
+                    spaceW(10),
                     Text(review.userName, style: AppStyles.semiBold14),
                   ],
                 ),
@@ -152,7 +153,7 @@ class _ReviewTile extends StatelessWidget {
             ],
           ),
           if (review.comment.isNotEmpty) ...[
-            SizedBox(height: 8.h),
+            spaceH(8),
             Text(review.comment,
                 style: AppStyles.regular14
                     .copyWith(color: cs.onSurfaceVariant)),
@@ -207,7 +208,7 @@ class _AddReviewDialogState extends State<_AddReviewDialog> {
               ),
             ),
           ),
-          SizedBox(height: 12.h),
+          spaceH(12),
           TextField(
             controller: _controller,
             maxLines: 3,

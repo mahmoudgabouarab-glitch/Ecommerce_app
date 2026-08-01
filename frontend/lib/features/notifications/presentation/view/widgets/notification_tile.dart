@@ -14,6 +14,7 @@ import '../../../../order/presentation/view/orders_view.dart';
 import '../../../../order/presentation/view_model/orders_cubit/orders_cubit.dart';
 import '../../../data/models/notification_model.dart';
 import '../../view_model/notifications_cubit/notifications_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class NotificationTile extends StatelessWidget {
   const NotificationTile({super.key, required this.item});
@@ -64,7 +65,7 @@ class NotificationTile extends StatelessWidget {
                     )
                   : _fallbackIcon(),
             ),
-            SizedBox(width: 12.w),
+            spaceW(12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,11 +90,11 @@ class NotificationTile extends StatelessWidget {
                         ),
                     ],
                   ),
-                  SizedBox(height: 3.h),
+                  spaceH(3),
                   Text(_body(),
                       style: AppStyles.regular12
                           .copyWith(color: cs.onSurfaceVariant, height: 1.4)),
-                  SizedBox(height: 6.h),
+                  spaceH(6),
                   Text(_relativeTime(),
                       style: AppStyles.regular12
                           .copyWith(color: cs.onSurfaceVariant, fontSize: 11)),

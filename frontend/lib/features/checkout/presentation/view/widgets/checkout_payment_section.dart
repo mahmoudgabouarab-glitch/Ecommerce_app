@@ -7,6 +7,7 @@ import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../view_model/checkout_cubit/checkout_cubit.dart';
 import 'checkout_section_title.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class CheckoutPaymentSection extends StatelessWidget {
   const CheckoutPaymentSection({super.key});
@@ -22,7 +23,7 @@ class CheckoutPaymentSection extends StatelessWidget {
           children: [
             CheckoutSectionTitle(
                 icon: Icons.payment_outlined, text: 'payment_method'.tr()),
-            SizedBox(height: 12.h),
+            spaceH(12),
             _PaymentTile(
               title: 'cash_on_delivery'.tr(),
               icon: Icons.local_shipping_outlined,
@@ -81,7 +82,7 @@ class _PaymentTile extends StatelessWidget {
         child: Row(
           children: [
             Icon(icon, color: selected ? AppColors.primary : cs.onSurfaceVariant),
-            SizedBox(width: 12.w),
+            spaceW(12),
             Text(title, style: AppStyles.medium14),
             const Spacer(),
             Icon(

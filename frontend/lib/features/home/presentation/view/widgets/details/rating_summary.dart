@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../../data/models/product_model.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class RatingSummary extends StatelessWidget {
   const RatingSummary({super.key, required this.product});
@@ -29,7 +30,7 @@ class RatingSummary extends StatelessWidget {
           Column(
             children: [
               Text(product.rating.toStringAsFixed(1), style: AppStyles.bold28),
-              SizedBox(height: 4.h),
+              spaceH(4),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: List.generate(5, (i) {
@@ -41,13 +42,13 @@ class RatingSummary extends StatelessWidget {
                   );
                 }),
               ),
-              SizedBox(height: 4.h),
+              spaceH(4),
               Text('$total ${'reviews'.tr()}',
                   style:
                       AppStyles.regular12.copyWith(color: cs.onSurfaceVariant)),
             ],
           ),
-          SizedBox(width: 18.w),
+          spaceW(18),
           Expanded(
             child: Column(
               children: [
@@ -59,10 +60,10 @@ class RatingSummary extends StatelessWidget {
                         Text('$star',
                             style: AppStyles.regular12
                                 .copyWith(color: cs.onSurfaceVariant)),
-                        SizedBox(width: 4.w),
+                        spaceW(4),
                         Icon(Icons.star_rounded,
                             size: 12.r, color: AppColors.star),
-                        SizedBox(width: 8.w),
+                        spaceW(8),
                         Expanded(
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(4.r),
@@ -77,7 +78,7 @@ class RatingSummary extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(width: 8.w),
+                        spaceW(8),
                         SizedBox(
                           width: 22.w,
                           child: Text(

@@ -11,6 +11,7 @@ import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../auth/presentation/view/widgets/login_required.dart';
 import '../../../../../cart/presentation/view_model/add_to_cart_cubit/add_to_cart_cubit.dart';
 import '../../../../data/models/product_model.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class DetailsBottomBar extends StatelessWidget {
   const DetailsBottomBar({
@@ -41,12 +42,12 @@ class DetailsBottomBar extends StatelessWidget {
               Text('price'.tr(),
                   style: AppStyles.regular12
                       .copyWith(color: cs.onSurfaceVariant)),
-              SizedBox(height: 2.h),
+              spaceH(2),
               Text(formatPrice(price),
                   style: AppStyles.bold24.copyWith(color: AppColors.primary)),
             ],
           ),
-          SizedBox(width: 16.w),
+          spaceW(16),
           Expanded(
             child: BlocConsumer<AddToCartCubit, AddToCartState>(
               listener: (context, s) {

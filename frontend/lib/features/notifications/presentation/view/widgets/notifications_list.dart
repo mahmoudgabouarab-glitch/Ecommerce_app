@@ -7,6 +7,7 @@ import '../../../../../core/widgets/skeletons.dart';
 import '../../../../../core/widgets/state_views.dart';
 import '../../view_model/notifications_cubit/notifications_cubit.dart';
 import 'notification_tile.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class NotificationsList extends StatelessWidget {
   const NotificationsList({super.key});
@@ -33,7 +34,7 @@ class NotificationsList extends StatelessWidget {
         return ListView.separated(
           padding: EdgeInsets.all(16.w),
           itemCount: items.length,
-          separatorBuilder: (_, _) => SizedBox(height: 10.h),
+          separatorBuilder: (_, _) => spaceH(10),
           itemBuilder: (context, i) => NotificationTile(item: items[i]),
         );
       },

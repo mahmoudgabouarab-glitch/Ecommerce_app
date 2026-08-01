@@ -8,6 +8,7 @@ import '../../../../../../core/utils/recently_viewed.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../../data/models/product_model.dart';
 import '../../details_view.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class RecentlyViewedSection extends StatelessWidget {
   const RecentlyViewedSection({super.key});
@@ -23,18 +24,18 @@ class RecentlyViewedSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('recently_viewed'.tr(), style: AppStyles.bold20),
-            SizedBox(height: 14.h),
+            spaceH(14),
             SizedBox(
               height: 215.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 clipBehavior: Clip.none,
                 itemCount: products.length,
-                separatorBuilder: (_, _) => SizedBox(width: 12.w),
+                separatorBuilder: (_, _) => spaceW(12),
                 itemBuilder: (_, i) => _RecentCard(product: products[i]),
               ),
             ),
-            SizedBox(height: 22.h),
+            spaceH(22),
           ],
         );
       },
@@ -84,7 +85,7 @@ class _RecentCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppStyles.semiBold14),
-                  SizedBox(height: 6.h),
+                  spaceH(6),
                   Text(formatPrice(product.effectivePrice),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

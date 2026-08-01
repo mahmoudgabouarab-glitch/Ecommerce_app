@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../utils/app_colors.dart';
 import '../utils/styles.dart';
+import '../../core/utils/spacing.dart';
 
 class EmptyState extends StatelessWidget {
   const EmptyState({
@@ -33,10 +34,10 @@ class EmptyState extends StatelessWidget {
               ),
               child: Icon(icon, size: 44.r, color: AppColors.primary),
             ),
-            SizedBox(height: 18.h),
+            spaceH(18),
             Text(title, style: AppStyles.bold20, textAlign: TextAlign.center),
             if (subtitle != null) ...[
-              SizedBox(height: 8.h),
+              spaceH(8),
               Text(
                 subtitle!,
                 textAlign: TextAlign.center,
@@ -66,12 +67,12 @@ class ErrorState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.cloud_off_rounded, size: 44.r, color: cs.onSurfaceVariant),
-            SizedBox(height: 14.h),
+            spaceH(14),
             Text(message,
                 textAlign: TextAlign.center,
                 style: AppStyles.regular14.copyWith(color: cs.onSurfaceVariant)),
             if (onRetry != null) ...[
-              SizedBox(height: 16.h),
+              spaceH(16),
               OutlinedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh, color: AppColors.primary),

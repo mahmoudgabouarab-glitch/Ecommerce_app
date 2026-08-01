@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../../data/models/product_model.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class ProductInfo extends StatelessWidget {
   const ProductInfo({super.key, required this.product});
@@ -22,16 +23,16 @@ class ProductInfo extends StatelessWidget {
               _Pill(text: product.categoryName!),
             const Spacer(),
             Icon(Icons.star_rounded, color: AppColors.star, size: 20.r),
-            SizedBox(width: 4.w),
+            spaceW(4),
             Text('${product.rating}', style: AppStyles.semiBold14),
             Text('  (${product.ratingCount})',
                 style: AppStyles.regular12.copyWith(color: cs.onSurfaceVariant)),
           ],
         ),
-        SizedBox(height: 14.h),
+        spaceH(14),
         Text(product.title, style: AppStyles.bold24),
         if (product.brand != null) ...[
-          SizedBox(height: 6.h),
+          spaceH(6),
           Text('by ${product.brand}',
               style: AppStyles.regular14.copyWith(color: cs.onSurfaceVariant)),
         ],

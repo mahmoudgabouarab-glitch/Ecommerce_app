@@ -11,6 +11,7 @@ import '../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../core/widgets/state_views.dart';
 import '../../../data/models/admin_user_model.dart';
 import '../../view_model/admin_users_cubit/admin_users_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class AdminUsersTab extends StatefulWidget {
   const AdminUsersTab({super.key});
@@ -90,7 +91,7 @@ class _AdminUsersTabState extends State<AdminUsersTab> {
               return ListView.separated(
                 padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 24.h),
                 itemCount: users.length,
-                separatorBuilder: (_, _) => SizedBox(height: 12.h),
+                separatorBuilder: (_, _) => spaceH(12),
                 itemBuilder: (context, i) => _UserTile(
                   user: users[i],
                   isUpdating: updatingId == users[i].id,
@@ -135,7 +136,7 @@ class _UserTile extends StatelessWidget {
                   )
                 : null,
           ),
-          SizedBox(width: 12.w),
+          spaceW(12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,11 +148,11 @@ class _UserTile extends StatelessWidget {
                           style: AppStyles.semiBold14,
                           overflow: TextOverflow.ellipsis),
                     ),
-                    SizedBox(width: 8.w),
+                    spaceW(8),
                     _RoleChip(isAdmin: user.isAdmin),
                   ],
                 ),
-                SizedBox(height: 3.h),
+                spaceH(3),
                 Text(user.email,
                     style: AppStyles.regular12
                         .copyWith(color: cs.onSurfaceVariant),
@@ -159,7 +160,7 @@ class _UserTile extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 8.w),
+          spaceW(8),
           if (isUpdating)
             SizedBox(
               width: 22.r,
@@ -200,7 +201,7 @@ class _UserActionsMenu extends StatelessWidget {
                       ? Icons.remove_moderator_outlined
                       : Icons.admin_panel_settings_outlined,
                   size: 19.r),
-              SizedBox(width: 10.w),
+              spaceW(10),
               Text(makeCustomer ? 'remove_admin'.tr() : 'make_admin'.tr()),
             ],
           ),
@@ -210,7 +211,7 @@ class _UserActionsMenu extends StatelessWidget {
           child: Row(
             children: [
               Icon(Icons.delete_outline, size: 19.r, color: AppColors.danger),
-              SizedBox(width: 10.w),
+              spaceW(10),
               Text('delete_user'.tr(),
                   style: const TextStyle(color: AppColors.danger)),
             ],

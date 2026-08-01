@@ -8,6 +8,7 @@ import '../../../../../core/utils/app_functions.dart';
 import '../../../../../core/utils/styles.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../view_model/checkout_cubit/checkout_cubit.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class CheckoutSummaryBar extends StatelessWidget {
   const CheckoutSummaryBar({
@@ -39,18 +40,18 @@ class CheckoutSummaryBar extends StatelessWidget {
             children: [
               _row(context, 'subtotal'.tr(), subtotal),
               if (discount > 0) ...[
-                SizedBox(height: 6.h),
+                spaceH(6),
                 _row(context, 'discount'.tr(), -discount,
                     valueColor: AppColors.success),
               ],
-              SizedBox(height: 6.h),
+              spaceH(6),
               _row(context, 'shipping'.tr(), shippingFee),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),
                 child: Divider(color: cs.outlineVariant, height: 1),
               ),
               _row(context, 'total'.tr(), total, bold: true),
-              SizedBox(height: 14.h),
+              spaceH(14),
               CustomButton(
                 text: 'place_order'.tr(),
                 isLoading: isLoading,

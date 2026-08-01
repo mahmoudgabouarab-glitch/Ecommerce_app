@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/utils/styles.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class CompareEmptyState extends StatelessWidget {
   const CompareEmptyState({super.key});
@@ -16,7 +17,7 @@ class CompareEmptyState extends StatelessWidget {
         children: [
           Icon(Icons.compare_arrows_rounded,
               size: 64.r, color: cs.onSurfaceVariant),
-          SizedBox(height: 12.h),
+          spaceH(12),
           Text('compare_empty'.tr(),
               textAlign: TextAlign.center,
               style: AppStyles.regular14.copyWith(color: cs.onSurfaceVariant)),

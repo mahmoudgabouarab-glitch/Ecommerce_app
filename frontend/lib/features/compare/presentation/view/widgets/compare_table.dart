@@ -8,6 +8,7 @@ import '../../../../../core/utils/styles.dart';
 import '../../../../home/data/models/product_model.dart';
 import 'compare_attribute_row.dart';
 import 'compare_header.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class CompareTable extends StatelessWidget {
   const CompareTable({super.key, required this.products});
@@ -63,7 +64,7 @@ class CompareTable extends StatelessWidget {
                   cells:
                       products.map((p) => _stockCell(context, p)).toList(),
                 ),
-                SizedBox(height: 24.h),
+                spaceH(24),
               ],
             ),
           ),
@@ -86,7 +87,7 @@ class CompareTable extends StatelessWidget {
               children: [
                 Icon(Icons.check_circle_rounded,
                     size: 13.r, color: AppColors.success),
-                SizedBox(width: 3.w),
+                spaceW(3),
                 Text(text,
                     style: AppStyles.semiBold14
                         .copyWith(color: AppColors.success)),
@@ -106,11 +107,11 @@ class CompareTable extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.star_rounded, size: 16.r, color: AppColors.star),
-          SizedBox(width: 3.w),
+          spaceW(3),
           Text('${p.rating}',
               style: AppStyles.semiBold14.copyWith(
                   color: win ? AppColors.success : cs.onSurface)),
-          SizedBox(width: 2.w),
+          spaceW(2),
           Text('(${p.ratingCount})',
               style: AppStyles.regular12.copyWith(color: cs.onSurfaceVariant)),
         ],

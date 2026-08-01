@@ -13,6 +13,7 @@ import '../../../../data/models/product_model.dart';
 import '../../../view_model/deals_cubit/deals_cubit.dart';
 import '../../details_view.dart';
 import 'home_shimmers.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class FlashDealsSection extends StatefulWidget {
   const FlashDealsSection({super.key});
@@ -62,23 +63,23 @@ class _FlashDealsSectionState extends State<FlashDealsSection> {
             Row(
               children: [
                 Text('🔥', style: TextStyle(fontSize: 18.sp)),
-                SizedBox(width: 6.w),
+                spaceW(6),
                 Text('flash_deals'.tr(), style: AppStyles.bold20),
               ],
             ),
-            SizedBox(height: 14.h),
+            spaceH(14),
             SizedBox(
               height: 262.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 clipBehavior: Clip.none,
                 itemCount: deals.length,
-                separatorBuilder: (_, _) => SizedBox(width: 12.w),
+                separatorBuilder: (_, _) => spaceW(12),
                 itemBuilder: (_, i) =>
                     _DealCard(product: deals[i], remaining: deals[i].dealEndsAt!.difference(now)),
               ),
             ),
-            SizedBox(height: 22.h),
+            spaceH(22),
           ],
         );
       },
@@ -150,7 +151,7 @@ class _DealCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppStyles.semiBold14),
-                  SizedBox(height: 6.h),
+                  spaceH(6),
                   Row(
                     children: [
                       Flexible(
@@ -159,7 +160,7 @@ class _DealCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: AppStyles.price),
                       ),
-                      SizedBox(width: 6.w),
+                      spaceW(6),
                       Flexible(
                         child: Text(formatPrice(product.price),
                             maxLines: 1,
@@ -171,7 +172,7 @@ class _DealCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8.h),
+                  spaceH(8),
                   _CountdownChip(remaining: remaining),
                 ],
               ),
@@ -205,7 +206,7 @@ class _CountdownChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.timer_outlined, size: 14.r, color: AppColors.primary),
-          SizedBox(width: 5.w),
+          spaceW(5),
           Text(_fmt(remaining),
               style: AppStyles.semiBold14
                   .copyWith(color: AppColors.primary, fontSize: 12.sp)),

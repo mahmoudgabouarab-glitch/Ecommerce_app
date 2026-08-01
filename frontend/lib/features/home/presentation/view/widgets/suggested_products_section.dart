@@ -9,6 +9,7 @@ import '../../../data/models/product_model.dart';
 import '../../view_model/suggested_cubit/suggested_cubit.dart';
 import '../details_view.dart';
 import 'home/home_shimmers.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class SuggestedProductsSection extends StatelessWidget {
   const SuggestedProductsSection({super.key, required this.title});
@@ -24,9 +25,9 @@ class SuggestedProductsSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title, style: AppStyles.bold20),
-              SizedBox(height: 14.h),
+              spaceH(14),
               HCardsShimmer(height: 235.h),
-              SizedBox(height: 22.h),
+              spaceH(22),
             ],
           );
         }
@@ -38,18 +39,18 @@ class SuggestedProductsSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(title, style: AppStyles.bold20),
-            SizedBox(height: 14.h),
+            spaceH(14),
             SizedBox(
               height: 235.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 clipBehavior: Clip.none,
                 itemCount: products.length,
-                separatorBuilder: (_, _) => SizedBox(width: 12.w),
+                separatorBuilder: (_, _) => spaceW(12),
                 itemBuilder: (_, i) => _SuggestedCard(product: products[i]),
               ),
             ),
-            SizedBox(height: 22.h),
+            spaceH(22),
           ],
         );
       },
@@ -99,18 +100,18 @@ class _SuggestedCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppStyles.semiBold14),
-                  SizedBox(height: 4.h),
+                  spaceH(4),
                   Row(
                     children: [
                       Icon(Icons.star_rounded,
                           color: AppColors.star, size: 14.r),
-                      SizedBox(width: 3.w),
+                      spaceW(3),
                       Text('${product.rating}',
                           style: AppStyles.regular12
                               .copyWith(color: cs.onSurfaceVariant)),
                     ],
                   ),
-                  SizedBox(height: 6.h),
+                  spaceH(6),
                   Text(formatPrice(product.effectivePrice),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

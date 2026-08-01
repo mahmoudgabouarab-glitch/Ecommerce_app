@@ -16,6 +16,7 @@ import 'rating_summary.dart';
 import 'reviews_section.dart';
 import 'stock_status.dart';
 import 'variant_selector.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class DetailsBody extends StatelessWidget {
   const DetailsBody({super.key});
@@ -71,25 +72,25 @@ class _DetailsContentState extends State<_DetailsContent> {
                 images: product.images,
                 heroTag: 'product-image-${product.id}',
               ),
-              SizedBox(height: 20.h),
+              spaceH(20),
               ProductInfo(product: product),
               if (product.variants.isNotEmpty) ...[
-                SizedBox(height: 18.h),
+                spaceH(18),
                 VariantSelector(
                   product: product,
                   selected: _selected,
                   onSelect: (v) => setState(() => _selected = v),
                 ),
               ],
-              SizedBox(height: 18.h),
+              spaceH(18),
               ProductDescription(product: product),
-              SizedBox(height: 18.h),
+              spaceH(18),
               StockStatus(product: product),
-              SizedBox(height: 24.h),
+              spaceH(24),
               RatingSummary(product: product),
-              SizedBox(height: 16.h),
+              spaceH(16),
               ReviewsSection(productId: product.id),
-              SizedBox(height: 28.h),
+              spaceH(28),
               SuggestedProductsSection(title: 'similar_products'.tr()),
             ],
           ),

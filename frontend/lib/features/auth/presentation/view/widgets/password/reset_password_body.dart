@@ -8,6 +8,7 @@ import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../../core/widgets/custom_text_field.dart';
 import '../../../view_model/password_cubit/password_cubit.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class ResetPasswordBody extends StatefulWidget {
   const ResetPasswordBody({super.key, required this.email});
@@ -48,18 +49,18 @@ class _ResetPasswordBodyState extends State<ResetPasswordBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 12.h),
+              spaceH(12),
               Text('reset_subtitle'.tr(),
                   style: AppStyles.regular14
                       .copyWith(color: AppStyles.muted(context))),
-              SizedBox(height: 20.h),
+              spaceH(20),
               CustomTextField(
                 controller: _otpController,
                 hint: 'reset_code'.tr(),
                 icon: Icons.pin_outlined,
                 keyboardType: TextInputType.number,
               ),
-              SizedBox(height: 16.h),
+              spaceH(16),
               CustomTextField(
                 controller: _passController,
                 hint: 'new_password'.tr(),
@@ -68,7 +69,7 @@ class _ResetPasswordBodyState extends State<ResetPasswordBody> {
                 validator: (v) =>
                     (v != null && v.length >= 6) ? null : 'password_min'.tr(),
               ),
-              SizedBox(height: 28.h),
+              spaceH(28),
               CustomButton(
                 text: 'reset_password'.tr(),
                 isLoading: state is PasswordLoading,

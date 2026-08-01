@@ -12,6 +12,7 @@ import '../../../../../core/widgets/state_views.dart';
 import '../../../../home/data/models/product_model.dart';
 import '../../view_model/admin_products_cubit/admin_products_cubit.dart';
 import 'product_form_sheet.dart';
+import '../../../../../core/utils/spacing.dart';
 
 class AdminProductsTab extends StatelessWidget {
   const AdminProductsTab({super.key});
@@ -45,7 +46,7 @@ class AdminProductsTab extends StatelessWidget {
           return ListView.separated(
             padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 90.h),
             itemCount: products.length,
-            separatorBuilder: (_, _) => SizedBox(height: 12.h),
+            separatorBuilder: (_, _) => spaceH(12),
             itemBuilder: (context, i) => _AdminProductTile(product: products[i]),
           );
         },
@@ -83,7 +84,7 @@ class _AdminProductTile extends StatelessWidget {
                   Icon(Icons.image_outlined, color: cs.onSurfaceVariant),
             ),
           ),
-          SizedBox(width: 12.w),
+          spaceW(12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +93,7 @@ class _AdminProductTile extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppStyles.semiBold14),
-                SizedBox(height: 2.h),
+                spaceH(2),
                 Text(
                     '${formatPrice(product.effectivePrice)} • ${'stock'.tr()} ${product.stock}',
                     maxLines: 1,

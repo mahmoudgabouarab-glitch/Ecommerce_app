@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../core/utils/spacing.dart';
 
 class ShimmerWrap extends StatelessWidget {
   const ShimmerWrap({super.key, required this.child});
@@ -30,7 +31,7 @@ class ListRowsShimmer extends StatelessWidget {
         padding: EdgeInsets.all(16.w),
         physics: const NeverScrollableScrollPhysics(),
         itemCount: count,
-        separatorBuilder: (_, _) => SizedBox(height: 12.h),
+        separatorBuilder: (_, _) => spaceH(12),
         itemBuilder: (_, _) => Container(
           height: rowHeight.h,
           decoration: BoxDecoration(
@@ -68,15 +69,15 @@ class DetailsShimmer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 bar(220.w, 22),
-                SizedBox(height: 12.h),
+                spaceH(12),
                 bar(120.w, 18),
-                SizedBox(height: 20.h),
+                spaceH(20),
                 bar(double.infinity, 14),
-                SizedBox(height: 10.h),
+                spaceH(10),
                 bar(double.infinity, 14),
-                SizedBox(height: 10.h),
+                spaceH(10),
                 bar(240.w, 14),
-                SizedBox(height: 24.h),
+                spaceH(24),
                 Row(
                   children: List.generate(
                     3,

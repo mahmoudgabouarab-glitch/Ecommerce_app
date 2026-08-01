@@ -6,6 +6,7 @@ import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/styles.dart';
 import '../../../../../../core/widgets/custom_button.dart';
 import '../../../view_model/products_cubit/products_cubit.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class ProductsHeader extends StatelessWidget {
   const ProductsHeader({super.key});
@@ -97,9 +98,9 @@ class _FilterSheetState extends State<_FilterSheet> {
                 ),
               ),
             ),
-            SizedBox(height: 16.h),
+            spaceH(16),
             Text('filter_sort'.tr(), style: AppStyles.bold20),
-            SizedBox(height: 20.h),
+            spaceH(20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -122,9 +123,9 @@ class _FilterSheetState extends State<_FilterSheet> {
               ),
               onChanged: (v) => setState(() => _range = v),
             ),
-            SizedBox(height: 12.h),
+            spaceH(12),
             Text('sort_by'.tr(), style: AppStyles.semiBold16),
-            SizedBox(height: 10.h),
+            spaceH(10),
             Wrap(
               spacing: 10.w,
               runSpacing: 10.h,
@@ -156,7 +157,7 @@ class _FilterSheetState extends State<_FilterSheet> {
                 );
               }).toList(),
             ),
-            SizedBox(height: 24.h),
+            spaceH(24),
             Row(
               children: [
                 Expanded(
@@ -169,7 +170,7 @@ class _FilterSheetState extends State<_FilterSheet> {
                     },
                   ),
                 ),
-                SizedBox(width: 12.w),
+                spaceW(12),
                 Expanded(
                   child: CustomButton(
                     text: 'apply'.tr(),

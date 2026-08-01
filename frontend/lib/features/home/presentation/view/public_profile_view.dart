@@ -11,6 +11,7 @@ import '../../../../core/utils/styles.dart';
 import '../../../../core/widgets/state_views.dart';
 import '../../data/models/public_profile_model.dart';
 import '../../data/repo/home_repo_impl.dart';
+import '../../../../core/utils/spacing.dart';
 
 class PublicProfileView extends StatefulWidget {
   const PublicProfileView({
@@ -83,14 +84,14 @@ class _ProfileContent extends StatelessWidget {
               children: [
                 _StatsRow(profile: profile),
                 if (profile.bio != null && profile.bio!.trim().isNotEmpty) ...[
-                  SizedBox(height: 22.h),
+                  spaceH(22),
                   _SectionLabel('bio'.tr()),
-                  SizedBox(height: 10.h),
+                  spaceH(10),
                   _BioCard(bio: profile.bio!.trim()),
                 ],
-                SizedBox(height: 22.h),
+                spaceH(22),
                 _SectionLabel('details'.tr()),
-                SizedBox(height: 10.h),
+                spaceH(10),
                 _DetailsCard(profile: profile),
               ],
             ),
@@ -145,12 +146,12 @@ class _Header extends StatelessWidget {
                   : null,
             ),
           ),
-          SizedBox(height: 14.h),
+          spaceH(14),
           Text(profile.name,
               style: AppStyles.bold24.copyWith(color: Colors.white),
               textAlign: TextAlign.center),
           if (profile.memberSince != null) ...[
-            SizedBox(height: 6.h),
+            spaceH(6),
             Text('${'member_since'.tr()} ${profile.memberSince}',
                 style: AppStyles.regular14
                     .copyWith(color: Colors.white.withValues(alpha: 0.85))),
@@ -202,9 +203,9 @@ class _StatTile extends StatelessWidget {
             ),
             child: Icon(icon, color: AppColors.primary, size: 22.r),
           ),
-          SizedBox(width: 14.w),
+          spaceW(14),
           Text(value, style: AppStyles.bold24),
-          SizedBox(width: 8.w),
+          spaceW(8),
           Text(label,
               style:
                   AppStyles.regular14.copyWith(color: cs.onSurfaceVariant)),
@@ -306,7 +307,7 @@ class _DetailRow extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, size: 22.r, color: AppColors.primary),
-          SizedBox(width: 14.w),
+          spaceW(14),
           Text(label,
               style:
                   AppStyles.regular14.copyWith(color: cs.onSurfaceVariant)),

@@ -11,6 +11,7 @@ import '../../../../../../core/widgets/custom_snackbar.dart';
 import '../../../../../../core/widgets/custom_text_field.dart';
 import '../../../view_model/password_cubit/password_cubit.dart';
 import '../../reset_password_view.dart';
+import '../../../../../../core/utils/spacing.dart';
 
 class ForgotPasswordBody extends StatefulWidget {
   const ForgotPasswordBody({super.key});
@@ -46,23 +47,23 @@ class _ForgotPasswordBodyState extends State<ForgotPasswordBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20.h),
+            spaceH(20),
             Icon(Icons.lock_reset_rounded,
                 color: AppColors.primary, size: 56.r),
-            SizedBox(height: 20.h),
+            spaceH(20),
             Text('reset_password'.tr(), style: AppStyles.bold24),
-            SizedBox(height: 8.h),
+            spaceH(8),
             Text('forgot_subtitle'.tr(),
                 style: AppStyles.regular14
                     .copyWith(color: AppStyles.muted(context))),
-            SizedBox(height: 28.h),
+            spaceH(28),
             CustomTextField(
               controller: _emailController,
               hint: 'email'.tr(),
               icon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
             ),
-            SizedBox(height: 28.h),
+            spaceH(28),
             CustomButton(
               text: 'send_code'.tr(),
               isLoading: state is PasswordLoading,
