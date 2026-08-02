@@ -1,12 +1,12 @@
-# Bazar — Full-Stack E-Commerce App
+# Bazar — Flutter E-Commerce App
 
-A complete shopping application built with a **Flutter** mobile client and a
-**Laravel 10 REST API**. It covers the full commerce flow — browsing, search,
-cart, checkout, orders — plus a built-in **admin panel** for managing products,
-categories, coupons, and orders.
+A complete shopping application built with a **Flutter** mobile client that
+consumes a **Laravel REST API**. It covers the full commerce flow — browsing,
+search, cart, checkout, orders — plus a built-in **admin panel** for managing
+products, categories, coupons, and orders.
 
-- **Frontend:** Flutter (Dart) · BLoC/Cubit · clean feature-first architecture
-- **Backend:** Laravel 10 · Sanctum token auth · MySQL
+- **App (my work):** Flutter (Dart) · BLoC/Cubit · clean feature-first architecture
+- **API:** consumes a Laravel REST API (included in this repo so the full stack can be run locally)
 - **Languages:** English + Arabic (RTL) · Light + Dark themes
 
 ---
@@ -73,7 +73,7 @@ categories, coupons, and orders.
 | Tooling | `flutter_launcher_icons` |
 | Localization | `easy_localization` (ar / en) |
 | Storage | `shared_preferences` |
-| Backend | Laravel 10, Sanctum, Eloquent, MySQL |
+| Companion API | Laravel 10, Sanctum, MySQL *(consumed by the app, not part of my work)* |
 
 ---
 
@@ -92,7 +92,7 @@ ecommerce_app/
 │   │               ├── data/          (models, repo, repo_impl)
 │   │               └── presentation/  (view, view_model/cubit)
 │   └── assets/translations/  # en.json, ar.json
-└── backend/                  # Laravel API
+└── backend/                  # companion Laravel API (consumed by the app)
     ├── app/Http/Controllers  # Auth, Product, Cart, Order, Coupon, Admin…
     ├── app/Models
     ├── database/migrations
@@ -106,7 +106,10 @@ Each feature follows the same layering: **model → repo (abstract) → repo_imp
 
 ## Getting Started
 
-### 1. Backend (Laravel API)
+### 1. Companion API (Laravel)
+
+> The API is included so you can run the full stack locally. It is a companion
+> backend the app talks to — the focus of this project is the Flutter client.
 
 ```bash
 cd backend
