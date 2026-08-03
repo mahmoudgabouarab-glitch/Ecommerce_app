@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 import '../models/genie_message.dart';
 import 'genie_repo.dart';
@@ -16,7 +17,7 @@ class GenieRepoImpl implements GenieRepo {
       List<Map<String, String>> messages) async {
     try {
       final data = await _api.post(
-        endpoint: "genie/chat",
+        endpoint: ApiEndpoints.genieChat,
         data: {"messages": messages},
       );
       return Right(GenieReply.fromJson(data));

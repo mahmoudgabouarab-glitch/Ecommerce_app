@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 import '../models/cart_model.dart';
 import 'cart_repo.dart';
@@ -14,7 +15,7 @@ class CartRepoImpl implements CartRepo {
   @override
   Future<Either<Failure, CartResponse>> getCart() async {
     try {
-      final data = await _api.get(endpoint: "cart");
+      final data = await _api.get(endpoint: ApiEndpoints.cart);
       return Right(CartResponse.fromJson(data));
     } catch (e) {
       return Left(_handle(e));
@@ -29,7 +30,7 @@ class CartRepoImpl implements CartRepo {
   }) async {
     try {
       await _api.post(
-        endpoint: "cart",
+        endpoint: ApiEndpoints.cart,
         data: {
           "product_id": productId,
           "quantity": quantity,
@@ -48,7 +49,7 @@ class CartRepoImpl implements CartRepo {
     required int quantity,
   }) async {
     try {
-      await _api.put(endpoint: "cart/$cartItemId", data: {"quantity": quantity});
+      await _api.put(endpoint: ApiEndpoints.cartItem(cartItemId), data: {"quantity": quantity});
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -58,7 +59,7 @@ class CartRepoImpl implements CartRepo {
   @override
   Future<Either<Failure, Unit>> removeItem(int cartItemId) async {
     try {
-      await _api.delete(endpoint: "cart/$cartItemId");
+      await _api.delete(endpoint: ApiEndpoints.cartItem(cartItemId));
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));

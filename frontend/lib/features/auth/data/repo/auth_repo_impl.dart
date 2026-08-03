@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 import '../models/auth_model.dart';
 import 'auth_repo.dart';
@@ -18,7 +19,7 @@ class AuthRepoImpl implements AuthRepo {
   }) async {
     try {
       final data = await _api.post(
-        endpoint: "login",
+        endpoint: ApiEndpoints.login,
         data: {"email": email, "password": password},
       );
       return Right(AuthModel.fromJson(data));
@@ -50,7 +51,7 @@ class AuthRepoImpl implements AuthRepo {
   }) async {
     try {
       final data = await _api.post(
-        endpoint: "register",
+        endpoint: ApiEndpoints.register,
         data: {
           "name": name,
           "email": email,
@@ -73,7 +74,7 @@ class AuthRepoImpl implements AuthRepo {
   }) async {
     try {
       final data = await _api.post(
-        endpoint: "email/verify",
+        endpoint: ApiEndpoints.emailVerify,
         data: {"email": email, "code": code},
       );
       return Right(AuthModel.fromJson(data));
@@ -85,7 +86,7 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<Either<Failure, Unit>> resendCode(String email) async {
     try {
-      await _api.post(endpoint: "email/resend", data: {"email": email});
+      await _api.post(endpoint: ApiEndpoints.emailResend, data: {"email": email});
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -95,7 +96,7 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<Either<Failure, Unit>> logout() async {
     try {
-      await _api.post(endpoint: "logout");
+      await _api.post(endpoint: ApiEndpoints.logout);
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -105,7 +106,7 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<Either<Failure, Unit>> forgotPassword(String email) async {
     try {
-      await _api.post(endpoint: "password/forgot", data: {"email": email});
+      await _api.post(endpoint: ApiEndpoints.passwordForgot, data: {"email": email});
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -120,7 +121,7 @@ class AuthRepoImpl implements AuthRepo {
   }) async {
     try {
       await _api.post(
-        endpoint: "password/reset",
+        endpoint: ApiEndpoints.passwordReset,
         data: {
           "email": email,
           "otp": otp,
@@ -141,7 +142,7 @@ class AuthRepoImpl implements AuthRepo {
   }) async {
     try {
       await _api.post(
-        endpoint: "password/change",
+        endpoint: ApiEndpoints.passwordChange,
         data: {
           "current_password": currentPassword,
           "password": password,

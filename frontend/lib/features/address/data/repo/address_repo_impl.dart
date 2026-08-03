@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 import '../models/address_model.dart';
 import 'address_repo.dart';
@@ -14,7 +15,7 @@ class AddressRepoImpl implements AddressRepo {
   @override
   Future<Either<Failure, List<AddressModel>>> getAddresses() async {
     try {
-      final data = await _api.get(endpoint: "addresses");
+      final data = await _api.get(endpoint: ApiEndpoints.addresses);
       final list = (data['data'] as List<dynamic>? ?? [])
           .map((e) => AddressModel.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -42,8 +43,8 @@ class AddressRepoImpl implements AddressRepo {
         "is_default": isDefault,
       };
       final data = id == null
-          ? await _api.post(endpoint: "addresses", data: body)
-          : await _api.put(endpoint: "addresses/$id", data: body);
+          ? await _api.post(endpoint: ApiEndpoints.addresses, data: body)
+          : await _api.put(endpoint: ApiEndpoints.address(id), data: body);
       final map = data['data'] as Map<String, dynamic>? ?? data;
       return Right(AddressModel.fromJson(map));
     } catch (e) {
@@ -54,7 +55,7 @@ class AddressRepoImpl implements AddressRepo {
   @override
   Future<Either<Failure, Unit>> delete(int id) async {
     try {
-      await _api.delete(endpoint: "addresses/$id");
+      await _api.delete(endpoint: ApiEndpoints.address(id));
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));

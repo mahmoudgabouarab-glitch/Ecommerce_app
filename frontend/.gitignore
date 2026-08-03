@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Secrets — real API base URL (copy api_env.example.dart -> api_env.dart)
+lib/core/network/api_env.dart

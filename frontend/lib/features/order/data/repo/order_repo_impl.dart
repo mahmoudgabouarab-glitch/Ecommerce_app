@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 import '../models/order_model.dart';
 import 'order_repo.dart';
@@ -20,7 +21,7 @@ class OrderRepoImpl implements OrderRepo {
   }) async {
     try {
       final data = await _api.post(
-        endpoint: "addresses",
+        endpoint: ApiEndpoints.addresses,
         data: {
           "full_name": fullName,
           "phone": phone,
@@ -43,7 +44,7 @@ class OrderRepoImpl implements OrderRepo {
   }) async {
     try {
       final data = await _api.post(
-        endpoint: "orders",
+        endpoint: ApiEndpoints.orders,
         data: {
           "address_id": addressId,
           "payment_method": paymentMethod,
@@ -61,7 +62,7 @@ class OrderRepoImpl implements OrderRepo {
   @override
   Future<Either<Failure, OrdersResponse>> getOrders() async {
     try {
-      final data = await _api.get(endpoint: "orders");
+      final data = await _api.get(endpoint: ApiEndpoints.orders);
       return Right(OrdersResponse.fromJson(data));
     } catch (e) {
       return Left(_handle(e));
@@ -71,7 +72,7 @@ class OrderRepoImpl implements OrderRepo {
   @override
   Future<Either<Failure, OrderModel>> getOrder(int orderId) async {
     try {
-      final data = await _api.get(endpoint: "orders/$orderId");
+      final data = await _api.get(endpoint: ApiEndpoints.order(orderId));
       final map = data['data'] as Map<String, dynamic>? ?? data;
       return Right(OrderModel.fromJson(map));
     } catch (e) {
@@ -82,7 +83,7 @@ class OrderRepoImpl implements OrderRepo {
   @override
   Future<Either<Failure, String>> payCard(int orderId) async {
     try {
-      final data = await _api.post(endpoint: "orders/$orderId/pay");
+      final data = await _api.post(endpoint: ApiEndpoints.orderPay(orderId));
       return Right(data['iframe_url'] as String? ?? '');
     } catch (e) {
       return Left(_handle(e));
@@ -93,7 +94,7 @@ class OrderRepoImpl implements OrderRepo {
   Future<Either<Failure, double>> applyCoupon(String code) async {
     try {
       final data = await _api.post(
-        endpoint: "coupons/apply",
+        endpoint: ApiEndpoints.couponsApply,
         data: {"code": code},
       );
       final discount = data['discount'];
@@ -109,7 +110,7 @@ class OrderRepoImpl implements OrderRepo {
   @override
   Future<Either<Failure, Unit>> cancelOrder(int orderId) async {
     try {
-      await _api.patch(endpoint: "orders/$orderId/cancel");
+      await _api.patch(endpoint: ApiEndpoints.orderCancel(orderId));
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 import '../models/banner_model.dart';
 import '../models/category_model.dart';
@@ -18,7 +19,7 @@ class HomeRepoImpl implements HomeRepo {
   @override
   Future<Either<Failure, List<BannerModel>>> getBanners() async {
     try {
-      final data = await _api.get(endpoint: "banners");
+      final data = await _api.get(endpoint: ApiEndpoints.banners);
       final list = (data['data'] as List<dynamic>? ?? [])
           .map((e) => BannerModel.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -31,7 +32,7 @@ class HomeRepoImpl implements HomeRepo {
   @override
   Future<Either<Failure, CategoriesResponse>> getCategories() async {
     try {
-      final data = await _api.get(endpoint: "categories");
+      final data = await _api.get(endpoint: ApiEndpoints.categories);
       return Right(CategoriesResponse.fromJson(data));
     } catch (e) {
       return Left(_handle(e));
@@ -51,7 +52,7 @@ class HomeRepoImpl implements HomeRepo {
   }) async {
     try {
       final data = await _api.get(
-        endpoint: "products",
+        endpoint: ApiEndpoints.products,
         queryParameters: {
           "page": page,
           "per_page": perPage,
@@ -72,7 +73,7 @@ class HomeRepoImpl implements HomeRepo {
   @override
   Future<Either<Failure, ProductModel>> getProductDetails(int id) async {
     try {
-      final data = await _api.get(endpoint: "products/$id");
+      final data = await _api.get(endpoint: ApiEndpoints.product(id));
       final map = data['data'] as Map<String, dynamic>? ?? data;
       if (data['ratings_breakdown'] != null) {
         map['ratings_breakdown'] = data['ratings_breakdown'];
@@ -86,7 +87,7 @@ class HomeRepoImpl implements HomeRepo {
   @override
   Future<Either<Failure, List<ProductModel>>> getRelated(int productId) async {
     try {
-      final data = await _api.get(endpoint: "products/$productId/related");
+      final data = await _api.get(endpoint: ApiEndpoints.productRelated(productId));
       final list = (data['data'] as List<dynamic>? ?? [])
           .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -99,7 +100,7 @@ class HomeRepoImpl implements HomeRepo {
   @override
   Future<Either<Failure, List<ProductModel>>> getDeals() async {
     try {
-      final data = await _api.get(endpoint: "products/deals");
+      final data = await _api.get(endpoint: ApiEndpoints.productsDeals);
       final list = (data['data'] as List<dynamic>? ?? [])
           .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -112,7 +113,7 @@ class HomeRepoImpl implements HomeRepo {
   @override
   Future<Either<Failure, List<ReviewModel>>> getReviews(int productId) async {
     try {
-      final data = await _api.get(endpoint: "products/$productId/reviews");
+      final data = await _api.get(endpoint: ApiEndpoints.productReviews(productId));
       final list = (data['data'] as List<dynamic>? ?? [])
           .map((e) => ReviewModel.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -130,7 +131,7 @@ class HomeRepoImpl implements HomeRepo {
   }) async {
     try {
       final data = await _api.post(
-        endpoint: "products/$productId/reviews",
+        endpoint: ApiEndpoints.productReviews(productId),
         data: {"rating": rating, "comment": comment},
       );
       final map = data['data'] as Map<String, dynamic>? ?? data;
@@ -144,7 +145,7 @@ class HomeRepoImpl implements HomeRepo {
   Future<Either<Failure, PublicProfileModel>> getPublicProfile(
       int userId) async {
     try {
-      final data = await _api.get(endpoint: "users/$userId/profile");
+      final data = await _api.get(endpoint: ApiEndpoints.userProfile(userId));
       return Right(PublicProfileModel.fromJson(data));
     } catch (e) {
       return Left(_handle(e));

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 import '../../../home/data/models/banner_model.dart';
 import '../../../home/data/models/product_model.dart';
@@ -19,7 +20,7 @@ class AdminRepoImpl implements AdminRepo {
   @override
   Future<Either<Failure, StatsModel>> getStats() async {
     try {
-      final data = await _api.get(endpoint: "admin/stats");
+      final data = await _api.get(endpoint: ApiEndpoints.adminStats);
       return Right(StatsModel.fromJson(data));
     } catch (e) {
       return Left(_handle(e));
@@ -30,7 +31,7 @@ class AdminRepoImpl implements AdminRepo {
   Future<Either<Failure, List<OrderModel>>> getAllOrders({String? status}) async {
     try {
       final data = await _api.get(
-        endpoint: "admin/orders",
+        endpoint: ApiEndpoints.adminOrders,
         queryParameters: {"status": ?status},
       );
       final list = (data['data'] as List<dynamic>? ?? [])
@@ -47,7 +48,7 @@ class AdminRepoImpl implements AdminRepo {
       int orderId, String status) async {
     try {
       await _api.patch(
-        endpoint: "admin/orders/$orderId/status",
+        endpoint: ApiEndpoints.adminOrderStatus(orderId),
         data: {"status": status},
       );
       return const Right(unit);
@@ -108,7 +109,7 @@ class AdminRepoImpl implements AdminRepo {
       if (id != null) field('_method', 'PUT');
 
       await _api.post(
-        endpoint: id == null ? "admin/products" : "admin/products/$id",
+        endpoint: id == null ? ApiEndpoints.adminProducts : ApiEndpoints.adminProduct(id),
         data: form,
       );
       return const Right(unit);
@@ -120,7 +121,7 @@ class AdminRepoImpl implements AdminRepo {
   @override
   Future<Either<Failure, Unit>> deleteProduct(int id) async {
     try {
-      await _api.delete(endpoint: "admin/products/$id");
+      await _api.delete(endpoint: ApiEndpoints.adminProduct(id));
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -145,7 +146,7 @@ class AdminRepoImpl implements AdminRepo {
       if (id != null) form.fields.add(const MapEntry('_method', 'PUT'));
 
       await _api.post(
-        endpoint: id == null ? "admin/categories" : "admin/categories/$id",
+        endpoint: id == null ? ApiEndpoints.adminCategories : ApiEndpoints.adminCategory(id),
         data: form,
       );
       return const Right(unit);
@@ -157,7 +158,7 @@ class AdminRepoImpl implements AdminRepo {
   @override
   Future<Either<Failure, Unit>> deleteCategory(int id) async {
     try {
-      await _api.delete(endpoint: "admin/categories/$id");
+      await _api.delete(endpoint: ApiEndpoints.adminCategory(id));
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -167,7 +168,7 @@ class AdminRepoImpl implements AdminRepo {
   @override
   Future<Either<Failure, List<CouponModel>>> getCoupons() async {
     try {
-      final data = await _api.get(endpoint: "admin/coupons");
+      final data = await _api.get(endpoint: ApiEndpoints.adminCoupons);
       final list = (data['data'] as List<dynamic>? ?? [])
           .map((e) => CouponModel.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -187,7 +188,7 @@ class AdminRepoImpl implements AdminRepo {
     bool isActive = true,
   }) async {
     try {
-      await _api.post(endpoint: "admin/coupons", data: {
+      await _api.post(endpoint: ApiEndpoints.adminCoupons, data: {
         "code": code,
         "discount_type": discountType,
         "amount": amount,
@@ -204,7 +205,7 @@ class AdminRepoImpl implements AdminRepo {
   @override
   Future<Either<Failure, Unit>> deleteCoupon(int id) async {
     try {
-      await _api.delete(endpoint: "admin/coupons/$id");
+      await _api.delete(endpoint: ApiEndpoints.adminCoupon(id));
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -215,7 +216,7 @@ class AdminRepoImpl implements AdminRepo {
   Future<Either<Failure, List<AdminUserModel>>> getUsers({String? search}) async {
     try {
       final data = await _api.get(
-        endpoint: "admin/users",
+        endpoint: ApiEndpoints.adminUsers,
         queryParameters: {"search": ?search},
       );
       final list = (data['data'] as List<dynamic>? ?? [])
@@ -232,7 +233,7 @@ class AdminRepoImpl implements AdminRepo {
       int id, String role) async {
     try {
       final data = await _api.patch(
-        endpoint: "admin/users/$id/role",
+        endpoint: ApiEndpoints.adminUserRole(id),
         data: {"role": role},
       );
       final map = (data['data'] ?? data) as Map<String, dynamic>;
@@ -245,7 +246,7 @@ class AdminRepoImpl implements AdminRepo {
   @override
   Future<Either<Failure, Unit>> deleteUser(int id) async {
     try {
-      await _api.delete(endpoint: "admin/users/$id");
+      await _api.delete(endpoint: ApiEndpoints.adminUser(id));
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -255,7 +256,7 @@ class AdminRepoImpl implements AdminRepo {
   @override
   Future<Either<Failure, List<BannerModel>>> getBanners() async {
     try {
-      final data = await _api.get(endpoint: "admin/banners");
+      final data = await _api.get(endpoint: ApiEndpoints.adminBanners);
       final list = (data['data'] as List<dynamic>? ?? [])
           .map((e) => BannerModel.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -295,7 +296,7 @@ class AdminRepoImpl implements AdminRepo {
       if (id != null) field('_method', 'PUT');
 
       await _api.post(
-        endpoint: id == null ? "admin/banners" : "admin/banners/$id",
+        endpoint: id == null ? ApiEndpoints.adminBanners : ApiEndpoints.adminBanner(id),
         data: form,
       );
       return const Right(unit);
@@ -307,7 +308,7 @@ class AdminRepoImpl implements AdminRepo {
   @override
   Future<Either<Failure, Unit>> deleteBanner(int id) async {
     try {
-      await _api.delete(endpoint: "admin/banners/$id");
+      await _api.delete(endpoint: ApiEndpoints.adminBanner(id));
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 import '../models/notification_model.dart';
 import 'notifications_repo.dart';
@@ -14,7 +15,7 @@ class NotificationsRepoImpl implements NotificationsRepo {
   @override
   Future<Either<Failure, NotificationsResponse>> getNotifications() async {
     try {
-      final data = await _api.get(endpoint: "notifications");
+      final data = await _api.get(endpoint: ApiEndpoints.notifications);
       return Right(NotificationsResponse.fromJson(data));
     } catch (e) {
       return Left(_handle(e));
@@ -24,7 +25,7 @@ class NotificationsRepoImpl implements NotificationsRepo {
   @override
   Future<Either<Failure, Unit>> markAllRead() async {
     try {
-      await _api.post(endpoint: "notifications/read-all");
+      await _api.post(endpoint: ApiEndpoints.notificationsReadAll);
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -34,7 +35,7 @@ class NotificationsRepoImpl implements NotificationsRepo {
   @override
   Future<Either<Failure, Unit>> markRead(int id) async {
     try {
-      await _api.patch(endpoint: "notifications/$id/read");
+      await _api.patch(endpoint: ApiEndpoints.notificationRead(id));
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));
@@ -48,7 +49,7 @@ class NotificationsRepoImpl implements NotificationsRepo {
   }) async {
     try {
       await _api.post(
-        endpoint: "device-tokens",
+        endpoint: ApiEndpoints.deviceTokens,
         data: {"token": token, "platform": ?platform},
       );
       return const Right(unit);
@@ -60,7 +61,7 @@ class NotificationsRepoImpl implements NotificationsRepo {
   @override
   Future<Either<Failure, Unit>> unregisterDevice(String token) async {
     try {
-      await _api.delete(endpoint: "device-tokens", data: {"token": token});
+      await _api.delete(endpoint: ApiEndpoints.deviceTokens, data: {"token": token});
       return const Right(unit);
     } catch (e) {
       return Left(_handle(e));

@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+import 'api_env.dart';
 import 'cache_helper.dart';
 import 'cache_keys.dart';
 
 class ApiServise {
-  static const String _defaultBaseUrl =
-      "https://ecommerceapp-production-620e.up.railway.app/api/";
   final String _baseUrl = const String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: _defaultBaseUrl,
+    defaultValue: kApiBaseUrl,
   );
   final Dio _dio;
 

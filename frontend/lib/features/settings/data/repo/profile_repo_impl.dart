@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 import '../../../auth/data/models/auth_model.dart';
 import 'profile_repo.dart';
@@ -32,7 +33,7 @@ class ProfileRepoImpl implements ProfileRepo {
         if (avatarPath != null)
           'avatar': await MultipartFile.fromFile(avatarPath),
       };
-      final res = await _api.post(endpoint: 'profile', data: data);
+      final res = await _api.post(endpoint: ApiEndpoints.profile, data: data);
       final map = res['data'] as Map<String, dynamic>? ?? res;
       return Right(UserModel.fromJson(map));
     } catch (e) {
